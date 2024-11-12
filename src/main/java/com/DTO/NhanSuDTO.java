@@ -1,134 +1,136 @@
-package DTO;
+package com.DTO;
 
 import java.time.LocalDate;
 
 public class NhanSuDTO {
-	private String maNhanSu;
-    private String tenNhanSu;
-	private String gioiTinh;
-    private LocalDate ngaySinh;
-    private String diaChi;
-    private String soDT;
-	private String email;
-	private String tenPhongBan;
-    private String tenChucVu; 
-    private String tenViTri;
-	private int mucLuong;
-	private String matKhau;
+	private String MaNhanSu;
+    private String TenNhanSu;
+	private String GioiTinh;
+    private LocalDate NgaySinh;
+    private String DiaChi;
+    private String SoDienThoai;
+	private String Email;
+	private String TenPhongBan;
+    private String TenChucVu; 
+    private String TenViTri;
+	private int MucLuong;
+	private String MatKhau;
 
     // Constructor
     public NhanSuDTO() {
     }
 
-    public NhanSuDTO(String maNhanSu, String tenNhanSu, String gioiTinh, LocalDate ngaySinh, String diaChi, String soDT, String email, String tenPhongBan, String tenChucVu, String tenViTri, int mucLuong, String matKhau) {
-        this.maNhanSu = maNhanSu;
-        this.tenNhanSu = tenNhanSu;
-        this.gioiTinh = gioiTinh;
-        this.ngaySinh = ngaySinh;
-        this.diaChi = diaChi;
-        this.soDT = soDT;
-        this.email = email;
-        this.tenPhongBan = tenPhongBan;
-        this.tenChucVu = tenChucVu;
-        this.tenViTri = tenViTri;
-        this.mucLuong = mucLuong;
-        this.matKhau = matKhau;
+    public NhanSuDTO(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh,
+    String DiaChi, String SoDienThoai, String Email, String TenPhongBan, String TenChucVu,
+    String TenViTri, int MucLuong, String MatKhau) {
+        this.MaNhanSu = MaNhanSu;
+        this.TenNhanSu = TenNhanSu;
+        this.GioiTinh = GioiTinh;
+        this.NgaySinh = NgaySinh;
+        this.DiaChi = DiaChi;
+        this.SoDienThoai = SoDienThoai;
+        this.Email = Email;
+        this.TenPhongBan = TenPhongBan;
+        this.TenChucVu = TenChucVu;
+        this.TenChucVu = TenViTri;
+        this.MucLuong = MucLuong;
+        this.MatKhau = MatKhau;
     }
 
-    // Getters và Setters
+    // Update all the setters and getters
     public String getMaNhanSu() {
-        return maNhanSu;
+        return MaNhanSu;
     }
-
-    public void setMaNhanSu(String maNhanSu) {
-        this.maNhanSu = maNhanSu;
+    
+    public void setMaNhanSu(String MaNhanSu) {
+        this.MaNhanSu = MaNhanSu;
     }
-
+    
     public String getTenNhanSu() {
-        return tenNhanSu;
+        return TenNhanSu;
     }
-
-    public void setTenNhanSu(String tenNhanSu) {
-        this.tenNhanSu = tenNhanSu;
+    
+    public void setTenNhanSu(String TenNhanSu) {
+        this.TenNhanSu = TenNhanSu;
     }
-
+    
+    public String getGioiTinh() {
+        return GioiTinh;
+    }
+    
+    public void setGioiTinh(String GioiTinh) {
+        this.GioiTinh = GioiTinh;
+    }
+    
+    public LocalDate getNgaySinh() {
+        return NgaySinh;
+    }
+    
+    public void setNgaySinh(LocalDate NgaySinh) {
+        this.NgaySinh = NgaySinh;
+    }
+    
+    public String getDiaChi() {
+        return DiaChi;
+    }
+    
+    public void setDiaChi(String DiaChi) {
+        this.DiaChi = DiaChi;
+    }
+    
+    public String getSoDienThoai() {
+        return SoDienThoai;
+    }
+    
+    public void setSoDienThoai(String SoDienThoai) {
+        this.SoDienThoai = SoDienThoai;
+    }
+    
+    public String getEmail() {
+        return Email;
+    }
+    
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+    
     public String getTenPhongBan() {
-        return tenPhongBan;
+        return TenPhongBan;
     }
-
-    public void setTenPhongBan(String tenPhongBan) {
-        this.tenPhongBan = tenPhongBan;
+    
+    public void setTenPhongBan(String TenPhongBan) {
+        this.TenPhongBan = TenPhongBan;
     }
-
+    
     public String getTenChucVu() {
-        return tenChucVu;
+        return TenChucVu;
     }
-
-    public void setTenChucVu(String tenChucVu) {
-        this.tenChucVu = tenChucVu;
+    
+    public void setTenChucVu(String TenChucVu) {
+        this.TenChucVu = TenChucVu;
     }
-
+    
     public String getTenViTri() {
-        return tenViTri;
+        return TenViTri;
     }
-
-    public void setTenViTri(String tenViTri) {
-        this.tenViTri = tenViTri;
+    
+    public void setTenViTri(String TenViTri) {
+        this.TenViTri = TenViTri;
     }
-
-	public String getGioiTinh() {
-		return gioiTinh;
-	}
-	
-	public void setGioiTinh(String gioiTinh) {
-		this.gioiTinh = gioiTinh;
-	}
-	
-	public LocalDate getNgaySinh() {
-		return ngaySinh;
-	}
-	
-	public void setNgaySinh(LocalDate ngaySinh) {
-		this.ngaySinh = ngaySinh;
-	}
-	
-	public String getDiaChi() {
-		return diaChi;
-	}
-	
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
-	
-	public String getSoDT() {
-		return soDT;
-	}
-	
-	public void setSoDT(String soDT) {
-		this.soDT = soDT;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public int getMucLuong() {
-		return mucLuong;
-	}
-	
-	public void setMucLuong(int mucLuong) {
-		this.mucLuong = mucLuong;
-	}
-	
-	public String getMatKhau() {
-		return matKhau;
-	}
-	
-	public void setMatKhau(String matKhau) {
-		this.matKhau = matKhau;
-	}
+    
+    public int getMucLuong() {
+        return MucLuong;
+    }
+    
+    public void setMucLuong(int MucLuong) {
+        this.MucLuong = MucLuong;
+    }
+    
+    public String getMatKhau() {
+        return MatKhau;
+    }
+    
+    public void setMatKhau(String MatKhau) {
+        this.MatKhau = MatKhau;
+    }
 }

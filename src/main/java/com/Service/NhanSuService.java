@@ -1,20 +1,20 @@
-package Service;
+package com.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Model.NhanSu;
-import Repository.NhanSuRepo;
+import com.Model.*;
+import com.Repository.*;
 import java.util.List;
 
 @Service
 public class NhanSuService {
 
     @Autowired
-    private NhanSuRepo nhanSuRepository;
+    private NhanSuRepo nhanSuRepo;
 
     public List<NhanSu> layTatCaHoSo() {
-        return nhanSuRepository.findAll();
+        return nhanSuRepo.findAll();
     }
 
     public List<NhanSu> layHoSoTheoPhongBan(String maPhongBan) {

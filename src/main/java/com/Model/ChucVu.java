@@ -1,47 +1,38 @@
-package Model;
+package com.Model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@IdClass(ChucVuID.class)
+@Table(name = "CHUCVU")
 public class ChucVu {
-    @Id
-    private String maChucVu;
+    @EmbeddedId
+    private ChucVuId chucVuId;  // Sử dụng @EmbeddedId cho khóa chính phức hợp
 
-    @Id
-    private String maPhongBan;
-
-    private String tenChucVu;
+    @Column(name = "TenChucVu")
+    private String TenChucVu;
 
     @ManyToOne
-    @JoinColumn(name = "ma_phong_ban", insertable = false, updatable = false) // Khóa ngoại từ PhongBan
+    @JoinColumn(name = "MaPhongBan", insertable = false, updatable = false) // Khóa ngoại từ PhongBan
     private PhongBan phongBan;
 
-    @OneToMany(mappedBy = "chucVu")
+    @OneToMany(mappedBy = "MaChucVu")
     private List<ViTri> listViTri;
 
-    public String getMaChucVu() {
-        return MaChucVu;
+
+    public ChucVuId getChucVuId() {
+        return chucVuId;
     }
 
-    public void setMaChucVu(String maChucVu) {
-        MaChucVu = maChucVu;
-    }
-
-    public String getMaPhongBan() {
-        return MaPhongBan;
-    }
-
-    public void setMaPhongBan(String maPhongBan) {
-        MaPhongBan = maPhongBan;
+    public void setChucVuId(ChucVuId chucVuId) {
+        this.chucVuId = chucVuId;
     }
 
     public String getTenChucVu() {
         return TenChucVu;
     }
 
-    public void setTenChucVu(String tenChucVu) {
-        TenChucVu = tenChucVu;
+    public void setTenChucVu(String TenChucVu) {
+        this.TenChucVu = TenChucVu;
     }
 }

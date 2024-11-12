@@ -1,14 +1,16 @@
-package Model;
+package com.Model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 public class PhongBan {
     @Id
-    private String maPhongBan;
+    @Column(name = "MaPhongBan")
+    private String MaPhongBan;
 
-    private String tenPhongBan;
+    @Column(name = "TenPhongBan")
+    private String TenPhongBan;
 
     @OneToMany(mappedBy = "phongBan")
     private List<ChucVu> listChucVu;

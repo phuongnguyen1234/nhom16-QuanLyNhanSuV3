@@ -1,34 +1,24 @@
-package Model;
+package com.Model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "BANGLUONG")
 public class BangLuong {
-    private String maBangLuong;
-    private String maNhanSu;
-    private String maBangChamCong;
-    private double luongThucNhan;
+    @Id
+    @Column(name = "MaBangLuong")
+    private String MaChucVuaBangLuong;
 
-    public BangLuong(){}
+    @Column(name = "TongThuNhap")
+    private int TongThuNhap;
 
-    public BangLuong(String maBangLuong, String maNhanSu, String maBangChamCong, double luongThucNhan) {
-        this.maBangLuong = maBangLuong;
-        this.maNhanSu = maNhanSu;
-        this.maBangChamCong = maBangChamCong;
-        this.luongThucNhan = luongThucNhan;
-    }
+    @Column(name = "LuongThucNhan")
+    private int LuongThucNhan;
 
-    // Getter methods for all properties
-    public String getMaBangLuong() {
-        return maBangLuong;
-    }
+    @Column(name = "GhiChu")
+    private String GhiChu;
 
-    public String getMaNhanSu() {
-        return maNhanSu;
-    }
-
-    public String getMaBangChamCong() {
-        return maBangChamCong;
-    }
-
-    public double getLuongThucNhan() {
-        return luongThucNhan;
-    }
+    @OneToOne
+    @JoinColumn(name = "MaBangChamCong", referencedColumnName = "MaBangChamCong")
+    private BangChamCong bangChamCong;
 }

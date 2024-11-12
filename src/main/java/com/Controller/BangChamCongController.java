@@ -1,8 +1,8 @@
-package com.QLNS.project.Controller;
+package com.Controller;
 
-import com.QLNS.project.Model.BangChamCong;
-import com.QLNS.project.DTO.BangChamCongDTO;
-import com.QLNS.project.Service.BangChamCongService;
+import com.Model.*;
+import com.Service.*;
+import com.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

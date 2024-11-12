@@ -1,4 +1,4 @@
-package Model;
+package com.Model;
 
 import java.io.Serializable;
 import java.util.Objects;

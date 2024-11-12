@@ -1,12 +1,11 @@
-package com.QLNS.project.Service;
+package com.Service;
 
-import com.QLNS.project.Model.BangChamCong;
-import com.QLNS.project.Respository.BangChamCongRepo;
+import com.Repository.*;
+import com.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BangChamCongService {

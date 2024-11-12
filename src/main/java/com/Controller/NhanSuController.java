@@ -1,20 +1,13 @@
-package Controller;
+package com.Controller;
 
-import Model.ChucVu;
-import Model.NhanSu;
-import Model.PhongBan;
-import Model.ViTri;
-import Repository.NhanSuRepo;
-import Service.ChucVuService;
-import Service.NhanSuService;
-import Service.PhongBanService;
-import Service.ViTriService;
-
+import com.Service.*;
+import com.Repository.*;
+import com.Model.*;
+import com.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
-import DTO.NhanSuDTO;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +34,13 @@ public class NhanSuController {
     // Lấy danh sách tất cả phòng ban
     @GetMapping("/phongban")
     public List<PhongBan> layTatCaPhongBan() {
-        return phongBanService.layTatCaPhongBan();
+        try {
+            return phongBanService.layTatCaPhongBan();
+        } catch (Exception e) {
+        // Log lỗi
+            System.out.println("Lỗi khi lấy phòng ban: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống", e);
+        }
     }
 
     // Lấy danh sách chức vụ theo mã phòng ban
@@ -57,7 +56,7 @@ public class NhanSuController {
     }
 
     @GetMapping
-    public List<NhanSu> layTatCaHoSo() {
+    public List<NhanSuDTO> layTatCaHoSo() {
         List<NhanSu> danhSachNhanSu = nhanSuService.layTatCaHoSo();
         List<NhanSuDTO> danhSachDTO = new ArrayList<>();
 

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Quản lý hồ sơ - Nhóm 16</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+    .add-record-btn {
+      padding: 8px 16px;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 30px;
+      width: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content h3 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .form-control[type="radio"] {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    .form-control select {
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .radio-group {
+      margin-bottom: 10px;
+    }
+
+    .radio-group input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">Nhóm 16</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Admin</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>Hồ sơ của tôi</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Cài đặt tài khoản</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Đăng xuất</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <!-- Quản lý Hồ sơ Nav Item -->
+      <li class="nav-item">
+        <a class="nav-link" href="profile-management.html">
+          <i class="bi bi-folder"></i><span>Quản lý Hồ sơ</span>
+        </a>
+      </li>
+      <!-- End Quản lý Hồ sơ Nav -->
+
+
+      <!-- Bảng tổng quát Nav Item -->
+      <li class="nav-item">
+        <a class="nav-link" href="tables-general.html">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Bảng chấm công</span>
+        </a>
+    </li>
+    <!-- End Bảng tổng quát Nav -->
+
+    <!-- Bảng dữ liệu Nav Item -->
+    <li class="nav-item">
+      <a class="nav-link" href="tables-data.html">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bảng lương</span>
+      </a>
+    </li>
+    <!-- End Bảng dữ liệu Nav -->
+
+
+      <li class="nav-heading">Trang</li>
+
+      <li class="nav-item">
+        <a class="nav-link " href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Hồ sơ</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.html">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Đăng nhập</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <!-- Main Content -->
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Quản lý hồ sơ</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Quản lý hồ sơ</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <button class="add-record-btn" onclick="openModal()">Thêm hồ sơ</button>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered datatable" id="nhanSuTable">
+          <thead>
+            <tr>
+              <th>Mã nhân sự</th>
+              <th>Tên nhân sự</th>
+              <th>Phòng ban</th>
+              <th>Chức vụ</th>
+              <th>Vị trí</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic rows added here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Modal for Adding/Editing Record -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h3 id="modal-title">Thêm hồ sơ mới</h3>
+    <form id="recordForm">
+      <div class="form-group">
+        <label for="tenNhanSu">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSu" placeholder="Tên nhân sự" class="form-control" required>
+      </div>
+
+      <div class="form-group radio-group">
+        <label>Giới tính:</label>
+        <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam" required> Nam
+        <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nữ"> Nữ
+      </div>
+
+      <div class="form-group">
+        <label for="ngaySinh">Ngày sinh:</label>
+        <input type="date" id="ngaySinh" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="diaChi">Địa chỉ:</label>
+        <input type="text" id="diaChi" placeholder="Địa chỉ" class="form-control" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="soDT">Số điện thoại:</label>
+        <input type="tel" id="soDT" placeholder="Số điện thoại" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Email" class="form-control" required>
+      </div>
+
+      
+
+      <div class="form-group">
+        <label for="phongBan">Phòng ban:</label>
+        <select id="phongBan" class="form-control" required>
+          <option value="">Chọn phòng ban</option>
+          <!--danh sach phong ban duoc hien thi o day-->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="viTri">Vị trí:</label>
+        <select id="viTri" class="form-control" required>
+          <option value="" disabled selected>Chọn vị trí</option>
+          <option value="Quản lý">Quản lý</option>
+          <option value="Nhân viên">Nhân viên</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="chucVu">Chức vụ:</label>
+        <input type="text" id="chucVu" placeholder="Chức vụ" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="mucLuong">Mức lương:</label>
+        <input type="number" id="mucLuong" placeholder="Mức lương" class="form-control" required>
+      </div>
+
+      <!-- Mới thêm trường Mật khẩu -->
+      <div class="form-group">
+        <label for="matKhau">Mật khẩu:</label>
+        <input type="password" id="matKhau" placeholder="Mật khẩu" class="form-control">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="showPassword">
+          <label class="form-check-label" for="showPassword">Hiển thị mật khẩu</label>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="submit" class="btn">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+  </main><!-- End Main Content -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    function openModal() {
+      document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // Handle form submission and populate table (sample)
+    document.getElementById("recordForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const table = document.getElementById("nhanSuTable").getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td>${table.rows.length + 1}</td>
+        <td>${document.getElementById("tenNhanSu").value}</td>
+        <td>${document.querySelector('input[name="gioiTinh"]:checked').value}</td>
+        <td>${document.getElementById("ngaySinh").value}</td>
+        <td>${document.getElementById("diaChi").value}</td>
+        <td>${document.getElementById("phongBan").value}</td>
+        <td>${document.getElementById("viTri").value}</td>
+        <td class="action-btns">
+          <button class="btn btn-warning" onclick="editRow(this)">Sửa</button>
+          <button class="btn btn-danger" onclick="deleteRow(this)">Xóa</button>
+        </td>
+      `;
+      closeModal();
+    });
+
+    function deleteRow(button) {
+      const row = button.closest('tr');
+      row.remove();
+    }
+
+    function editRow(button) {
+      const row = button.closest('tr');
+      document.getElementById("tenNhanSu").value = row.cells[1].innerText;
+      document.querySelector(`input[name="gioiTinh"][value="${row.cells[2].innerText}"]`).checked = true;
+      document.getElementById("ngaySinh").value = row.cells[3].innerText;
+      document.getElementById("diaChi").value = row.cells[4].innerText;
+      document.getElementById("phongBan").value = row.cells[5].innerText;
+      document.getElementById("viTri").value = row.cells[6].innerText;
+      openModal();
+      row.remove();  // Remove old data from table
+    }
+    document.getElementById("showPassword").addEventListener("change", function () {
+      const passwordField = document.getElementById("matKhau");
+      if (this.checked) {
+        passwordField.type = "text";  // Hiển thị mật khẩu
+      } else {
+        passwordField.type = "password";  // Ẩn mật khẩu
+      }
+    });
+
+    // Modal open and close functionality
+    function openModal() {
+      document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // Save record (for illustration purposes)
+    function saveRecord() {
+      alert("Hồ sơ đã được lưu!");
+      closeModal();
+    }
+
+    function loadPhongBan(){
+      // Khi trang tải, gọi API để lấy danh sách phòng ban
+    window.onload = function() {
+        fetch("/api/phongban")
+            .then(response => response.json()) // Chuyển dữ liệu JSON từ API
+            .then(data => {
+                const phongBanSelect = document.getElementById("phongBan");
+
+                // Lặp qua dữ liệu phòng ban và thêm vào dropdown
+                data.forEach(phongBan => {
+                    const option = document.createElement("option");
+                    option.value = phongBan.maPhongBan; // Mã phòng ban là giá trị của option
+                    option.textContent = phongBan.tenPhongBan; // Tên phòng ban là nội dung hiển thị
+                    phongBanSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Có lỗi khi lấy phòng ban:", error);
+            });
+    };
+    }
+  </script>
+
+</body>
+
+</html>

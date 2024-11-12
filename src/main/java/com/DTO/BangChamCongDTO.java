@@ -1,7 +1,6 @@
-package com.QLNS.project.DTO;
+package com.DTO;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class BangChamCongDTO {
     private String maBangChamCong;

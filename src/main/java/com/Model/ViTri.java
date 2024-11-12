@@ -1,31 +1,31 @@
-package Model;
+package com.Model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @IdClass(ViTriId.class) // Sử dụng lớp ID cho khóa chính
 public class ViTri {
     @Id
-    private String maViTri; // Mã vị trí (khóa chính)
+    private String MaViTri; // Mã vị trí (khóa chính)
 
     @Id
-    private String maPhongBan; // Mã phòng ban (khóa ngoại)
+    private String MaPhongBan; // Mã phòng ban (khóa ngoại)
 
     @Id
-    private String maChucVu; // Mã chức vụ (khóa ngoại)
+    private String MaChucVu; // Mã chức vụ (khóa ngoại)
 
-    private String tenViTri; // Tên vị trí
+    private String TenViTri; // Tên vị trí
 
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "ma_chuc_vu", referencedColumnName = "maChucVu", insertable = false, updatable = false),
-        @JoinColumn(name = "ma_phong_ban", referencedColumnName = "maPhongBan", insertable = false, updatable = false)
+        @JoinColumn(name = "MaChucVu", referencedColumnName = "MaChucVu", insertable = false, updatable = false),
+        @JoinColumn(name = "MaPhongBan", referencedColumnName = "MaPhongBan", insertable = false, updatable = false)
     })
     private ChucVu chucVu;
 
     @ManyToOne
-    @JoinColumn(name = "ma_phong_ban", insertable = false, updatable = false)
+    @JoinColumn(name = "MaPhongBan", insertable = false, updatable = false)
     private PhongBan phongBan;
 
     @OneToMany(mappedBy = "viTri")

@@ -1,7 +1,7 @@
-package com.QLNS.project.Respository;
+package com.Repository;
 
-import com.QLNS.project.Model.BangChamCong;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.Model.*;
 
 public interface BangChamCongRepo extends JpaRepository<BangChamCong, String> {
     

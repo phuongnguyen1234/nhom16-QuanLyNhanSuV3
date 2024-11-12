@@ -1,47 +1,77 @@
-package Model;
+package com.Model;
 
-import javax.annotation.processing.Generated;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import java.lang.annotation.Inherited;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "NHANSU")
 public class NhanSu {
 	@Id
+    @Column(name = "MaNhanSu")
     private String MaNhanSu;
 
-	private String TenNhanSu;
+    @Column(name = "TenNhanSu")
+    private String TenNhanSu;
+
+    @Column(name = "GioiTinh")
     private String GioiTinh;
+
+    @Column(name = "NgaySinh")
     private LocalDate NgaySinh;
+
+    @Column(name = "DiaChi")
     private String DiaChi;
-    private String SoDT;
-	private String Email;
-	private String MaPhongBan;
-	private String MaChucVu;
-	private String MaViTri;
-	private int MucLuong;
-	private String MatKhau;
+
+    @Column(name = "SoDienThoai")
+    private String SoDienThoai;
+
+    @Column(name = "Email")
+    private String Email;
+
+    @Column(name = "MaPhongBan")
+    private String MaPhongBan;
+
+    @Column(name = "MaChucVu")
+    private String MaChucVu;
+
+    @Column(name = "MaViTri")
+    private String MaViTri;
+
+    @Column(name = "MucLuong")
+    private int MucLuong;
+
+    @Column(name = "MatKhau")
+    private String MatKhau;
+
+    // Các quan hệ @ManyToOne
+    @ManyToOne
+    @JoinColumn(name = "MaPhongBan", referencedColumnName = "MaPhongBan", insertable = false, updatable = false)
+    private PhongBan phongBan;
+
+    @ManyToOne
+    @JoinColumn(name = "MaChucVu", referencedColumnName = "MaChucVu", insertable = false, updatable = false)
+    private ChucVu chucVu;
+
+    @ManyToOne
+    @JoinColumn(name = "MaViTri", referencedColumnName = "MaViTri", insertable = false, updatable = false)
+    private ViTri viTri;
 
 	public NhanSu(){}
 
-	public NhanSu(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh, String DiaChi, String SoDT, String Email, String MaPhongBan, String MaChucVu, String MaViTri, int MucLuong, String MatKhau) {
-	    this.MaNhanSu = MaNhanSu;
-	    this.TenNhanSu = TenNhanSu;
-	    this.GioiTinh = GioiTinh;
-	    this.NgaySinh = NgaySinh;
-	    this.DiaChi = DiaChi;
-	    this.SoDT = SoDT;
-	    this.Email = Email;
-	    this.MaPhongBan = MaPhongBan;
-	    this.MaChucVu = MaChucVu;
-	    this.MaViTri = MaViTri;
-	    this.MucLuong = MucLuong;
-	    this.MatKhau = MatKhau;
-	}
+	public NhanSu(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh, String DiaChi, String SoDienThoai, String Email, String MaPhongBan, String MaChucVu, String MaViTri, int MucLuong, String MatKhau) {
+        this.MaNhanSu = MaNhanSu;
+        this.TenNhanSu = TenNhanSu;
+        this.GioiTinh = GioiTinh;
+        this.NgaySinh = NgaySinh;
+        this.DiaChi = DiaChi;
+        this.SoDienThoai = SoDienThoai;
+        this.Email = Email;  // sửa lại tên tham số từ 'Email' thành 'email'
+        this.MaPhongBan = MaPhongBan;
+        this.MaChucVu = MaChucVu;
+        this.MaViTri = MaViTri;
+        this.MucLuong = MucLuong;
+        this.MatKhau = MatKhau;
+    }
 
 	public String getMaNhanSu() {
 	    return MaNhanSu;
@@ -83,12 +113,12 @@ public class NhanSu {
         this.DiaChi = DiaChi;
     }
     
-    public String getSoDT() {
-        return SoDT;
+    public String getSoDienThoai() {
+        return SoDienThoai;
     }
     
-    public void setSoDT(String SoDT) {
-        this.SoDT = SoDT;
+    public void setSoDienThoai(String SoDienThoai) {
+        this.SoDienThoai = SoDienThoai;
     }
 
 	public String getEmail() {
@@ -138,6 +168,21 @@ public class NhanSu {
 	public void setMatKhau(String MatKhau) {
 	    this.MatKhau = MatKhau;
 	}
+
+	// Phương thức trả về đối tượng PhongBan liên kết
+    public PhongBan getPhongBan() {
+        return phongBan;
+    }
+
+    // Phương thức trả về đối tượng ChucVu liên kết
+    public ChucVu getChucVu() {
+        return chucVu;
+    }
+
+    // Phương thức trả về đối tượng ViTri liên kết
+    public ViTri getViTri() {
+        return viTri;
+    }
 
 	
 }
