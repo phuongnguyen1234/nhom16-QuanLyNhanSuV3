@@ -7,8 +7,6 @@ import com.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,29 +17,14 @@ public class NhanSuController {
     @Autowired
     private NhanSuService nhanSuService;
 
-    @Autowired // Tiêm nhanSuRepo
-    private NhanSuRepo nhanSuRepo;
-
     @Autowired
-    private PhongBanService phongBanService;
+    private NhanSuRepo nhanSuRepo;
 
     @Autowired
     private ChucVuService chucVuService;
 
     @Autowired
     private ViTriService viTriService;
-
-    // Lấy danh sách tất cả phòng ban
-    @GetMapping("/phongban")
-    public List<PhongBan> layTatCaPhongBan() {
-        try {
-            return phongBanService.layTatCaPhongBan();
-        } catch (Exception e) {
-        // Log lỗi
-            System.out.println("Lỗi khi lấy phòng ban: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống", e);
-        }
-    }
 
     // Lấy danh sách chức vụ theo mã phòng ban
     @GetMapping("/chucvu/{maPhongBan}")
@@ -55,25 +38,26 @@ public class NhanSuController {
         return viTriService.layViTriTheoChucVu(maPhongBan, maChucVu);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<NhanSuDTO> layTatCaHoSo() {
         List<NhanSu> danhSachNhanSu = nhanSuService.layTatCaHoSo();
         List<NhanSuDTO> danhSachDTO = new ArrayList<>();
 
-    for (NhanSu nhanSu : danhSachNhanSu) {
-        NhanSuDTO dto = new NhanSuDTO();
-        dto.setMaNhanSu(nhanSu.getMaNhanSu());
-        dto.setTenNhanSu(nhanSu.getTenNhanSu());
-        dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan()); // Lấy tên phòng ban
-        dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu()); // Lấy tên chức vụ
-        dto.setTenViTri(nhanSu.getViTri().getTenViTri()); // Lấy tên vị trí
-        danhSachDTO.add(dto);
+        for (NhanSu nhanSu : danhSachNhanSu) {
+            NhanSuDTO dto = new NhanSuDTO(
+                nhanSu.getMaNhanSu(),
+                nhanSu.getTenNhanSu(),
+                nhanSu.getPhongBan().getTenPhongBan(),
+                nhanSu.getChucVu().getTenChucVu(),
+                nhanSu.getViTri().getTenViTri()
+            );
+            danhSachDTO.add(dto);
+        }
+
+        return danhSachDTO;
     }
 
-    return danhSachDTO;
-    }
-
-    @GetMapping("/{maNhanSu}")
+    @GetMapping("/{maNhanSu}/detail")
     public ResponseEntity<NhanSuDTO> layHoSoChiTiet(@PathVariable String maNhanSu) {
     NhanSu nhanSu = nhanSuRepo.findById(maNhanSu).orElse(null);
     if (nhanSu == null) {

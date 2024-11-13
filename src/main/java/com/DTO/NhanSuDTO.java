@@ -1,6 +1,11 @@
 package com.DTO;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonPropertyOrder({ "maNhanSu", "tenNhanSu", "tenPhongBan", "tenChucVu", "tenViTri" })
 
 public class NhanSuDTO {
 	private String MaNhanSu;
@@ -20,21 +25,12 @@ public class NhanSuDTO {
     public NhanSuDTO() {
     }
 
-    public NhanSuDTO(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh,
-    String DiaChi, String SoDienThoai, String Email, String TenPhongBan, String TenChucVu,
-    String TenViTri, int MucLuong, String MatKhau) {
+    public NhanSuDTO(String MaNhanSu, String TenNhanSu, String TenPhongBan, String TenChucVu, String TenViTri){
         this.MaNhanSu = MaNhanSu;
         this.TenNhanSu = TenNhanSu;
-        this.GioiTinh = GioiTinh;
-        this.NgaySinh = NgaySinh;
-        this.DiaChi = DiaChi;
-        this.SoDienThoai = SoDienThoai;
-        this.Email = Email;
         this.TenPhongBan = TenPhongBan;
         this.TenChucVu = TenChucVu;
-        this.TenChucVu = TenViTri;
-        this.MucLuong = MucLuong;
-        this.MatKhau = MatKhau;
+        this.TenViTri = TenViTri;
     }
 
     // Update all the setters and getters

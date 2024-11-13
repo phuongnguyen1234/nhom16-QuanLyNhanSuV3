@@ -3,9 +3,9 @@ package com.Controller;
 import com.Service.*;
 import com.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,9 +16,15 @@ public class PhongBanController {
     @Autowired
     private PhongBanService phongBanService;
 
-    // Endpoint để lấy danh sách phòng ban
+    // Lấy danh sách tất cả phòng ban
     @GetMapping
     public List<PhongBan> layTatCaPhongBan() {
-        return phongBanService.layTatCaPhongBan();
+        try {
+            System.out.println("Lay dc!");
+            return phongBanService.layTatCaPhongBan();
+        } catch (Exception e) {
+            System.out.println("Lỗi khi lấy phòng ban: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống", e);
+        }
     }
 }

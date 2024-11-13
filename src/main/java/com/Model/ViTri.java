@@ -12,7 +12,7 @@ public class ViTri {
     private String maViTri; 
 
     @Id
-    @Column(name = "PhongBan")
+    @Column(name = "MaPhongBan")
     private String maPhongBan; 
 
     @Id

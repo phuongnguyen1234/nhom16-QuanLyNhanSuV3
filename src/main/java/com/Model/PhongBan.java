@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "PHONGBAN")
 public class PhongBan {
     @Id
     @Column(name = "MaPhongBan")
