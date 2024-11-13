@@ -7,10 +7,10 @@ import java.util.List;
 public class PhongBan {
     @Id
     @Column(name = "MaPhongBan")
-    private String MaPhongBan;
+    private String maPhongBan;
 
     @Column(name = "TenPhongBan")
-    private String TenPhongBan;
+    private String tenPhongBan;
 
     @OneToMany(mappedBy = "phongBan")
     private List<ChucVu> listChucVu;
@@ -19,18 +19,18 @@ public class PhongBan {
     private List<ViTri> listViTri;
 
     public String getMaPhongBan(){
-        return MaPhongBan;
+        return maPhongBan;
     }
 
     public String getTenPhongBan(){
-        return TenPhongBan;
+        return tenPhongBan;
     }
 
     public void setMaPhongBan(String MaPhongBan){
-        this.MaPhongBan = MaPhongBan;
+        this.maPhongBan = MaPhongBan;
     }
 
     public void setTenPhongBan(String TenPhongBan){
-        this.TenPhongBan = TenPhongBan;
+        this.tenPhongBan = TenPhongBan;
     }
 }

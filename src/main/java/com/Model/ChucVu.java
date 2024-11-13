@@ -5,34 +5,31 @@ import java.util.List;
 
 @Entity
 @Table(name = "CHUCVU")
+@IdClass(ChucVuId.class)
 public class ChucVu {
-    @EmbeddedId
-    private ChucVuId chucVuId;  // Sử dụng @EmbeddedId cho khóa chính phức hợp
+    @Id
+    @Column(name = "MaChucVu")
+    private String maChucVu;
+
+    @Id
+    @Column(name = "MaPhongBan")
+    private String maPhongBan;
 
     @Column(name = "TenChucVu")
-    private String TenChucVu;
+    private String tenChucVu;
 
     @ManyToOne
-    @JoinColumn(name = "MaPhongBan", insertable = false, updatable = false) // Khóa ngoại từ PhongBan
+    @JoinColumn(name = "MaPhongBan", insertable = false, updatable = false) 
     private PhongBan phongBan;
 
-    @OneToMany(mappedBy = "MaChucVu")
+    @OneToMany(mappedBy = "chucVu")
     private List<ViTri> listViTri;
 
-
-    public ChucVuId getChucVuId() {
-        return chucVuId;
-    }
-
-    public void setChucVuId(ChucVuId chucVuId) {
-        this.chucVuId = chucVuId;
-    }
-
     public String getTenChucVu() {
-        return TenChucVu;
+        return tenChucVu;
     }
 
     public void setTenChucVu(String TenChucVu) {
-        this.TenChucVu = TenChucVu;
+        this.tenChucVu = TenChucVu;
     }
 }

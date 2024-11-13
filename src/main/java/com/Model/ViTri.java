@@ -4,18 +4,23 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@IdClass(ViTriId.class) // Sử dụng lớp ID cho khóa chính
+@Table(name = "VITRI")
+@IdClass(ViTriId.class) 
 public class ViTri {
     @Id
-    private String MaViTri; // Mã vị trí (khóa chính)
+    @Column(name = "MaViTri")
+    private String maViTri; 
 
     @Id
-    private String MaPhongBan; // Mã phòng ban (khóa ngoại)
+    @Column(name = "PhongBan")
+    private String maPhongBan; 
 
     @Id
-    private String MaChucVu; // Mã chức vụ (khóa ngoại)
+    @Column(name = "MaChucVu")
+    private String maChucVu; 
 
-    private String TenViTri; // Tên vị trí
+    @Column(name = "TenViTri")
+    private String tenViTri;
 
     @ManyToOne
     @JoinColumns({
@@ -32,34 +37,34 @@ public class ViTri {
     private List<NhanSu> ListNhanSu;
 
     public String getMaViTri() {
-        return MaViTri;
+        return maViTri;
     }
 
     public void setMaViTri(String MaViTri) {
-        this.MaViTri = MaViTri;
+        this.maViTri = MaViTri;
     }
 
     public String getMaChucVu() {
-        return MaChucVu;
+        return maChucVu;
     }
 
     public void setMaChucVu(String MaChucVu) {
-        this.MaChucVu = MaChucVu;
+        this.maChucVu = MaChucVu;
     }
 
     public String getMaPhongBan() {
-        return MaPhongBan;
+        return maPhongBan;
     }
 
     public void setMaPhongBan(String MaPhongBan) {
-        this.MaPhongBan = MaPhongBan;
+        this.maPhongBan = MaPhongBan;
     }
 
     public String getTenViTri() {
-        return TenViTri;
+        return tenViTri;
     }
 
     public void setTenViTri(String TenViTri) {
-        this.TenViTri = TenViTri;
+        this.tenViTri = TenViTri;
     }
 }

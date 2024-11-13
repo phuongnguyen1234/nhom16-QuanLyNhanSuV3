@@ -14,6 +14,6 @@ public class ChucVuService {
     private ChucVuRepo chucVuRepo;
 
     public List<ChucVu> layChucVuTheoPhongBan(String maPhongBan) {
-        return chucVuRepo.findByMaPhongBan(maPhongBan);
+        return chucVuRepo.findByPhongBan_MaPhongBan(maPhongBan);
     }
 }

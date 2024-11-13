@@ -8,40 +8,40 @@ import java.time.LocalDate;
 public class NhanSu {
 	@Id
     @Column(name = "MaNhanSu")
-    private String MaNhanSu;
+    private String maNhanSu;
 
     @Column(name = "TenNhanSu")
-    private String TenNhanSu;
+    private String tenNhanSu;
 
     @Column(name = "GioiTinh")
-    private String GioiTinh;
+    private String gioiTinh;
 
     @Column(name = "NgaySinh")
-    private LocalDate NgaySinh;
+    private LocalDate ngaySinh;
 
     @Column(name = "DiaChi")
-    private String DiaChi;
+    private String diaChi;
 
     @Column(name = "SoDienThoai")
-    private String SoDienThoai;
+    private String soDienThoai;
 
     @Column(name = "Email")
-    private String Email;
+    private String email;
 
     @Column(name = "MaPhongBan")
-    private String MaPhongBan;
+    private String maPhongBan;
 
     @Column(name = "MaChucVu")
-    private String MaChucVu;
+    private String maChucVu;
 
     @Column(name = "MaViTri")
-    private String MaViTri;
+    private String maViTri;
 
     @Column(name = "MucLuong")
-    private int MucLuong;
+    private int mucLuong;
 
     @Column(name = "MatKhau")
-    private String MatKhau;
+    private String matKhau;
 
     // Các quan hệ @ManyToOne
     @ManyToOne
@@ -58,115 +58,117 @@ public class NhanSu {
 
 	public NhanSu(){}
 
-	public NhanSu(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh, String DiaChi, String SoDienThoai, String Email, String MaPhongBan, String MaChucVu, String MaViTri, int MucLuong, String MatKhau) {
-        this.MaNhanSu = MaNhanSu;
-        this.TenNhanSu = TenNhanSu;
-        this.GioiTinh = GioiTinh;
-        this.NgaySinh = NgaySinh;
-        this.DiaChi = DiaChi;
-        this.SoDienThoai = SoDienThoai;
-        this.Email = Email;  // sửa lại tên tham số từ 'Email' thành 'email'
-        this.MaPhongBan = MaPhongBan;
-        this.MaChucVu = MaChucVu;
-        this.MaViTri = MaViTri;
-        this.MucLuong = MucLuong;
-        this.MatKhau = MatKhau;
+	public NhanSu(String MaNhanSu, String TenNhanSu, String GioiTinh, LocalDate NgaySinh,
+    String DiaChi, String SoDienThoai, String Email, String MaPhongBan, String MaChucVu,
+    String MaViTri, int MucLuong, String MatKhau) {
+        this.maNhanSu = MaNhanSu;
+        this.tenNhanSu = TenNhanSu;
+        this.gioiTinh = GioiTinh;
+        this.ngaySinh = NgaySinh;
+        this.diaChi = DiaChi;
+        this.soDienThoai = SoDienThoai;
+        this.email = Email;  // sửa lại tên tham số từ 'Email' thành 'email'
+        this.maPhongBan = MaPhongBan;
+        this.maChucVu = MaChucVu;
+        this.maViTri = MaViTri;
+        this.mucLuong = MucLuong;
+        this.matKhau = MatKhau;
     }
 
 	public String getMaNhanSu() {
-	    return MaNhanSu;
+	    return maNhanSu;
 	}
 	
 	public void setMaNhanSu(String MaNhanSu) {
-	    this.MaNhanSu = MaNhanSu;
+	    this.maNhanSu = MaNhanSu;
 	}
 	
 	public String getTenNhanSu() {
-	    return TenNhanSu;
+	    return tenNhanSu;
 	}
 	
 	public void setTenNhanSu(String TenNhanSu) {
-	    this.TenNhanSu = TenNhanSu;
+	    this.tenNhanSu = TenNhanSu;
 	}
 		
     public String getGioiTinh() {
-        return GioiTinh;
+        return gioiTinh;
     }
     
     public void setGioiTinh(String GioiTinh) {
-        this.GioiTinh = GioiTinh;
+        this.gioiTinh = GioiTinh;
     }
     
     public LocalDate getNgaySinh() {
-        return NgaySinh;
+        return ngaySinh;
     }
     
     public void setNgaySinh(LocalDate NgaySinh) {
-        this.NgaySinh = NgaySinh;
+        this.ngaySinh = NgaySinh;
     }
     
     public String getDiaChi() {
-        return DiaChi;
+        return diaChi;
     }
     
     public void setDiaChi(String DiaChi) {
-        this.DiaChi = DiaChi;
+        this.diaChi = DiaChi;
     }
     
     public String getSoDienThoai() {
-        return SoDienThoai;
+        return soDienThoai;
     }
     
     public void setSoDienThoai(String SoDienThoai) {
-        this.SoDienThoai = SoDienThoai;
+        this.soDienThoai = SoDienThoai;
     }
 
 	public String getEmail() {
-	    return Email;
+	    return email;
 	}
 	
 	public void setEmail(String Email) {
-	    this.Email = Email;
+	    this.email = Email;
 	}
 		
 	public String getMaPhongBan() {
-	    return MaPhongBan;
+	    return maPhongBan;
 	}
 	
 	public void setMaPhongBan(String MaPhongBan) {
-	    this.MaPhongBan = MaPhongBan;
+	    this.maPhongBan = MaPhongBan;
 	}
 		
 	public String getMaChucVu() {
-	    return MaChucVu;
+	    return maChucVu;
 	}
 	
 	public void setMaChucVu(String MaChucVu) {
-	    this.MaChucVu = MaChucVu;
+	    this.maChucVu = MaChucVu;
 	}
 		
 	public String getMaViTri() {
-	    return MaViTri;
+	    return maViTri;
 	}
 	
 	public void setMaViTri(String MaViTri) {
-	    this.MaViTri = MaViTri;
+	    this.maViTri = MaViTri;
 	}
 		
 	public int getMucLuong() {
-	    return MucLuong;
+	    return mucLuong;
 	}
 	
 	public void setMucLuong(int MucLuong) {
-	    this.MucLuong = MucLuong;
+	    this.mucLuong = MucLuong;
 	}
 		
 	public String getMatKhau() {
-	    return MatKhau;
+	    return matKhau;
 	}
 	
 	public void setMatKhau(String MatKhau) {
-	    this.MatKhau = MatKhau;
+	    this.matKhau = MatKhau;
 	}
 
 	// Phương thức trả về đối tượng PhongBan liên kết

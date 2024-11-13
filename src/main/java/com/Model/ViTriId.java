@@ -12,10 +12,10 @@ public class ViTriId implements Serializable {
     public ViTriId() {
     }
 
-    public ViTriId(String maViTri, String maPhongBan, String maChucVu) {
-        this.maViTri = maViTri;
-        this.maPhongBan = maPhongBan;
-        this.maChucVu = maChucVu;
+    public ViTriId(String MaViTri, String MaPhongBan, String MaChucVu) {
+        this.maViTri = MaViTri;
+        this.maPhongBan = MaPhongBan;
+        this.maChucVu = MaChucVu;
     }
 
     // Getters và Setters
@@ -23,24 +23,24 @@ public class ViTriId implements Serializable {
         return maViTri;
     }
 
-    public void setMaViTri(String maViTri) {
-        this.maViTri = maViTri;
+    public void setMaViTri(String MaViTri) {
+        this.maViTri = MaViTri;
     }
 
     public String getMaPhongBan() {
         return maPhongBan;
     }
 
-    public void setMaPhongBan(String maPhongBan) {
-        this.maPhongBan = maPhongBan;
+    public void setMaPhongBan(String MaPhongBan) {
+        this.maPhongBan = MaPhongBan;
     }
 
     public String getMaChucVu() {
         return maChucVu;
     }
 
-    public void setMaChucVu(String maChucVu) {
-        this.maChucVu = maChucVu;
+    public void setMaChucVu(String MaChucVu) {
+        this.maChucVu = MaChucVu;
     }
 
     // equals() và hashCode()

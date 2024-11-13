@@ -7,16 +7,16 @@ import jakarta.persistence.*;
 public class BangLuong {
     @Id
     @Column(name = "MaBangLuong")
-    private String MaChucVuaBangLuong;
+    private String maChucVuaBangLuong;
 
     @Column(name = "TongThuNhap")
-    private int TongThuNhap;
+    private int tongThuNhap;
 
     @Column(name = "LuongThucNhan")
-    private int LuongThucNhan;
+    private int luongThucNhan;
 
     @Column(name = "GhiChu")
-    private String GhiChu;
+    private String ghiChu;
 
     @OneToOne
     @JoinColumn(name = "MaBangChamCong", referencedColumnName = "MaBangChamCong")

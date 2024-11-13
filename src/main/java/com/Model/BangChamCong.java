@@ -9,32 +9,32 @@ import java.time.LocalDate;
 public class BangChamCong {
     @Id
     @Column(name = "MaBangChamCong")
-    private String MaBangChamCong;
+    private String maBangChamCong;
 
     @Column(name = "MaNhanSu")
-    private String MaNhanSu;
+    private String maNhanSu;
 
     @Column(name = "ThoiGian")
-    private LocalDate ThoiGian;
+    private LocalDate thoiGian;
 
     @Column(name = "SoNgayLamTrongThang")
-    private int SoNgayLamTrongThang;
+    private int soNgayLamTrongThang;
 
     @Column(name = "SoNgayNghiCoPhep")
-    private int SoNgayNghiCoPhep;
+    private int soNgayNghiCoPhep;
 
     @Column(name = "SoNgayNghiKhongPhep")
-    private int SoNgayNghiKhongPhep;
+    private int soNgayNghiKhongPhep;
 
     @Column(name = "GhiChu")
-    private String GhiChu;
+    private String ghiChu;
 
     @Column(name = "DuocPhepChinhSua")
-    private boolean DuocPhepChinhSua;
+    private boolean duocPhepChinhSua;
 
     @ManyToOne
     @JoinColumn(name = "MaNhanSu", referencedColumnName = "MaNhanSu", insertable = false, updatable = false)
-    private NhanSu NhanSu;
+    private NhanSu nhanSu;
 
     @OneToOne(mappedBy = "bangChamCong")
     private BangLuong bangLuong;
@@ -43,82 +43,82 @@ public class BangChamCong {
     }
 
     public BangChamCong(String maBangChamCong, String MaNhanSu, LocalDate ThoiGian, int SoNgayLamTrongThang, int SoNgayNghiCoPhep, int SoNgayNghiKhongPhep, String GhiChu, boolean DuocPhepChinhSua) {
-        this.MaBangChamCong = maBangChamCong;
-        this.MaNhanSu = MaNhanSu;
-        this.ThoiGian = ThoiGian;
-        this.SoNgayLamTrongThang = SoNgayLamTrongThang;
-        this.SoNgayNghiCoPhep = SoNgayNghiCoPhep;
-        this.SoNgayNghiKhongPhep = SoNgayNghiKhongPhep;
-        this.GhiChu = GhiChu;
-        this.DuocPhepChinhSua = DuocPhepChinhSua;
+        this.maBangChamCong = maBangChamCong;
+        this.maNhanSu = MaNhanSu;
+        this.thoiGian = ThoiGian;
+        this.soNgayLamTrongThang = SoNgayLamTrongThang;
+        this.soNgayNghiCoPhep = SoNgayNghiCoPhep;
+        this.soNgayNghiKhongPhep = SoNgayNghiKhongPhep;
+        this.ghiChu = GhiChu;
+        this.duocPhepChinhSua = DuocPhepChinhSua;
     }
 
     // Getters và Setters
     public String getMaBangChamCong() {
-        return MaBangChamCong;
+        return maBangChamCong;
     }
 
     public void setMaBangChamCong(String MaBangChamCong) {
-        this.MaBangChamCong = MaBangChamCong;
+        this.maBangChamCong = MaBangChamCong;
     }
 
     public String getMaNhanSu() {
-        return MaNhanSu;
+        return maNhanSu;
     }
 
     public void setMaNhanSu(String MaNhanSu) {
-        this.MaNhanSu = MaNhanSu;
+        this.maNhanSu = MaNhanSu;
     }
 
     public LocalDate getThoiGian() {
-        return ThoiGian;
+        return thoiGian;
     }
 
     public void setThoiGian(LocalDate ThoiGian) {
-        this.ThoiGian = ThoiGian;
+        this.thoiGian = ThoiGian;
     }
 
     public int getSoNgayLamTrongThang() {
-        return SoNgayLamTrongThang;
+        return soNgayLamTrongThang;
     }
 
     public void setSoNgayLamTrongThang(int SoNgayLamTrongThang) {
-        this.SoNgayLamTrongThang = SoNgayLamTrongThang;
+        this.soNgayLamTrongThang = SoNgayLamTrongThang;
     }
 
     public int getSoNgayNghiCoPhep() {
-        return SoNgayNghiCoPhep;
+        return soNgayNghiCoPhep;
     }
 
     public void setSoNgayNghiCoPhep(int SoNgayNghiCoPhep) {
-        this.SoNgayNghiCoPhep = SoNgayNghiCoPhep;
+        this.soNgayNghiCoPhep = SoNgayNghiCoPhep;
     }
 
     public int getSoNgayNghiKhongPhep() {
-        return SoNgayNghiKhongPhep;
+        return soNgayNghiKhongPhep;
     }
 
     public void setSoNgayNghiKhongPhep(int SoNgayNghiKhongPhep) {
-        this.SoNgayNghiKhongPhep = SoNgayNghiKhongPhep;
+        this.soNgayNghiKhongPhep = SoNgayNghiKhongPhep;
     }
 
     public String getGhiChu() {
-        return GhiChu;
+        return ghiChu;
     }
 
     public void setGhiChu(String GhiChu) {
-        this.GhiChu = GhiChu;
+        this.ghiChu = GhiChu;
     }
 
     public boolean isDuocPhepChinhSua() {
-        return DuocPhepChinhSua;
+        return duocPhepChinhSua;
     }
 
     public void setDuocPhepChinhSua(boolean DuocPhepChinhSua) {
-        this.DuocPhepChinhSua = DuocPhepChinhSua;
+        this.duocPhepChinhSua = DuocPhepChinhSua;
     }
 
     public NhanSu getNhanSu(){
-        return NhanSu;
+        return nhanSu;
     }
 }

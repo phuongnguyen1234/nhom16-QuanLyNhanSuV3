@@ -2,14 +2,12 @@ package com.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.Model.*;
 import com.Repository.*;
 import java.util.List;
 
 @Service
 public class NhanSuService {
-
     @Autowired
     private NhanSuRepo nhanSuRepo;
 
@@ -30,7 +28,7 @@ public class NhanSuService {
     }
     
     public NhanSu timKiemNhanSu(String maNhanSu) {
-        return nhanSuRepo.findByMaNhanSu(maNhanSu); // Giả sử bạn đã định nghĩa phương thức này trong repository
+        return nhanSuRepo.findByMaNhanSu(maNhanSu); 
     }
     
 }

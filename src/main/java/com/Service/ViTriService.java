@@ -1,4 +1,5 @@
 package com.Service;
+
 import com.Repository.*;
 import java.util.*;
 import com.Model.*;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ViTriService {
-
     @Autowired
     private ViTriRepo viTriRepo;
 
