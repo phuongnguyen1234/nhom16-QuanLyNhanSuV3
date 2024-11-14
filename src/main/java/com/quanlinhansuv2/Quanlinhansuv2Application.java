@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication(scanBasePackages = {"com.Controller", "com.Service", "com.Repository"})
+@SpringBootApplication(scanBasePackages = {"com.Controller", "com.Service", "com.Repository", "com.config"})
 @EnableJpaRepositories(basePackages = "com.Repository")
 @EntityScan(basePackages = "com.Model") 
 public class Quanlinhansuv2Application {
