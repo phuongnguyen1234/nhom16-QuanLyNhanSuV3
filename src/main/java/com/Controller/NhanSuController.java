@@ -7,8 +7,8 @@ import com.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/api/hoso")
@@ -27,24 +27,24 @@ public class NhanSuController {
     private ViTriService viTriService;
 
     // Lấy danh sách chức vụ theo mã phòng ban
-    @GetMapping("/chucvu/{maPhongBan}")
+    @GetMapping("/{maPhongBan}/chucvu")
     public List<ChucVu> layChucVuTheoPhongBan(@PathVariable String maPhongBan) {
         return chucVuService.layChucVuTheoPhongBan(maPhongBan);
     }
 
     // Lấy danh sách vị trí theo mã chức vụ và mã phòng ban
-    @GetMapping("/vitri/{maPhongBan}/{maChucVu}")
+    @GetMapping("/{maPhongBan}/{maChucVu}/vitri")
     public List<ViTri> layViTriTheoChucVu(@PathVariable String maPhongBan, @PathVariable String maChucVu) {
         return viTriService.layViTriTheoChucVu(maPhongBan, maChucVu);
     }
 
     @GetMapping("/all")
-    public List<NhanSuDTO> layTatCaHoSo() {
+    public List<NhanSuShortDTO> layTatCaHoSo() {
         List<NhanSu> danhSachNhanSu = nhanSuService.layTatCaHoSo();
-        List<NhanSuDTO> danhSachDTO = new ArrayList<>();
+        List<NhanSuShortDTO> danhSachDTO = new ArrayList<>();
 
         for (NhanSu nhanSu : danhSachNhanSu) {
-            NhanSuDTO dto = new NhanSuDTO(
+            NhanSuShortDTO dto = new NhanSuShortDTO(
                 nhanSu.getMaNhanSu(),
                 nhanSu.getTenNhanSu(),
                 nhanSu.getPhongBan().getTenPhongBan(),
@@ -57,19 +57,19 @@ public class NhanSuController {
         return danhSachDTO;
     }
 
-    @GetMapping("/{maNhanSu}/detail")
-    public ResponseEntity<NhanSuDTO> layHoSoChiTiet(@PathVariable String maNhanSu) {
+    @GetMapping("/{maNhanSu}")
+    public ResponseEntity<NhanSuFullDTO> layHoSoChiTiet(@PathVariable String maNhanSu) {
     NhanSu nhanSu = nhanSuRepo.findById(maNhanSu).orElse(null);
     if (nhanSu == null) {
         return ResponseEntity.notFound().build();
     }
-
-    // Chuyển đổi sang NhanSuDTO
-    NhanSuDTO dto = new NhanSuDTO();
+    // Chuyển đổi sang NhanSuFullDTO
+    NhanSuFullDTO dto = new NhanSuFullDTO();
     dto.setMaNhanSu(nhanSu.getMaNhanSu());
     dto.setTenNhanSu(nhanSu.getTenNhanSu());
     dto.setGioiTinh(nhanSu.getGioiTinh());
-    dto.setNgaySinh(nhanSu.getNgaySinh());
+    DateTimeFormatter fm = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    dto.setNgaySinh(nhanSu.getNgaySinh().format(fm));
     dto.setDiaChi(nhanSu.getDiaChi());
     dto.setSoDienThoai(nhanSu.getSoDienThoai());
     dto.setEmail(nhanSu.getEmail());
@@ -78,13 +78,15 @@ public class NhanSuController {
     dto.setTenViTri(nhanSu.getViTri().getTenViTri());
     dto.setMucLuong(nhanSu.getMucLuong());
     dto.setMatKhau(nhanSu.getMatKhau());
-
     return ResponseEntity.ok(dto);
     }
 
-    @PostMapping
+    //tao ho so moi
+    @PostMapping("/new")
     public ResponseEntity<NhanSu> taoHoSoMoi(@RequestBody NhanSu nhanSu) {
         try {
+            String newMaNhanSu = nhanSuService.generateNewMaNhanSu();
+            nhanSu.setMaNhanSu(newMaNhanSu);
             NhanSu nhanSuMoi = nhanSuRepo.save(nhanSu);
             return ResponseEntity.ok(nhanSuMoi);
         } catch (Exception e) {
@@ -92,6 +94,7 @@ public class NhanSuController {
         }
     }
 
+    //cap nhat ho so
     @PutMapping("/{maNhanSu}")
     public ResponseEntity<NhanSu> capNhatHoSo(@PathVariable String maNhanSu, @RequestBody NhanSu nhanSu) {
         if (!nhanSuRepo.existsById(maNhanSu)) {
@@ -102,6 +105,7 @@ public class NhanSuController {
         return ResponseEntity.ok(nhanSuCapNhat);
     }
 
+    //xoa ho so
     @DeleteMapping("/{maNhanSu}")
     public ResponseEntity<Void> xoaHoSo(@PathVariable String maNhanSu) {
         if (!nhanSuRepo.existsById(maNhanSu)) {
@@ -110,75 +114,4 @@ public class NhanSuController {
         nhanSuRepo.deleteById(maNhanSu);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/phongban/{maPhongBan}")
-    public List<NhanSuDTO> layHoSoTheoPhongBan(@PathVariable String maPhongBan) {
-        List<NhanSu> danhSachNhanSu = nhanSuService.layHoSoTheoPhongBan(maPhongBan);
-        List<NhanSuDTO> danhSachDTO = new ArrayList<>();
-
-        for (NhanSu nhanSu : danhSachNhanSu) {
-            NhanSuDTO dto = new NhanSuDTO();
-            dto.setMaNhanSu(nhanSu.getMaNhanSu());
-            dto.setTenNhanSu(nhanSu.getTenNhanSu());
-            dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan());
-            dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu());
-            dto.setTenViTri(nhanSu.getViTri().getTenViTri());
-            danhSachDTO.add(dto);
-        }
-
-        return danhSachDTO;
-    }
-
-        @GetMapping("/chucvu/{maChucVu}")
-    public List<NhanSuDTO> layHoSoTheoChucVu(@PathVariable String maChucVu) {
-        List<NhanSu> danhSachNhanSu = nhanSuService.layHoSoTheoChucVu(maChucVu);
-        List<NhanSuDTO> danhSachDTO = new ArrayList<>();
-
-        for (NhanSu nhanSu : danhSachNhanSu) {
-            NhanSuDTO dto = new NhanSuDTO();
-            dto.setMaNhanSu(nhanSu.getMaNhanSu());
-            dto.setTenNhanSu(nhanSu.getTenNhanSu());
-            dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan());
-            dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu());
-            dto.setTenViTri(nhanSu.getViTri().getTenViTri());
-            danhSachDTO.add(dto);
-        }
-
-        return danhSachDTO;
-    }
-
-    @GetMapping("/vitri/{maViTri}")
-    public List<NhanSuDTO> layHoSoTheoViTri(@PathVariable String maViTri) {
-        List<NhanSu> danhSachNhanSu = nhanSuService.layHoSoTheoViTri(maViTri);
-        List<NhanSuDTO> danhSachDTO = new ArrayList<>();
-
-        for (NhanSu nhanSu : danhSachNhanSu) {
-            NhanSuDTO dto = new NhanSuDTO();
-            dto.setMaNhanSu(nhanSu.getMaNhanSu());
-            dto.setTenNhanSu(nhanSu.getTenNhanSu());
-            dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan());
-            dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu());
-            dto.setTenViTri(nhanSu.getViTri().getTenViTri());
-            danhSachDTO.add(dto);
-        }
-
-        return danhSachDTO;
-    }
-
-    @GetMapping("/{maNhanSu}")
-    public ResponseEntity<NhanSuDTO> timKiemNhanSu(@PathVariable String maNhanSu) {
-        NhanSu nhanSu = nhanSuService.timKiemNhanSu(maNhanSu); // Tìm kiếm trong service
-        if (nhanSu != null) {
-            NhanSuDTO dto = new NhanSuDTO();
-            dto.setMaNhanSu(nhanSu.getMaNhanSu());
-            dto.setTenNhanSu(nhanSu.getTenNhanSu());
-            dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan());
-            dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu());
-            dto.setTenViTri(nhanSu.getViTri().getTenViTri());
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build(); // Nếu không tìm thấy, trả về 404
-        }
-    }
-
 }

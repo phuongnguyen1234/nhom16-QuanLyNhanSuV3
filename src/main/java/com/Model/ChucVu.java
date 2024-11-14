@@ -19,7 +19,7 @@ public class ChucVu {
     private String tenChucVu;
 
     @ManyToOne
-    @JoinColumn(name = "MaPhongBan", insertable = false, updatable = false) 
+    @JoinColumn(name = "MaPhongBan", referencedColumnName = "MaPhongBan", insertable = false, updatable = false)
     private PhongBan phongBan;
 
     @OneToMany(mappedBy = "chucVu")

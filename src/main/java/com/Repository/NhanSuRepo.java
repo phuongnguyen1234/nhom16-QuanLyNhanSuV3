@@ -9,5 +9,5 @@ public interface NhanSuRepo extends JpaRepository<NhanSu, String> {
     List<NhanSu> findByViTri_MaViTri(String maViTri);
     List<NhanSu> findByChucVu_MaChucVu(String maChucVu);
     List<NhanSu> findByPhongBan_MaPhongBan(String maPhongBan);
-
+    Optional<NhanSu> findTopByOrderByMaNhanSuDesc();
 }

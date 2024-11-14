@@ -67,7 +67,7 @@ public class NhanSu {
         this.ngaySinh = NgaySinh;
         this.diaChi = DiaChi;
         this.soDienThoai = SoDienThoai;
-        this.email = Email;  // sửa lại tên tham số từ 'Email' thành 'email'
+        this.email = Email;
         this.maPhongBan = MaPhongBan;
         this.maChucVu = MaChucVu;
         this.maViTri = MaViTri;
