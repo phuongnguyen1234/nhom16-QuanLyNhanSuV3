@@ -1,7 +1,9 @@
 package com.Controller;
 
 import com.Model.BangLuong;
+import com.Model.BangChamCong;
 import com.Service.BangLuongService;
+import com.Service.BangChamCongService;  // Giả sử có service cho BangChamCong
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ public class BangLuongController {
     @Autowired
     private BangLuongService bangLuongService;
 
+    @Autowired
+    private BangChamCongService bangChamCongService; // Service cho BangChamCong
 
     @GetMapping("/all")
     public ResponseEntity<List<BangLuong>> getAllBangLuong() {
@@ -30,21 +34,16 @@ public class BangLuongController {
     @GetMapping("/filter")
     public ResponseEntity<List<BangLuong>> getBangLuongByMonthAndYear(@RequestParam String month, @RequestParam String year) {
         try {
-            // Check if month and year are valid integers
             int parsedMonth = Integer.parseInt(month);
             int parsedYear = Integer.parseInt(year);
 
-            // Call service method to get data
+            // Lọc bảng lương theo tháng và năm
             List<BangLuong> bangLuongs = bangLuongService.getBangLuongByMonth(parsedMonth, parsedYear);
             return ResponseEntity.ok(bangLuongs);
-
         } catch (NumberFormatException e) {
-            // Handle invalid month/year format
-            return ResponseEntity.badRequest().body(Collections.emptyList()); // or return error message
+            return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
-
-
 
     @GetMapping("/export")
     public ResponseEntity<List<BangLuong>> exportBangLuong() {
@@ -55,7 +54,7 @@ public class BangLuongController {
         return ResponseEntity.ok(bangLuongs);
     }
 
-    // API để xuất bảng lương dưới dạng CSV
+    // API xuất bảng lương dưới dạng CSV
     @GetMapping("/export/csv")
     public ResponseEntity<String> exportBangLuongCsv() {
         List<BangLuong> bangLuongs = bangLuongService.exportBangLuong();
@@ -63,18 +62,25 @@ public class BangLuongController {
             return ResponseEntity.noContent().build();
         }
 
-
         StringBuilder csvOutput = new StringBuilder();
-        csvOutput.append("MaBangLuong,TongThuNhap,LuongThucNhan,GhiChu,Month,Year\n");
+        csvOutput.append("MaBangLuong,MaBangChamCong,TenNhanSu,Thang,SoNgayLamTrongThang,SoNgayNghi,LuongThucNhan,GhiChu\n");
 
         for (BangLuong bangLuong : bangLuongs) {
+            BangChamCong bangChamCong = bangLuong.getBangChamCong();
+            String maBangChamCong = bangChamCong != null ? bangChamCong.getMaBangChamCong() : "N/A";
+            String tenNhanSu = bangChamCong != null && bangChamCong.getNhanSu().getTenNhanSu() != null
+                    ? bangChamCong.getNhanSu().getTenNhanSu() : "Chưa có tên nhân sự";
+            int soNgayLamTrongThang = bangChamCong != null ? bangChamCong.getSoNgayLamTrongThang() : 0;
+            int soNgayNghi = bangChamCong != null ? bangChamCong.getSoNgayNghiCoPhep() + bangChamCong.getSoNgayNghiKhongPhep() : 0;
 
             csvOutput.append(bangLuong.getMaChucVuaBangLuong()).append(",")
-                    .append(bangLuong.getTongThuNhap()).append(",")
-                    .append(bangLuong.getLuongThucNhan()).append(",")
-                    .append(bangLuong.getGhiChu()).append(",")
+                    .append(maBangChamCong).append(",")
+                    .append(tenNhanSu).append(",")
                     .append(bangLuong.getMonth()).append(",")
-                    .append(bangLuong.getYear()).append("\n");
+                    .append(soNgayLamTrongThang).append(",")
+                    .append(soNgayNghi).append(",")
+                    .append(bangLuong.getLuongThucNhan()).append(",")
+                    .append(bangLuong.getGhiChu()).append("\n");
         }
 
         return ResponseEntity.ok()
