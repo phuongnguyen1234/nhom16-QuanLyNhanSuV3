@@ -34,8 +34,8 @@ public class NhanSuController {
 
     // Lấy danh sách vị trí theo mã chức vụ và mã phòng ban
     @GetMapping("/{maPhongBan}/{maChucVu}/vitri")
-    public List<ViTri> layViTriTheoChucVu(@PathVariable String maPhongBan, @PathVariable String maChucVu) {
-        return viTriService.layViTriTheoChucVu(maPhongBan, maChucVu);
+    public List<ViTri> layViTriTheoPhongBanVaChucVu(@PathVariable String maPhongBan, @PathVariable String maChucVu) {
+        return viTriService.layViTriTheoPhongBanVaChucVu(maPhongBan, maChucVu);
     }
 
     @GetMapping("/all")

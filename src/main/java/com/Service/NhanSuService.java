@@ -16,15 +16,15 @@ public class NhanSuService {
     }
 
     public List<NhanSu> layHoSoTheoPhongBan(String maPhongBan) {
-        return nhanSuRepo.findByPhongBan_MaPhongBan(maPhongBan);
+        return nhanSuRepo.findByMaPhongBan(maPhongBan);
     }
 
     public List<NhanSu> layHoSoTheoChucVu(String maChucVu) {
-        return nhanSuRepo.findByChucVu_MaChucVu(maChucVu);
+        return nhanSuRepo.findByMaChucVu(maChucVu);
     }
     
     public List<NhanSu> layHoSoTheoViTri(String maViTri) {
-        return nhanSuRepo.findByViTri_MaViTri(maViTri);
+        return nhanSuRepo.findByMaViTri(maViTri);
     }
     
     public NhanSu timKiemNhanSu(String maNhanSu) {

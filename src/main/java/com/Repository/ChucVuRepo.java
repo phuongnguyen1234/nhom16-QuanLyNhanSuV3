@@ -7,5 +7,5 @@ import org.springframework.stereotype.*;
 
 @Repository
 public interface ChucVuRepo extends JpaRepository<ChucVu, ChucVuId> {
-    List<ChucVu> findByPhongBan_MaPhongBan(String maPhongBan);
+    List<ChucVu> findByMaPhongBan(String maPhongBan);
 }

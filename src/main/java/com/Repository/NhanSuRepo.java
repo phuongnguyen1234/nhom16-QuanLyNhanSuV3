@@ -6,8 +6,8 @@ import java.util.*;
 
 public interface NhanSuRepo extends JpaRepository<NhanSu, String> {
     NhanSu findByMaNhanSu(String maNhanSu);
-    List<NhanSu> findByViTri_MaViTri(String maViTri);
-    List<NhanSu> findByChucVu_MaChucVu(String maChucVu);
-    List<NhanSu> findByPhongBan_MaPhongBan(String maPhongBan);
+    List<NhanSu> findByMaViTri(String maViTri);
+    List<NhanSu> findByMaChucVu(String maChucVu);
+    List<NhanSu> findByMaPhongBan(String maPhongBan);
     Optional<NhanSu> findTopByOrderByMaNhanSuDesc();
 }

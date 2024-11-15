@@ -32,4 +32,20 @@ public class ChucVu {
     public void setTenChucVu(String TenChucVu) {
         this.tenChucVu = TenChucVu;
     }
+
+    public String getMaChucVu() {
+        return maChucVu;
+    }
+    
+    public void setMaChucVu(String maChucVu) {
+        this.maChucVu = maChucVu;
+    }
+    
+    public String getMaPhongBan() {
+        return maPhongBan;
+    }
+    
+    public void setMaPhongBan(String maPhongBan) {
+        this.maPhongBan = maPhongBan;
+    }
 }
