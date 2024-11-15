@@ -1,7 +1,6 @@
 package com.Model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -42,83 +41,101 @@ public class BangChamCong {
     public BangChamCong() {
     }
 
-    public BangChamCong(String maBangChamCong, String MaNhanSu, LocalDate ThoiGian, int SoNgayLamTrongThang, int SoNgayNghiCoPhep, int SoNgayNghiKhongPhep, String GhiChu, boolean DuocPhepChinhSua) {
+    public BangChamCong(String maBangChamCong, String maNhanSu, LocalDate thoiGian,
+                        int soNgayLamTrongThang, int soNgayNghiCoPhep,
+                        int soNgayNghiKhongPhep, String ghiChu, boolean duocPhepChinhSua) {
         this.maBangChamCong = maBangChamCong;
-        this.maNhanSu = MaNhanSu;
-        this.thoiGian = ThoiGian;
-        this.soNgayLamTrongThang = SoNgayLamTrongThang;
-        this.soNgayNghiCoPhep = SoNgayNghiCoPhep;
-        this.soNgayNghiKhongPhep = SoNgayNghiKhongPhep;
-        this.ghiChu = GhiChu;
-        this.duocPhepChinhSua = DuocPhepChinhSua;
+        this.maNhanSu = maNhanSu;
+        this.thoiGian = thoiGian;
+        this.soNgayLamTrongThang = soNgayLamTrongThang;
+        this.soNgayNghiCoPhep = soNgayNghiCoPhep;
+        this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
+        this.ghiChu = ghiChu;
+        this.duocPhepChinhSua = duocPhepChinhSua;
     }
 
     // Getters và Setters
+
     public String getMaBangChamCong() {
         return maBangChamCong;
     }
 
-    public void setMaBangChamCong(String MaBangChamCong) {
-        this.maBangChamCong = MaBangChamCong;
+    public void setMaBangChamCong(String maBangChamCong) {
+        this.maBangChamCong = maBangChamCong;
     }
 
     public String getMaNhanSu() {
         return maNhanSu;
     }
 
-    public void setMaNhanSu(String MaNhanSu) {
-        this.maNhanSu = MaNhanSu;
+    public void setMaNhanSu(String maNhanSu) {
+        this.maNhanSu = maNhanSu;
     }
 
     public LocalDate getThoiGian() {
         return thoiGian;
     }
 
-    public void setThoiGian(LocalDate ThoiGian) {
-        this.thoiGian = ThoiGian;
+    public void setThoiGian(LocalDate thoiGian) {
+        this.thoiGian = thoiGian;
     }
 
     public int getSoNgayLamTrongThang() {
         return soNgayLamTrongThang;
     }
 
-    public void setSoNgayLamTrongThang(int SoNgayLamTrongThang) {
-        this.soNgayLamTrongThang = SoNgayLamTrongThang;
+    public void setSoNgayLamTrongThang(int soNgayLamTrongThang) {
+        this.soNgayLamTrongThang = soNgayLamTrongThang;
     }
 
     public int getSoNgayNghiCoPhep() {
         return soNgayNghiCoPhep;
     }
 
-    public void setSoNgayNghiCoPhep(int SoNgayNghiCoPhep) {
-        this.soNgayNghiCoPhep = SoNgayNghiCoPhep;
+    public void setSoNgayNghiCoPhep(int soNgayNghiCoPhep) {
+        this.soNgayNghiCoPhep = soNgayNghiCoPhep;
     }
 
     public int getSoNgayNghiKhongPhep() {
         return soNgayNghiKhongPhep;
     }
 
-    public void setSoNgayNghiKhongPhep(int SoNgayNghiKhongPhep) {
-        this.soNgayNghiKhongPhep = SoNgayNghiKhongPhep;
+    public void setSoNgayNghiKhongPhep(int soNgayNghiKhongPhep) {
+        this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
     }
 
     public String getGhiChu() {
         return ghiChu;
     }
 
-    public void setGhiChu(String GhiChu) {
-        this.ghiChu = GhiChu;
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
     }
 
     public boolean isDuocPhepChinhSua() {
         return duocPhepChinhSua;
     }
 
-    public void setDuocPhepChinhSua(boolean DuocPhepChinhSua) {
-        this.duocPhepChinhSua = DuocPhepChinhSua;
+    public void setDuocPhepChinhSua(boolean duocPhepChinhSua) {
+        this.duocPhepChinhSua = duocPhepChinhSua;
     }
 
-    public NhanSu getNhanSu(){
+    public NhanSu getNhanSu() {
         return nhanSu;
+    }
+
+    public void setNhanSu(NhanSu nhanSu) {
+        this.nhanSu = nhanSu;
+    }
+
+    public BangLuong getBangLuong() {
+        return bangLuong;
+    }
+
+    public void setBangLuong(BangLuong bangLuong) {
+        this.bangLuong = bangLuong;
+    }
+
+    public void setSoGioLamThem(int i) {
     }
 }
