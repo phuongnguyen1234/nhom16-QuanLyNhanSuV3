@@ -18,8 +18,8 @@ public class BangLuongService {
         return bangLuongRepository.findAll();
     }
 
-    public List<BangLuong> getBangLuongByMonthAndYear(int month, int year) {
-        return bangLuongRepository.findByMonthAndYear(month, year);
+    public List<BangLuong> filterByMonthAndYear(int month, int year) {
+        return bangLuongRepository.findByBangChamCong_ThoiGian_MonthAndYear(month, year);
     }
 
     // Xuất bảng lương dưới dạng JSON
