@@ -8,7 +8,7 @@ public class BangLuong {
 
     @Id
     @Column(name = "MaBangLuong")
-    private String maChucVuaBangLuong;
+    private String maBangLuong;
 
     @Column(name = "TongThuNhap")
     private int tongThuNhap;
