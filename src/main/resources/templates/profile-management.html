@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Quản lý nhân sự - Nhóm 16</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+    .add-record-btn {
+      padding: 8px 16px;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 30px;
+      width: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content h3 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .form-control[type="radio"] {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    .form-control select {
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .radio-group {
+      margin-bottom: 10px;
+    }
+
+    .radio-group input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+
+</head>
+
+
+<body>
+  <script>
+  function getDetail(maNhanSu) {
+  // Gọi API để lấy dữ liệu chi tiết của nhân sự
+  fetch(`http://localhost:8080/api/hoso/${maNhanSu}`)
+      .then(response => response.json())
+      .then(data => {
+          // Điền dữ liệu vào các trường của form
+          document.getElementById("maNhanSuInfo").value = maNhanSu;
+          document.getElementById("tenNhanSuInfo").value = data.tenNhanSu;
+          if (data.gioiTinh === "Nam") {
+              document.getElementById("gioiTinhNamInfo").checked = true;
+          } else if (data.gioiTinh === "Nữ") {
+              document.getElementById("gioiTinhNuInfo").checked = true;
+          }
+          document.getElementById("ngaySinhInfo").value = data.ngaySinh;
+          document.getElementById("diaChiInfo").value = data.diaChi;
+          document.getElementById("soDTInfo").value = data.soDienThoai;
+          document.getElementById("emailInfo").value = data.email;
+          document.getElementById("phongBanInfo").value = data.tenPhongBan;
+          document.getElementById("chucVuInfo").value = data.tenChucVu;
+          document.getElementById("viTriInfo").value = data.tenViTri;
+          document.getElementById("mucLuongInfo").value = data.mucLuong;
+          document.getElementById("matKhauInfo").value = data.matKhau;
+
+          document.getElementById("detailModal").style.display = "block";
+      })
+      .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
+}
+
+  function closeDetailForm() {
+    document.getElementById("detailModal").style.display = "none";
+  }
+
+  function openAddForm() {
+    document.getElementById("addForm").style.display = "block";
+  }
+
+  function closeAddForm() {
+    document.getElementById("addForm").style.display = "none";
+  }
+
+  //load bang NHANSU khi Quan ly ho so duoc mo ra
+  document.addEventListener("DOMContentLoaded", function() {
+  fetch("http://localhost:8080/api/hoso/all") 
+      .then(response => response.json())
+      .then(data => {
+          const tbody = document.querySelector("#nhanSuTable tbody");
+          tbody.innerHTML = ""; // Xóa nội dung cũ (nếu có)
+          data.forEach(record => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                  <td>${record.maNhanSu}</td>
+                  <td>${record.tenNhanSu}</td>
+                  <td>${record.tenPhongBan}</td>
+                  <td>${record.tenChucVu}</td>
+                  <td>${record.tenViTri}</td>
+                  <td>
+                      <button onclick="getDetail('${record.maNhanSu}')">Xem</button>
+                  </td>
+              `;
+              tbody.appendChild(row);
+          });
+      })
+      .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
+});
+
+  // Handle form submission and populate table (sample)
+  document.getElementById('addRecordForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+  const data = {
+    tenNhanSu: document.getElementById('tenNhanSu').value,
+    gioiTinh: document.querySelector('input[name="gioiTinh"]:checked').value,
+    ngaySinh: document.getElementById('ngaySinh').value,
+    diaChi: document.getElementById('diaChi').value,
+    soDT: document.getElementById('soDT').value,
+    email: document.getElementById('email').value,
+    phongBan: document.getElementById('phongBan').value,
+    chucVu: document.getElementById('chucVu').value,
+    viTri: document.getElementById('viTri').value,
+    mucLuong: document.getElementById('mucLuong').value,
+    matKhau: document.getElementById('matKhau').value,
+  };
+  console.log(JSON.stringify(data));
+/*
+  fetch('/api/hoso/new', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    closeAddForm(); // Đóng modal sau khi lưu thành công
+  })
+  .catch(error => console.error('Lỗi:', error)); */
+});
+
+  document.getElementById("showPassword").addEventListener("change", function () {
+      const passwordField = document.getElementById("matKhau");
+      passwordField.type = this.checked ? "text" : "password";
+  });
+
+  function convertDateFormat() {
+  var inputDate = document.getElementById("ngaySinh").value;  // Lấy giá trị từ input
+  if (inputDate) {
+      var dateObj = new Date(inputDate);  // Tạo đối tượng Date từ giá trị input
+
+      // Lấy ngày, tháng, năm
+      var day = ("0" + dateObj.getDate()).slice(-2);  // Thêm số 0 nếu ngày nhỏ hơn 10
+      var month = ("0" + (dateObj.getMonth() + 1)).slice(-2);  // Thêm số 0 nếu tháng nhỏ hơn 10
+      var year = dateObj.getFullYear();
+
+      // Tạo chuỗi ngày theo định dạng dd/MM/yyyy
+      var formattedDate = day + "/" + month + "/" + year;
+
+      // Ghi lại giá trị đã chuyển đổi vào trường input hoặc xử lý theo ý muốn
+      console.log(formattedDate); // In ra console (hoặc bạn có thể gán vào một trường khác)
+      // Nếu bạn muốn gán vào trường input:
+      document.getElementById("ngaySinh").value = formattedDate;
+  }
+}
+
+// Kiểm tra và kích hoạt Chức vụ và Vị trí khi có lựa chọn Phòng ban và Chức vụ
+function toggleFields() {
+  const phongBanSelect = document.getElementById("phongBan");
+  const chucVuSelect = document.getElementById("chucVu");
+  const viTriSelect = document.getElementById("viTri");
+
+  // Nếu Phòng ban không được chọn, khóa Chức vụ và Vị trí
+  if (!phongBanSelect.value) {
+      chucVuSelect.disabled = true;
+      viTriSelect.disabled = true;
+      chucVuSelect.innerHTML = '<option value="">- Chọn Chức vụ -</option>'; // Reset Chức vụ
+      viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+      return;
+  }
+  
+  // Nếu Phòng ban được chọn, kích hoạt Chức vụ và load lại Chức vụ
+  chucVuSelect.disabled = false;
+  loadChucVu(phongBanSelect.value); // Lọc và tải Chức vụ theo Phòng ban
+}
+
+// Lọc các chức vụ theo Phòng ban
+function loadChucVu(phongBanId) {
+  fetch(`http://localhost:8080/api/hoso/${phongBanId}/chucvu`)
+      .then(response => response.json())
+      .then(data => {
+          const chucVuSelect = document.getElementById("chucVu");
+          chucVuSelect.innerHTML = '<option value="">- Chọn Chức vụ -</option>'; // Reset Chức vụ
+
+          // Thêm các option Chức vụ vào select
+          data.forEach(chucVu => {
+              const option = document.createElement("option");
+              option.value = chucVu.maChucVu;
+              option.textContent = chucVu.tenChucVu;
+              chucVuSelect.appendChild(option);
+          });
+
+          // Sau khi load chức vụ, reset và khóa vị trí để đảm bảo vị trí sẽ cập nhật khi chọn chức vụ mới
+          const viTriSelect = document.getElementById("viTri");
+          viTriSelect.disabled = true;
+          viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+      })
+      .catch(error => console.error("Lỗi khi tải chức vụ:", error));
+}
+
+// Lọc các vị trí theo Phòng ban và Chức vụ
+function loadViTri() {
+  const phongBanId = document.getElementById("phongBan").value;
+  const chucVuId = document.getElementById("chucVu").value;
+  const viTriSelect = document.getElementById("viTri");
+
+  // Nếu không có Phòng ban hoặc Chức vụ thì khóa Vị trí
+  if (!phongBanId || !chucVuId) {
+      viTriSelect.disabled = true;
+      viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+      return;
+  }
+
+  // Nếu có đủ Phòng ban và Chức vụ, kích hoạt Vị trí và load lại danh sách Vị trí
+  viTriSelect.disabled = false;
+  fetch(`http://localhost:8080/api/hoso/${phongBanId}/${chucVuId}/vitri`)
+      .then(response => response.json())
+      .then(data => {
+          viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+
+          // Thêm các option Vị trí vào select
+          data.forEach(viTri => {
+              const option = document.createElement("option");
+              option.value = viTri.maViTri;
+              option.textContent = viTri.tenViTri;
+              viTriSelect.appendChild(option);
+          });
+      })
+      .catch(error => console.error("Lỗi khi tải vị trí:", error));
+}
+
+// Event listener cho khi chọn Phòng ban và Chức vụ
+document.getElementById("phongBan").addEventListener("change", toggleFields);
+document.getElementById("chucVu").addEventListener("change", loadViTri);
+
+
+</script>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">Nhóm 16</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Admin</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>Hồ sơ của tôi</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Cài đặt tài khoản</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="/dangxuat">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Đăng xuất</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <!-- Quản lý Hồ sơ Nav Item -->
+      <li class="nav-item">
+        <a class="nav-link" href="profile-management.html">
+          <i class="bi bi-folder"></i><span>Quản lý Hồ sơ</span>
+        </a>
+      </li>
+      <!-- End Quản lý Hồ sơ Nav -->
+
+
+      <!-- Bảng tổng quát Nav Item -->
+      <li class="nav-item">
+        <a class="nav-link" href="tables-general.html">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Bảng chấm công</span>
+        </a>
+    </li>
+    <!-- End Bảng tổng quát Nav -->
+
+    <!-- Bảng dữ liệu Nav Item -->
+    <li class="nav-item">
+      <a class="nav-link" href="tables-data.html">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bảng lương</span>
+      </a>
+    </li>
+    <!-- End Bảng dữ liệu Nav -->
+
+
+      <li class="nav-heading">Trang</li>
+
+      <li class="nav-item">
+        <a class="nav-link " href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Hồ sơ</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/dangxuat">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Đăng xuất</span>
+        </a>
+    </li><!-- End Logout Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <!-- Main Content -->
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Quản lý hồ sơ</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Quản lý hồ sơ</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <button class="add-record-btn" onclick="openAddForm()">Thêm hồ sơ</button>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered datatable" id="nhanSuTable">
+          <thead>
+            <tr>
+              <th>Mã nhân sự</th>
+              <th>Tên nhân sự</th>
+              <th>Phòng ban</th>
+              <th>Chức vụ</th>
+              <th>Vị trí</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic rows added here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Form Thông Tin Chi Tiết -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <span class="close" onclick="closeDetailForm()">&times;</span>
+    <h3 id="modal-title">Thông tin chi tiết nhân sự</h3>
+    <form id="detailRecordForm">
+      <!-- Tên Nhân Sự -->
+      <div class="form-group">
+        <label for="maNhanSuInfo">Mã nhân sự:</label>
+        <input type="text" id="maNhanSuInfo" class="form-control" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="tenNhanSuInfo">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSuInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Giới Tính -->
+      <div class="form-group radio-group">
+        <label>Giới tính:</label>
+        <input type="radio" id="gioiTinhNamInfo" name="gioiTinh" value="Nam" disabled> Nam
+        <input type="radio" id="gioiTinhNuInfo" name="gioiTinh" value="Nữ" disabled> Nữ
+      </div>
+
+      <!-- Ngày Sinh -->
+      <div class="form-group">
+        <label for="ngaySinhInfo">Ngày sinh:</label>
+        <input type="date" id="ngaySinhInfo" class="form-control" disabled onchange="convertDateFormat()">
+      </div>
+
+      <!-- Địa Chỉ -->
+      <div class="form-group">
+        <label for="diaChiInfo">Địa chỉ:</label>
+        <input type="text" id="diaChiInfo" class="form-control" disabled>
+      </div>
+      
+      <!-- Số Điện Thoại -->
+      <div class="form-group">
+        <label for="soDTInfo">Số điện thoại:</label>
+        <input type="tel" id="soDTInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="emailInfo">Email:</label>
+        <input type="email" id="emailInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Phòng Ban -->
+      <div class="form-group">
+        <label for="phongBanInfo">Phòng ban:</label>
+        <input type="text" id="phongBanInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Chức Vụ -->
+      <div class="form-group">
+        <label for="chucVuInfo">Chức vụ:</label>
+        <input type="text" id="chucVuInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Vị Trí -->
+      <div class="form-group">
+        <label for="viTriInfo">Vị trí:</label>
+        <input type="text" id="viTriInfo" class="form-control" disabled>
+      </div>
+
+      <!-- Mức Lương -->
+      <div class="form-group">
+        <label for="mucLuongInfo">Mức lương:</label>
+        <input type="number" id="mucLuongInfo" class="form-control" 
+        oninput="this.value = Math.floor(Math.abs(this.value))" disabled>
+      </div>
+
+      <!-- Mật Khẩu -->
+      <div class="form-group">
+        <label for="matKhauInfo">Mật khẩu:</label>
+        <input type="password" id="matKhauInfo" class="form-control" disabled>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="showPasswordInfo">
+          <label class="form-check-label" for="showPasswordInfo">Hiển thị mật khẩu</label>
+        </div>
+      </div>
+      
+      <!-- Modal Footer với 2 nút Chỉnh Sửa và Xóa -->
+      <div class="modal-footer">
+        <button type="button" class="btn" onclick="editRecord()">Chỉnh sửa</button>
+        <button type="button" class="btn btn-danger" onclick="deleteRecord()">Xóa</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+    <!-- Form them/chinh sua ho so -->
+<div id="addForm" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddForm()">&times;</span>
+    <h3 id="modal-title">Thêm hồ sơ mới</h3>
+    <form id="addRecordForm">
+      <div class="form-group">
+        <label for="tenNhanSu">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSu" placeholder="Tên nhân sự" class="form-control" required>
+      </div>
+
+      <div class="form-group radio-group">
+        <label>Giới tính:</label>
+        <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam" required> Nam
+        <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nữ"> Nữ
+      </div>
+
+      <div class="form-group">
+        <label for="ngaySinh">Ngày sinh:</label>
+        <input type="date" id="ngaySinh" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="diaChi">Địa chỉ:</label>
+        <input type="text" id="diaChi" placeholder="Địa chỉ" class="form-control" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="soDT">Số điện thoại:</label>
+        <input type="tel" id="soDT" placeholder="Số điện thoại" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Email" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phongBan">Phòng ban:</label>
+        <select id="phongBan" class="form-control" required onchange="toggleFields()">
+          <option value="">- Chọn phòng ban -</option>
+          <option value="NS">Nhân sự</option>
+          <option value="TC-KT">Tài chính - Kế toán</option>
+          <option value="MKT">Marketing</option>
+          <option value="IT">Công nghệ thông tin</option>
+          <option value="QHKH">Quan hệ khách hàng</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="chucVu">Chức vụ:</label>
+        <select id="chucVu" class="form-control" required disabled onchange="loadViTri()">
+          <option value="">- Chọn chức vụ -</option>
+          <!--danh sach chucvu duoc hien thi o day-->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="viTri">Vị trí:</label>
+        <select id="viTri" class="form-control" required disabled>
+          <option value="">- Chọn vị trí -</option>
+          <!--danh sach vitri duoc hien thi o day-->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="mucLuong">Mức lương:</label>
+        <input type="number" id="mucLuong" placeholder="Mức lương" class="form-control" 
+        required oninput="this.value = Math.floor(Math.abs(this.value))">
+      </div>
+
+      <!-- Mới thêm trường Mật khẩu -->
+      <div class="form-group">
+        <label for="matKhau">Mật khẩu:</label>
+        <input type="password" id="matKhau" placeholder="Mật khẩu" class="form-control">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="showPassword">
+          <label class="form-check-label" for="showPassword">Hiển thị mật khẩu</label>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="submit" class="btn">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+  </main><!-- End Main Content -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+</body>
+</html>
