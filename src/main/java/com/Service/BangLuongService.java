@@ -18,8 +18,7 @@ public class BangLuongService {
         return bangLuongRepository.findAll();
     }
 
-    // Lọc bảng lương theo tháng
-    public List<BangLuong> getBangLuongByMonth(int month, int year) {
+    public List<BangLuong> getBangLuongByMonthAndYear(int month, int year) {
         return bangLuongRepository.findByMonthAndYear(month, year);
     }
 
