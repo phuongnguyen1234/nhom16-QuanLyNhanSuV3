@@ -31,23 +31,20 @@ public class BangLuongController {
     }
 
     // API để lọc bảng lương theo tháng và năm
-    @GetMapping("/filter")
-public ResponseEntity<List<BangLuong>> getBangLuongByMonthAndYear(@RequestParam String month, @RequestParam String year) {
-    try {
-        int parsedMonth = Integer.parseInt(month);
-        int parsedYear = Integer.parseInt(year);
-
-        // Lọc bảng lương dựa trên tháng và năm từ BangChamCong
-        List<BangLuong> bangLuongs = bangLuongService.getBangLuongByMonthAndYear(parsedMonth, parsedYear);
-
-        if (bangLuongs.isEmpty()) {
-            return ResponseEntity.noContent().build();
+   @GetMapping("/filter")
+    public ResponseEntity<List<BangLuong>> getBangLuongByMonthAndYear(
+            @RequestParam int month, @RequestParam int year) {
+        try {
+            // Lọc bảng lương theo tháng và năm
+            List<BangLuong> bangLuongs = bangLuongService.filterByMonthAndYear(month, year);
+            if (bangLuongs.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(bangLuongs);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
-        return ResponseEntity.ok(bangLuongs);
-    } catch (NumberFormatException e) {
-        return ResponseEntity.badRequest().body(Collections.emptyList());
     }
-}
 
 
     @GetMapping("/export")
