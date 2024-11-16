@@ -11,4 +11,5 @@ import java.util.List;
 public interface BangLuongRepo extends JpaRepository<BangLuong, String> {
     @Query("SELECT bl FROM BangLuong bl JOIN bl.bangChamCong bcc WHERE bcc.thoiGian = :thoiGian")
     List<BangLuong> findByThoiGian(@Param("thoiGian") LocalDate thoiGian);
+
 }

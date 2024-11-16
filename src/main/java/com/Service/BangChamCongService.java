@@ -90,7 +90,7 @@ public class BangChamCongService {
         }
     }
     // Hàm tìm kiếm bảng chấm công theo tháng và năm
-    public List<BangChamCong> getBangChamCongByMonthAndYear(int month, int year) {
-        return bangChamCongRepo.findByMonthAndYear(month, year);
+    public List<BangChamCong> getBangChamCongByThoiGian(LocalDate thoiGian) {
+        return bangChamCongRepo.findByThoiGian(thoiGian);
     }
 }

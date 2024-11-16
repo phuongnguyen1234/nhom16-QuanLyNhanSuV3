@@ -38,18 +38,6 @@ public class BangChamCong {
     @OneToOne(mappedBy = "bangChamCong")
     private BangLuong bangLuong;
 
-    public void setNhanSu(NhanSu nhanSu) {
-        this.nhanSu = nhanSu;
-    }
-
-    public BangLuong getBangLuong() {
-        return bangLuong;
-    }
-
-    public void setBangLuong(BangLuong bangLuong) {
-        this.bangLuong = bangLuong;
-    }
-
     public BangChamCong() {
     }
 

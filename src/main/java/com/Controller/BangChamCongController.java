@@ -11,11 +11,11 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.*;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/bangchamcong")
@@ -82,10 +82,10 @@ public class BangChamCongController {
     }
     // Endpoint tìm kiếm bảng chấm công theo tháng và năm
     @GetMapping("/search")
-    public List<BangChamCongDTO> searchBangChamCongByMonthAndYear(
-            @RequestParam int month, @RequestParam int year) {
+    public List<BangChamCongDTO> searchBangChamCongByThoiGian(
+            @RequestParam LocalDate thoiGian) {
 
-        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByMonthAndYear(month, year);
+        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByThoiGian(thoiGian);
         return bangChamCongList.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
     // Chuyển đổi từ BangChamCong thành BangChamCongDTO
