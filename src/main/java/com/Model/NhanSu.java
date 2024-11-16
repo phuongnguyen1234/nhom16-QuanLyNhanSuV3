@@ -2,7 +2,6 @@ package com.Model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
 
 @Entity
 @Table(name = "NHANSU")

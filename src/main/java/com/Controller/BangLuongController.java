@@ -1,10 +1,8 @@
 package com.Controller;
 
 import com.DTO.*;
-import com.Model.BangLuong;
-import com.Model.BangChamCong;
-import com.Service.BangLuongService;
-import com.Service.BangChamCongService;  // Giả sử có service cho BangChamCong
+import com.Model.*;
+import com.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

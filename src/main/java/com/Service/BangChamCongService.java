@@ -1,8 +1,7 @@
 package com.Service;
 
-import com.Model.NhanSu;
 import com.Repository.BangChamCongRepo;
-import com.Model.BangChamCong;
+import com.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
