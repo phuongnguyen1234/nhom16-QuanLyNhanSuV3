@@ -297,9 +297,9 @@
           data.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${item.maChucVuaBangLuong}</td>
+                <td>${item.maBangLuong}</td>
                 <td>${item.bangChamCong.maBangChamCong}</td>
-                <td>${item.bangChamCong.tenNhanSu}</td>
+                <td>${item.bangChamCong.nhanSu.tenNhanSu}</td>
                 <td>${item.month}/${item.year}</td>
                 <td>${item.bangChamCong.soNgayLam}</td>
                 <td>${item.bangChamCong.soNgayNghi}</td>
@@ -316,6 +316,9 @@
         salaryTableBody.innerHTML = '<tr><td colspan="8">Lỗi khi tải dữ liệu.</td></tr>';
       }
     }
+    window.onload = fetchSalaryData(11,2024);
+
+
 
     // Handle month and year selection
     selectMonth.addEventListener('change', function () {

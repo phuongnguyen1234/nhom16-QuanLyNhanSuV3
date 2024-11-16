@@ -2,7 +2,9 @@ package com.Controller;
 
 import com.DTO.*;
 import com.Model.BangLuong;
+import com.Model.BangChamCong;
 import com.Service.BangLuongService;
+import com.Service.BangChamCongService;  // Giả sử có service cho BangChamCong
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,9 +67,8 @@ public class BangLuongController {
             return ResponseEntity.noContent().build();
         }
 
-
         StringBuilder csvOutput = new StringBuilder();
-        csvOutput.append("MaBangLuong,TongThuNhap,LuongThucNhan,GhiChu,Month,Year\n");
+        csvOutput.append("MaBangLuong,MaBangChamCong,TenNhanSu,Thang,SoNgayLamTrongThang,SoNgayNghi,LuongThucNhan,GhiChu\n");
 
         for (BangLuong bl : bangLuong) {
 

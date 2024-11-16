@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng Chấm Công</title>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
 
@@ -19,259 +22,481 @@
   <!-- SheetJS library for exporting to Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <style>
-    .table th, .table td {
-      vertical-align: middle;
+    .table-container {
+      overflow-x: auto; /* Allows horizontal scrolling if table is too wide */
+      padding: 0 15px; /* Optional: Adjust padding as needed */
+      margin-bottom: 20px; /* Space below the table */
     }
-    .action-btns button {
-      margin: 0 5px;
+
+    .table {
+      width: 100%; /* Ensures table takes full width of its container */
+      max-width: 100%; /* Prevents table from exceeding container width */
+      border-collapse: collapse; /* Makes table borders appear as a single border */
+    }
+
+    /* Apply custom styling for table headers and cells */
+    .table th, .table td {
+      white-space: nowrap; /* Prevents text from wrapping */
+      overflow: hidden; /* Hides overflow text */
+      text-overflow: ellipsis; /* Adds "..." for long text */
+      padding: 8px 12px; /* Padding for table cells */
+      vertical-align: middle; /* Aligns cell content vertically in the middle */
+      word-break: break-word; /* Wraps long words to prevent overflow */
+    }
+
+    /* Optional: Style action buttons in the action column */
+    .table .action-btns button {
+      margin: 0 5px; /* Adds space between buttons */
+      display: inline-block;
+    }
+
+    .action-btns button.btn-secondary {
+      color: #555; /* Example color for secondary button */
+    }
+
+    .action-btns button.btn-primary {
+      color: #007bff; /* Example color for primary button */
+    }
+
+    /* Optional: Styling for the header row */
+    .table thead th {
+      background-color: #f8f9fa; /* Light gray background for headers */
+      color: #333; /* Dark text color for headers */
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
-  <!-- Header, Sidebar, and Main Content remain the same as the previous code -->
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+<!-- Header -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/logo.png" alt="">
+      <span class="d-none d-lg-block">Nhóm 16</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+  </div>
 
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">Nhóm 16</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
+  <div class="search-bar">
+    <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    </form>
+  </div>
 
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
-
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Admin</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>Hồ sơ của tôi</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Cài đặt tài khoản</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Đăng xuất</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link " href="index.html">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-      <!-- Quản lý Hồ sơ Nav Item -->
-      <li class="nav-item">
-        <a class="nav-link" href="profile-management.html">
-          <i class="bi bi-folder"></i><span>Quản lý Hồ sơ</span>
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle " href="#">
+          <i class="bi bi-search"></i>
         </a>
       </li>
-      <!-- End Quản lý Hồ sơ Nav -->
 
-
-      <!-- Bảng tổng quát Nav Item -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables-general.html">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Bảng chấm công</span>
+      <li class="nav-item dropdown pe-3">
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
         </a>
-    </li>
-    <!-- End Bảng tổng quát Nav -->
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Admin</h6>
+            <span>Web Designer</span>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-person"></i>
+              <span>Hồ sơ của tôi</span>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-gear"></i>
+              <span>Cài đặt tài khoản</span>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Đăng xuất</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>
 
-    <!-- Bảng dữ liệu Nav Item -->
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar">
+  <ul class="sidebar-nav" id="sidebar-nav">
+    <li class="nav-item">
+      <a class="nav-link " href="index.html">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="profile-management.html">
+        <i class="bi bi-folder"></i><span>Quản lý Hồ sơ</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="tables-general.html">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bảng chấm công</span>
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="tables-data.html">
         <i class="bi bi-layout-text-window-reverse"></i><span>Bảng lương</span>
       </a>
     </li>
-    <!-- End Bảng dữ liệu Nav -->
+    <li class="nav-heading">Trang</li>
+    <li class="nav-item">
+      <a class="nav-link " href="users-profile.html">
+        <i class="bi bi-person"></i>
+        <span>Hồ sơ</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="pages-login.html">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Đăng nhập</span>
+      </a>
+    </li>
+  </ul>
+</aside>
 
+<!-- Main content -->
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Bảng Chấm Công</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Bảng chấm công</li>
+      </ol>
+    </nav>
+  </div>
 
-      <li class="nav-heading">Trang</li>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Danh sách chấm công</h5>
+            <div class="mb-3">
+              <!-- Update the button to call the new function -->
+              <button class="btn btn-primary" onclick="createAttendanceSheet()">Tạo bảng chấm công tháng này</button>
+              <button class="btn btn-primary" onclick="downloadExcel()">Xuất Excel</button>
+              <label for="selectMonth" class="ms-3">Thời gian:</label>
+              <select id="selectMonth" class="form-select d-inline-block w-auto ms-1">
+                <option selected>- Chọn tháng -</option>
+                <option value="1">Tháng 1</option>
+                <option value="2">Tháng 2</option>
+                <option value="3">Tháng 3</option>
+                <option value="4">Tháng 4</option>
+                <option value="5">Tháng 5</option>
+                <option value="6">Tháng 6</option>
+                <option value="7">Tháng 7</option>
+                <option value="8">Tháng 8</option>
+                <option value="9">Tháng 9</option>
+                <option value="10">Tháng 10</option>
+                <option value="11">Tháng 11</option>
+                <option value="12">Tháng 12</option>
+                <!-- Continue for other months -->
+              </select>
+              <select id="selectYear" class="form-select d-inline-block w-auto ms-1">
+                <option selected>- Chọn năm -</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
 
-      <li class="nav-item">
-        <a class="nav-link " href="users-profile.html">
-          <i class="bi bi-person"></i>
-          <span>Hồ sơ</span>
-        </a>
-      </li><!-- End Profile Page Nav -->
-  
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Đăng nhập</span>
-        </a>
-      </li><!-- End Login Page Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
-  <!-- Main content -->
-  <main id="main" class="main">
-    <div class="pagetitle">
-      <h1>Bảng Chấm Công</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
-          <li class="breadcrumb-item active">Bảng chấm công</li>
-        </ol>
-      </nav>
-    </div>
-
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Danh sách chấm công</h5>
-
-              <!-- Buttons for creating and exporting attendance sheet -->
-              <div class="mb-3">
-                <button class="btn btn-primary">Tạo bảng chấm công tháng này</button>
-                <button class="btn btn-secondary" onclick="exportTableToExcel()">Xuất bảng chấm công</button>
-                <label for="selectMonth" class="ms-3">Thời gian:</label>
-                <select id="selectMonth" class="form-select d-inline-block w-auto ms-1">
-                  <option selected>- Chọn tháng -</option>
-                  <option value="1">Tháng 1</option>
-                  <option value="2">Tháng 2</option>
-                  <option value="2">Tháng 3</option>
-                  <option value="2">Tháng 4</option>
-                  <option value="2">Tháng 5</option>
-                  <option value="2">Tháng 6</option>
-                  <option value="2">Tháng 7</option>
-                  <option value="2">Tháng 8</option>
-                  <option value="2">Tháng 9</option>
-                  <option value="2">Tháng 10</option>
-                  <option value="2">Tháng 11</option>
-                  <option value="2">Tháng 12</option>
-                  <!-- Add more months as needed -->
-                </select>
-                <select id="selectYear" class="form-select d-inline-block w-auto ms-1">
-                  <option selected>- Chọn năm -</option>
-                  <option value="2023">2023</option>
-                  <option value="2024">2024</option>
-                  <!-- Add more years as needed -->
-                </select>
-              </div>
-
-              <!-- Attendance table -->
+            <div class="table-container">
               <table class="table table-striped table-bordered" id="attendanceTable">
                 <thead>
-                  <tr>
-                    <th scope="col">Mã bảng chấm công</th>
-                    <th scope="col">Tên nhân sự</th>
-                    <th scope="col">Tháng</th>
-                    <th scope="col">Số ngày làm trong tháng</th>
-                    <th scope="col">Số ngày nghỉ</th>
-                    <th scope="col">Ghi chú</th>
-                    <th scope="col">Hành động</th>
-                  </tr>
+                <tr>
+                  <th>Mã bảng chấm công</th>
+                  <th>Mã nhân sự</th>
+                  <th>Thời gian</th>
+                  <th>Số ngày làm trong tháng</th>
+                  <th>Số giờ làm thêm</th>
+                  <th>Số ngày nghỉ có phép</th>
+                  <th>Số ngày nghỉ không phép</th>
+                  <th>Ghi chú</th>
+<!--                  <th>Hành động</th>-->
+                </tr>
                 </thead>
                 <tbody>
+                <!-- Table rows go here -->
                   <tr>
-                    <td>BC001</td>
-                    <td>ABC</td>
-                    <td>11/2024</td>
-                    <td>30</td>
-                    <td>0</td>
-                    <td></td>
-                    <td class="action-btns">
-                      <button class="btn btn-warning btn-sm" onclick="editAttendance(this)">Sửa</button>
-                    </td>
+<!--                    <td>BC001</td>-->
+<!--                    <td>ABC</td>-->
+<!--                    <td>11/2024</td>-->
+<!--                    <td>30</td>-->
+<!--                    <td>5</td>-->
+<!--                    <td>2</td>-->
+<!--                    <td>0</td>-->
+<!--                    <td>On time</td>-->
                   </tr>
-                  <!-- Additional rows can be added here -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <!-- Footer remains the same as the previous code -->
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- JavaScript code -->
-  <script>
-    function editAttendance(button) {
-      const row = $(button).closest('tr');
-      const data = row.children('td').map(function() {
-        return $(this).text();
-      }).get();
-      console.log('Edit:', data);
+<!-- Vendor JS Files -->
+<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/chart.js/chart.umd.js"></script>
+<script src="assets/vendor/echarts/echarts.min.js"></script>
+<script src="assets/vendor/quill/quill.js"></script>
+<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+<script>
+  let selectedRow = null; // Variable to store the selected row
+
+
+ // Khi giá trị của tháng hoặc năm thay đổi, gọi hàm lọc
+    $('#selectMonth, #selectYear').on('change', function() {
+        filterTableByDate(); // Gọi hàm lọc khi giá trị thay đổi
+    });
+
+    // Hàm lọc bảng theo tháng và năm
+    function filterTableByDate() {
+        const selectedMonth = parseInt($('#selectMonth').val()); // Lấy tháng đã chọn dưới dạng số
+        const selectedYear = parseInt($('#selectYear').val()); // Lấy năm đã chọn dưới dạng số
+
+        // Lặp qua từng dòng trong bảng (bỏ qua tiêu đề)
+        $('#attendanceTable tbody tr').each(function() {
+            const row = $(this);
+            const monthYear = row.find('td').eq(2).text().trim(); // Lấy tháng/năm từ cột thứ 3 của dòng
+
+            // Tách chuỗi "MM/YYYY" thành số tháng và số năm
+            const [rowMonth, rowYear] = monthYear.split('/').map(Number); // Chuyển thành số nguyên
+
+            // Kiểm tra xem dòng có khớp với tháng và năm đã chọn hay không
+            const isMonthMatch = isNaN(selectedMonth) || rowMonth === selectedMonth;
+            const isYearMatch = isNaN(selectedYear) || rowYear === selectedYear;
+
+            // Hiển thị hoặc ẩn dòng dựa trên điều kiện khớp
+            if (isMonthMatch && isYearMatch) {
+                row.show();
+            } else {
+                row.hide();
+            }
+        });
     }
 
-    // Function to export table data to Excel
-    function exportTableToExcel() {
-      const table = document.getElementById("attendanceTable");
-      const workbook = XLSX.utils.table_to_book(table, {sheet: "Attendance"});
-      XLSX.writeFile(workbook, "BangChamCong.xlsx");
+// Function to render table data
+function renderTable(data) {
+    const tableBody = document.querySelector('#attendanceTable tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="text" value="${item.maBangChamCong}" disabled></td>
+            <td><input type="text" value="${item.maNhanSu}" disabled></td>
+            <td><input type="text" value="${item.thoiGian}" disabled></td>
+            <td><input type="number" value="${item.soNgayLamTrongThang}" disabled></td>
+            <td><input type="number" value="${item.soGioLamThem}" disabled></td>
+            <td><input type="number" value="${item.soNgayNghiCoPhep}" disabled></td>
+            <td><input type="number" value="${item.soNgayNghiKhongPhep}" disabled></td>
+            <td><input type="text" value="${item.ghiChu}" disabled></td>
+            <td><input type="checkbox" ${item.duocPhepChinhSua ? 'checked' : ''} disabled></td>
+            <td>
+                <button class="btn btn-secondary" onclick="enableEditing(this)">Chỉnh sửa</button>
+                <button class="btn btn-primary" onclick="saveData('${item.maBangChamCong}', this)" disabled>Lưu</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Function to enable editing mode
+function enableEditing(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input');
+    inputs.forEach(input => input.disabled = false);  // Enable all inputs
+    row.querySelector('button:nth-child(2)').disabled = false; // Enable the save button    . Disabled = true; // Disable the "Edit" button to prevent further edits
+}
+
+// Function to save data after editing
+async function saveData(maBangChamCong, button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input');
+    const data = {
+        maBangChamCong: inputs[0].value,
+        maNhanSu: inputs[1].value,
+        thoiGian: inputs[2].value,
+        soNgayLamTrongThang: parseInt(inputs[3].value),
+        soGioLamThem: parseInt(inputs[4].value),
+        soNgayNghiCoPhep: parseInt(inputs[5].value),
+        soNgayNghiKhongPhep: parseInt(inputs[6].value),
+        ghiChu: inputs[7].value,
+        duocPhepChinhSua: inputs[8].checked
+    };
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/bangchamcong/${maBangChamCong}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('Cập nhật thành công');
+            fetchBangChamCongData();  // Refresh the table after saving
+        } else {
+            alert('Cập nhật thất bại');
+        }
+    } catch (error) {
+        console.error('Error saving data:', error);
     }
-  </script>
+}
+
+// Fetch data from the API and render it on page load
+async function fetchBangChamCongData() {
+    try {
+        const response = await fetch('http://localhost:8080/api/bangchamcong');
+        if (response.ok) {
+            const data = await response.json();
+            renderTable(data); // Populate table
+            document.querySelector('#exportButton').disabled = false; // Enable Export Button
+        } else {
+            alert('Không thể tải dữ liệu');
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+function downloadExcel() {
+            // Gọi API tải xuống file Excel
+            fetch('/api/bangchamcong/export/excel', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Có lỗi xảy ra khi tải file.');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Tạo một URL tạm thời cho file tải về
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'bangchamcong.xlsx'); // Tên file tải về
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('Không thể tải xuống file Excel.');
+            });
+        }
+
+// Call fetchBangChamCongData when the page loads
+window.onload = fetchBangChamCongData;
+
+async function createAttendanceSheet() {
+    try {
+        // Fetch employee data from NhanSu API
+        const response = await fetch('http://localhost:8080/api/hoso/all');
+        if (response.ok) {
+            const employees = await response.json();
+
+            // Prepare attendance data based on current month and year
+            const today = new Date();
+            const month = today.getMonth() + 1;
+            const year = today.getFullYear();
+            const attendanceData = employees.map(employee => ({
+                maBangChamCong: `BCC-${employee.maNhanSu}-${month}${year}`, // Example ID
+                maNhanSu: employee.maNhanSu,
+                thoiGian: `${month}/${year}`,
+                soNgayLamTrongThang: 0, // Default or calculated value
+                //soGioLamThem: 0, // Default value
+                soNgayNghiCoPhep: 0, // Default value
+                soNgayNghiKhongPhep: 0, // Default value
+                ghiChu: ""
+            }));
+
+            // Render the attendance table with fetched data
+            renderTable(attendanceData);
+
+            // Save each attendance record to the database
+            for (const entry of attendanceData) {
+              const saveResponse = await fetch('http://localhost:8080/api/bangchamcong', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(entry)
+            });
+
+    if (!saveResponse.ok) {
+        console.error(`Failed to save record for ${entry.maNhanSu}: ${saveResponse.statusText}`);
+    }
+}
+            alert('Bảng chấm công đã được tạo và lưu thành công');
+            fetchBangChamCongData(); // Refresh the table after saving
+        } else {
+            alert('Không thể tải dữ liệu nhân sự');
+        }
+    } catch (error) {
+        console.error('Error creating attendance table:', error);
+    }
+}
+const savePromises = attendanceData.map(entry =>
+    fetch('http://localhost:8080/api/bangchamcong', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry)
+    })
+);
+
+Promise.all(savePromises)
+    .then(results => {
+        if (results.every(response => response.ok)) {
+            alert('Bảng chấm công đã được tạo và lưu thành công');
+            fetchBangChamCongData(); // Refresh the table after all saves
+        } else {
+            alert('Có lỗi khi lưu bảng chấm công cho một số nhân sự');
+        }
+    })
+    .catch(error => {
+        console.error('Error creating attendance table:', error);
+    });
+
+
+
+</script>
+
+<!-- Bootstrap JS (thêm vào nếu cần) -->
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

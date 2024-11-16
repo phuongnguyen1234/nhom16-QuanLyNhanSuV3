@@ -1,15 +1,21 @@
 package com.Controller;
 
-import com.Model.*;
-import com.Service.*;
-import com.DTO.*;
+import com.Model.BangChamCong;
+import com.Service.BangChamCongService;
+import com.DTO.BangChamCongDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/bangchamcong")
@@ -33,12 +39,28 @@ public class BangChamCongController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Thêm bảng chấm công
-    @PostMapping
-    public BangChamCongDTO createBangChamCong(@RequestBody BangChamCongDTO bangChamCongDTO) {
-        BangChamCong bangChamCong = convertToEntity(bangChamCongDTO);
-        BangChamCong savedBangChamCong = bangChamCongService.saveBangChamCong(bangChamCong);
-        return convertToDTO(savedBangChamCong);
+    @GetMapping("/export/excel")
+    public ResponseEntity<InputStreamResource> exportBangChamCongToExcel() {
+        ByteArrayInputStream in = bangChamCongService.exportBangChamCongToExcel();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=bangchamcong.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(new InputStreamResource(in));
+    }
+
+    // Thêm bảng chấm công mới
+    @PostMapping("/create")
+    public ResponseEntity<?> createBangChamCong(@RequestBody BangChamCongDTO bangChamCongDTO) {
+        try {
+            BangChamCong bangChamCong = convertToEntity(bangChamCongDTO);
+            BangChamCong savedBangChamCong = bangChamCongService.createBangChamCong(bangChamCong);
+            return ResponseEntity.ok(convertToDTO(savedBangChamCong));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Cập nhật bảng chấm công
@@ -58,7 +80,14 @@ public class BangChamCongController {
             return ResponseEntity.notFound().build();
         }
     }
+    // Endpoint tìm kiếm bảng chấm công theo tháng và năm
+    @GetMapping("/search")
+    public List<BangChamCongDTO> searchBangChamCongByMonthAndYear(
+            @RequestParam int month, @RequestParam int year) {
 
+        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByMonthAndYear(month, year);
+        return bangChamCongList.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
     // Chuyển đổi từ BangChamCong thành BangChamCongDTO
     private BangChamCongDTO convertToDTO(BangChamCong bangChamCong) {
         return new BangChamCongDTO(

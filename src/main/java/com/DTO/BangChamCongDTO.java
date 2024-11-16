@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class BangChamCongDTO {
     private String maBangChamCong;
     private String maNhanSu;
-    private LocalDate thoiGian; // Sử dụng LocalDate thay cho String
+    private LocalDate thoiGian;
     private int soNgayLamTrongThang;
     private int soNgayNghiCoPhep;
     private int soNgayNghiKhongPhep;
@@ -29,6 +29,7 @@ public class BangChamCongDTO {
     }
 
     // Getters và Setters
+
     public String getMaBangChamCong() {
         return maBangChamCong;
     }
