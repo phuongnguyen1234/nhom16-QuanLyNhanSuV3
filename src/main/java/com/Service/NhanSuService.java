@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.Model.*;
 import com.Repository.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NhanSuService {
@@ -40,5 +41,19 @@ public class NhanSuService {
             newMaNhanSu = String.format("NS%04d", lastNumber + 1);  // Sinh mã mới theo định dạng NSxxxx.
         }
         return newMaNhanSu;
+    }
+
+    public Long getTotalNhanSu() {
+        return nhanSuRepo.count();
+    }
+
+    public List<Map<String, Object>> getNhanSuCountByPhongBan() {
+        List<Object[]> results = nhanSuRepo.countNhanSuByPhongBan();
+        return results.stream().map(row -> {
+            Map<String, Object> phongBanData = new HashMap<>();
+            phongBanData.put("tenPhongBan", row[0]);
+            phongBanData.put("soNhanSu", row[1]);
+            return phongBanData;
+        }).collect(Collectors.toList());
     }
 }

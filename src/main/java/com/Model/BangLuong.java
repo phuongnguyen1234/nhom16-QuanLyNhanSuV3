@@ -5,10 +5,12 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "BANGLUONG")
 public class BangLuong {
-
     @Id
     @Column(name = "MaBangLuong")
-    private String maChucVuaBangLuong;
+    private String maBangLuong;
+
+    @Column(name = "MaBangChamCong")
+    private String maBangChamCong;
 
     @Column(name = "TongThuNhap")
     private int tongThuNhap;
@@ -19,26 +21,26 @@ public class BangLuong {
     @Column(name = "GhiChu")
     private String ghiChu;
 
-    // New properties for month and year
-    @Column(name = "Month")
-    private int month;
-
-    @Column(name = "Year")
-    private int year;
-
     @OneToOne
-    @JoinColumn(name = "MaBangChamCong", referencedColumnName = "MaBangChamCong")
+    @JoinColumn(name = "MaBangChamCong", referencedColumnName = "MaBangChamCong", insertable = false, updatable = false)
     private BangChamCong bangChamCong;
 
     // Getters and setters for all properties
-    public String getMaChucVuaBangLuong() {
-        return maChucVuaBangLuong;
+    public String getMaBangLuong() {
+        return maBangLuong;
     }
 
-    public void setMaChucVuaBangLuong(String maChucVuaBangLuong) {
-        this.maChucVuaBangLuong = maChucVuaBangLuong;
+    public void setMaBangLuong(String maBangLuong) {
+        this.maBangLuong = maBangLuong;
     }
 
+    public String getMaBangChamCong(){
+        return maBangChamCong;
+    }
+
+    public void setMaBangChamCong(String maBangChamCong) {
+        this.maBangChamCong = maBangChamCong;
+    }
     public int getTongThuNhap() {
         return tongThuNhap;
     }
@@ -69,21 +71,5 @@ public class BangLuong {
 
     public void setBangChamCong(BangChamCong bangChamCong) {
         this.bangChamCong = bangChamCong;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 }

@@ -19,7 +19,7 @@ public class BangChamCongController {
     private BangChamCongService bangChamCongService;
 
     // Lấy danh sách bảng chấm công
-    @GetMapping
+    @GetMapping("/all")
     public List<BangChamCongDTO> getAllBangChamCong() {
         List<BangChamCong> bangChamCongList = bangChamCongService.getAllBangChamCong();
         return bangChamCongList.stream().map(this::convertToDTO).collect(Collectors.toList());

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
 
 @RestController
@@ -95,7 +96,7 @@ public class NhanSuController {
     }
 
     //cap nhat ho so
-    @PutMapping("/{maNhanSu}")
+    @PutMapping("/edit/{maNhanSu}")
     public ResponseEntity<NhanSu> capNhatHoSo(@PathVariable String maNhanSu, @RequestBody NhanSu nhanSu) {
         if (!nhanSuRepo.existsById(maNhanSu)) {
             return ResponseEntity.notFound().build();
@@ -106,12 +107,34 @@ public class NhanSuController {
     }
 
     //xoa ho so
-    @DeleteMapping("/{maNhanSu}")
+    @DeleteMapping("/delete/{maNhanSu}")
     public ResponseEntity<Void> xoaHoSo(@PathVariable String maNhanSu) {
         if (!nhanSuRepo.existsById(maNhanSu)) {
             return ResponseEntity.notFound().build();
         }
         nhanSuRepo.deleteById(maNhanSu);
         return ResponseEntity.noContent().build();
+    }
+
+    //thong ke nhan su
+    @GetMapping("/thongke")
+    public Map<String, Object> getNhanSuCount() {
+        Map<String, Object> response = new HashMap<>();
+
+        // Tổng số nhân sự
+        Long total = nhanSuRepo.count();
+        response.put("tongSoNhanSu", total);
+
+        // Số nhân sự theo từng phòng ban
+        List<Object[]> counts = nhanSuRepo.countNhanSuByPhongBan();
+        List<Map<String, Object>> phongBanCounts = counts.stream().map(row -> {
+            Map<String, Object> phongBanData = new HashMap<>();
+            phongBanData.put("tenPhongBan", row[0]);
+            phongBanData.put("soNhanSu", row[1]);
+            return phongBanData;
+        }).collect(Collectors.toList());
+        response.put("soNhanSuTheoPhongBan", phongBanCounts);
+
+        return response;
     }
 }

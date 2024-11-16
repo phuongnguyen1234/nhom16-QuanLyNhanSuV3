@@ -2,6 +2,7 @@ package com.Model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.*;
 
 @Entity
 @Table(name = "NHANSU")
@@ -43,7 +44,6 @@ public class NhanSu {
     @Column(name = "MatKhau")
     private String matKhau;
 
-    // Các quan hệ @ManyToOne
     @ManyToOne
     @JoinColumn(name = "MaPhongBan", referencedColumnName = "MaPhongBan", insertable = false, updatable = false)
     private PhongBan phongBan;
@@ -55,6 +55,7 @@ public class NhanSu {
     @ManyToOne
     @JoinColumn(name = "MaViTri", referencedColumnName = "MaViTri", insertable = false, updatable = false)
     private ViTri viTri;
+
 
 	public NhanSu(){}
 
@@ -185,6 +186,4 @@ public class NhanSu {
     public ViTri getViTri() {
         return viTri;
     }
-
-	
 }

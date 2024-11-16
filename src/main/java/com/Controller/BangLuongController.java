@@ -1,13 +1,14 @@
 package com.Controller;
 
+import com.DTO.*;
 import com.Model.BangLuong;
 import com.Service.BangLuongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/bangluong")
@@ -16,50 +17,51 @@ public class BangLuongController {
     @Autowired
     private BangLuongService bangLuongService;
 
-
     @GetMapping("/all")
-    public ResponseEntity<List<BangLuong>> getAllBangLuong() {
-        List<BangLuong> bangLuongs = bangLuongService.getAllBangLuong();
-        if (bangLuongs.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(bangLuongs);
+    public List<BangLuongDTO> getAllBangLuong() {
+        List<BangLuong> bangLuong = bangLuongService.getAllBangLuong();
+        List<BangLuongDTO> danhSach = new ArrayList<>();
+            for(BangLuong bl: bangLuong){
+                BangLuongDTO dto = new BangLuongDTO(
+                    bl.getMaBangLuong(),
+                    bl.getBangChamCong().getMaBangChamCong(),
+                    bl.getBangChamCong().getNhanSu().getTenNhanSu(),
+                    bl.getBangChamCong().getNhanSu().getPhongBan().getTenPhongBan(),
+                    bl.getBangChamCong().getNhanSu().getChucVu().getTenChucVu(),
+                    bl.getBangChamCong().getNhanSu().getViTri().getTenViTri(),
+                    bl.getBangChamCong().getThoiGian(),
+                    bl.getBangChamCong().getSoNgayLamTrongThang(),
+                    bl.getBangChamCong().getSoNgayNghiCoPhep(),
+                    bl.getBangChamCong().getSoNgayNghiKhongPhep(),
+                    bl.getTongThuNhap(),
+                    bl.getLuongThucNhan(),
+                    bl.getGhiChu()
+                );
+                danhSach.add(dto);
+            }
+            return danhSach;
     }
+        
 
     // API để lọc bảng lương theo tháng và năm
     @GetMapping("/filter")
-    public ResponseEntity<List<BangLuong>> getBangLuongByMonthAndYear(@RequestParam String month, @RequestParam String year) {
+    public ResponseEntity<List<BangLuong>> getBangLuongByThoiGian(@RequestParam LocalDate thoiGian) {
         try {
-            // Check if month and year are valid integers
-            int parsedMonth = Integer.parseInt(month);
-            int parsedYear = Integer.parseInt(year);
-
             // Call service method to get data
-            List<BangLuong> bangLuongs = bangLuongService.getBangLuongByMonth(parsedMonth, parsedYear);
-            return ResponseEntity.ok(bangLuongs);
+            List<BangLuong> bangLuong = bangLuongService.getBangLuongByThoiGian(thoiGian);
+            return ResponseEntity.ok(bangLuong);
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             // Handle invalid month/year format
             return ResponseEntity.badRequest().body(Collections.emptyList()); // or return error message
         }
     }
 
-
-
-    @GetMapping("/export")
-    public ResponseEntity<List<BangLuong>> exportBangLuong() {
-        List<BangLuong> bangLuongs = bangLuongService.exportBangLuong();
-        if (bangLuongs.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(bangLuongs);
-    }
-
     // API để xuất bảng lương dưới dạng CSV
     @GetMapping("/export/csv")
     public ResponseEntity<String> exportBangLuongCsv() {
-        List<BangLuong> bangLuongs = bangLuongService.exportBangLuong();
-        if (bangLuongs.isEmpty()) {
+        List<BangLuong> bangLuong = bangLuongService.exportBangLuong();
+        if (bangLuong.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
@@ -67,14 +69,12 @@ public class BangLuongController {
         StringBuilder csvOutput = new StringBuilder();
         csvOutput.append("MaBangLuong,TongThuNhap,LuongThucNhan,GhiChu,Month,Year\n");
 
-        for (BangLuong bangLuong : bangLuongs) {
+        for (BangLuong bl : bangLuong) {
 
-            csvOutput.append(bangLuong.getMaChucVuaBangLuong()).append(",")
-                    .append(bangLuong.getTongThuNhap()).append(",")
-                    .append(bangLuong.getLuongThucNhan()).append(",")
-                    .append(bangLuong.getGhiChu()).append(",")
-                    .append(bangLuong.getMonth()).append(",")
-                    .append(bangLuong.getYear()).append("\n");
+            csvOutput.append(bl.getMaBangLuong()).append(",")
+                    .append(bl.getTongThuNhap()).append(",")
+                    .append(bl.getLuongThucNhan()).append(",")
+                    .append(bl.getGhiChu()).append(",");
         }
 
         return ResponseEntity.ok()
