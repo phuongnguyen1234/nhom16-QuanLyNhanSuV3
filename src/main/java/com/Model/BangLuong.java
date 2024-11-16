@@ -19,12 +19,6 @@ public class BangLuong {
     @Column(name = "GhiChu")
     private String ghiChu;
 
-    // New properties for month and year
-    @Column(name = "Month")
-    private int month;
-
-    @Column(name = "Year")
-    private int year;
 
     @OneToOne
     @JoinColumn(name = "MaBangChamCong", referencedColumnName = "MaBangChamCong")
