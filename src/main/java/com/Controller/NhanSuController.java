@@ -115,28 +115,4 @@ public class NhanSuController {
         nhanSuRepo.deleteById(maNhanSu);
         return ResponseEntity.noContent().build();
     }
-
-    //thong ke nhan su
-    @GetMapping("/thongke")
-    public Map<String, Object> getNhanSuCount() {
-    Map<String, Object> response = new LinkedHashMap<>(); // Đảm bảo thứ tự key-value trong JSON trả về
-
-    // Tổng số nhân sự
-    Long total = nhanSuRepo.count();
-    response.put("tongSoNhanSu", total);
-
-    // Số nhân sự theo từng phòng ban
-    List<Object[]> counts = nhanSuRepo.countNhanSuByPhongBan();
-    List<Map<String, Object>> phongBanCounts = counts.stream().map(row -> {
-        Map<String, Object> phongBanData = new LinkedHashMap<>(); // Dùng LinkedHashMap cho từng phòng ban
-        phongBanData.put("tenPhongBan", row[0]); // Đặt tên phòng ban trước
-        phongBanData.put("soNhanSu", row[1]);   // Đặt số nhân sự sau
-        return phongBanData;
-    }).collect(Collectors.toList());
-    response.put("soNhanSuTheoPhongBan", phongBanCounts);
-
-    return response;
-}
-
-
 }

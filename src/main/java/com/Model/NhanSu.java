@@ -2,6 +2,7 @@ package com.Model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "NHANSU")
@@ -184,5 +185,12 @@ public class NhanSu {
     // Phương thức trả về đối tượng ViTri liên kết
     public ViTri getViTri() {
         return viTri;
+    }
+
+    public int getAge(){
+        if (ngaySinh == null) {
+            return 0; // Trường hợp không có ngày sinh
+        }
+        return Period.between(ngaySinh, LocalDate.now()).getYears();
     }
 }
