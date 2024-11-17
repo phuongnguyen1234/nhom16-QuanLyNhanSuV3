@@ -25,4 +25,10 @@ public class DashboardController {
         return dashboardService.getAgeStatistics();
     }
 
+    // API trả về thống kê mức lương
+    @GetMapping("/salaryStatistics")
+    public Map<String, Integer> getSalaryStatistics() {
+        return dashboardService.getSalaryStatistics();
+    }
+
 }
