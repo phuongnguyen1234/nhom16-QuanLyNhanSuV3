@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Bảng Lương</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <style>
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table {
+      width: 100%;
+    }
+
+    .btn-group {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/logo.png" alt="">
+      <span class="d-none d-lg-block">Nhóm 16</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+  </div><!-- End Logo -->
+
+  <div class="search-bar">
+    <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    </form>
+  </div><!-- End Search Bar -->
+
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle " href="#">
+          <i class="bi bi-search"></i>
+        </a>
+      </li><!-- End Search Icon-->
+
+      <li class="nav-item dropdown pe-3">
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+        </a><!-- End Profile Image Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Admin</h6>
+            <span>Web Designer</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-person"></i>
+              <span>Hồ sơ của tôi</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-gear"></i>
+              <span>Cài đặt tài khoản</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="/dangxuat">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Đăng xuất</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav><!-- End Icons Navigation -->
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+  <ul class="sidebar-nav" id="sidebar-nav">
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="index.html">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="profile-management.html">
+        <i class="bi bi-folder"></i><span>Quản lý Hồ sơ</span>
+      </a>
+    </li><!-- End Quản lý Hồ sơ Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="tables-general.html">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bảng chấm công</span>
+      </a>
+    </li><!-- End Bảng tổng quát Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="tables-data.html">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bảng lương</span>
+      </a>
+    </li><!-- End Bảng dữ liệu Nav -->
+
+    <li class="nav-heading">Trang</li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="users-profile.html">
+        <i class="bi bi-person"></i>
+        <span>Hồ sơ</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="/dangxuat">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Đăng xuất</span>
+      </a>
+  </li><!-- End Logout Nav -->
+  </ul>
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Bảng Lương</h1>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Danh sách bảng lương</h5>
+
+            <!-- Buttons for exporting salary sheet -->
+            <div class="btn-group">
+              <button id="exportBtn" class="btn btn-primary">Xuất bảng lương</button>
+            </div>
+
+            <!-- Dropdowns for selecting time -->
+            <div class="d-inline-block ms-3">
+              <label for="selectMonth" class="me-1">Thời gian:</label>
+              <select id="selectMonth" class="form-select d-inline-block w-auto">
+                <option selected>- Chọn tháng -</option>
+                <option value="1">Tháng 1</option>
+                <option value="2">Tháng 2</option>
+                <option value="3">Tháng 3</option>
+                <option value="4">Tháng 4</option>
+                <option value="5">Tháng 5</option>
+                <option value="6">Tháng 6</option>
+                <option value="7">Tháng 7</option>
+                <option value="8">Tháng 8</option>
+                <option value="9">Tháng 9</option>
+                <option value="10">Tháng 10</option>
+                <option value="11">Tháng 11</option>
+                <option value="12">Tháng 12</option>
+              </select>
+
+              <select id="selectYear" class="form-select d-inline-block w-auto ms-1">
+                <option selected>- Chọn năm -</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
+
+            <!-- Salary table -->
+            <table class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th scope="col">Mã bảng lương</th>
+                <th scope="col">Mã bảng chấm công</th>
+                <th scope="col">Tên nhân sự</th>
+                <th scope="col">Tháng</th>
+                <th scope="col">Số ngày làm trong tháng</th>
+                <th scope="col">Số ngày nghỉ</th>
+                <th scope="col">Lương thực nhận</th>
+                <th scope="col">Ghi chú</th>
+              </tr>
+              </thead>
+              <tbody id="salaryTableBody">
+              <tr>
+                <td>BL001</td>
+                <td>BC001</td>
+                <td>ABC</td>
+                <td>11/2024</td>
+                <td>29</td>
+                <td>1</td>
+                <td>1000000</td>
+                <td></td>
+              </tr>
+              <!-- Additional rows will be added dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>Nhóm 16</span></strong>. Bản quyền được bảo lưu
+  </div>
+  <div class="credits">
+    <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/chart.js/chart.umd.js"></script>
+<script src="assets/vendor/echarts/echarts.min.js"></script>
+<script src="assets/vendor/quill/quill.js"></script>
+<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<!-- Custom JS -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const salaryTableBody = document.querySelector('#salaryTableBody');
+    const selectMonth = document.getElementById('selectMonth');
+    const selectYear = document.getElementById('selectYear');
+    const exportBtn = document.getElementById('exportBtn');
+
+    // Function to fetch salary data by month and year
+    async function fetchSalaryData(month, year) {
+      try {
+        if (!month || !year || month === '-1' || year === '-1') {
+          alert('Please select both month and year');
+          return;
+        }
+
+        const response = await fetch(`/api/bangluong/filter?month=${month}&year=${year}`);
+        const data = await response.json();
+
+        // Clear previous table data
+        salaryTableBody.innerHTML = '';
+
+        if (data && data.length) {
+          data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.maBangLuong}</td>
+                <td>${item.bangChamCong.maBangChamCong}</td>
+                <td>${item.bangChamCong.nhanSu.tenNhanSu}</td>
+                <td>${item.month}/${item.year}</td>
+                <td>${item.bangChamCong.soNgayLam}</td>
+                <td>${item.bangChamCong.soNgayNghi}</td>
+                <td>${item.luongThucNhan}</td>
+                <td>${item.ghiChu || ''}</td>
+              `;
+            salaryTableBody.appendChild(row);
+          });
+        } else {
+          salaryTableBody.innerHTML = '<tr><td colspan="8">Không có dữ liệu.</td></tr>';
+        }
+      } catch (error) {
+        console.error('Error fetching salary data:', error);
+        salaryTableBody.innerHTML = '<tr><td colspan="8">Lỗi khi tải dữ liệu.</td></tr>';
+      }
+    }
+    window.onload = fetchSalaryData(11,2024);
+
+
+
+    // Handle month and year selection
+    selectMonth.addEventListener('change', function () {
+      const month = selectMonth.value;
+      const year = selectYear.value;
+      if (month && year) {
+        fetchSalaryData(month, year);
+      }
+    });
+
+    selectYear.addEventListener('change', function () {
+      const month = selectMonth.value;
+      const year = selectYear.value;
+      if (month && year) {
+        fetchSalaryData(month, year);
+      }
+    });
+
+    // Export data as CSV
+    exportBtn.addEventListener('click', function () {
+      const rows = Array.from(salaryTableBody.rows);
+      if (rows.length === 0) return;
+
+      let csv = 'Mã bảng lương,Mã bảng chấm công,Tên nhân sự,Tháng,Số ngày làm trong tháng,Số ngày nghỉ,Lương thực nhận,Ghi chú\n';
+
+      rows.forEach(row => {
+        const cells = Array.from(row.cells);
+        csv += cells.map(cell => cell.textContent).join(',') + '\n';
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'bangluong.csv';
+      link.click();
+    });
+  });
+</script>
+
+</body>
+
+</html>

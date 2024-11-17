@@ -1048,6 +1048,48 @@ h6 {
   max-width: 120px;
 }
 
+.profile .profile-change-password label {
+  font-weight: 600;
+  color: rgba(1, 41, 112, 0.6);
+  font-size: 15px;
+}
+
+.profile .profile-change-password .form-control {
+  font-size: 15px;
+  color: #2c384e;
+}
+
+.profile .profile-change-password button {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile .profile-change-password .btn-primary {
+  background-color: #4154f1;
+  border-color: #4154f1;
+  transition: background-color 0.3s ease;
+}
+
+.profile .profile-change-password .btn-primary:hover {
+  background-color: #5969f3;
+  border-color: #5969f3;
+}
+
+.profile .profile-change-password .btn-outline-secondary {
+  color: #4154f1;
+  border-color: #4154f1;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.profile .profile-change-password .btn-outline-secondary:hover {
+  color: #5969f3;
+  border-color: #5969f3;
+}
+
+.profile .profile-change-password i {
+  margin-right: 5px;
+}
+
 /*--------------------------------------------------------------
 # F.A.Q Page
 --------------------------------------------------------------*/

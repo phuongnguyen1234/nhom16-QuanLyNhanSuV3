@@ -17,6 +17,6 @@ public interface NhanSuRepo extends JpaRepository<NhanSu, String> {
            "FROM NhanSu ns JOIN ns.phongBan pb " +
            "GROUP BY pb.tenPhongBan")
     List<Object[]> countNhanSuByPhongBan();
-
+    NhanSu findByEmail(String email);
     long count();
 }

@@ -56,4 +56,13 @@ public class NhanSuService {
             return phongBanData;
         }).collect(Collectors.toList());
     }
+
+    public NhanSu findByEmail(String email) {
+        return nhanSuRepo.findByEmail(email); // Tìm nhân sự theo email
+    }
+    
+    public NhanSu save(NhanSu nhanSu) {
+        return nhanSuRepo.save(nhanSu);
+    }
+
 }
