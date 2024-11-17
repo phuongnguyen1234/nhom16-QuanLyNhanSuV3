@@ -77,4 +77,36 @@ public class DashboardService {
         return ageStatistics;
     }
 
+
+    
+    // Thống kê phân chia theo mức lương
+    public Map<String, Integer> getSalaryStatistics() {
+        Map<String, Integer> salaryStatistics = new HashMap<>();
+        List<NhanSu> allNhanSu = nhanSuRepo.findAll();
+
+        // Khởi tạo các nhóm mức lương
+        int under6M = 0;
+        int between6MAnd9M = 0;
+        int above9M = 0;
+
+        // Phân loại theo mức lương
+        for (NhanSu nhanSu : allNhanSu) {
+            int salary = nhanSu.getMucLuong();
+            if (salary < 6000000) {
+                under6M++;
+            } else if (salary >= 6000000 && salary <= 9000000) {
+                between6MAnd9M++;
+            } else {
+                above9M++;
+            }
+        }
+
+        salaryStatistics.put("Dưới 6 triệu", under6M);
+        salaryStatistics.put("6-9 triệu", between6MAnd9M);
+        salaryStatistics.put("Trên 9 triệu", above9M);
+
+        return salaryStatistics;
+    }
+
+
 }
