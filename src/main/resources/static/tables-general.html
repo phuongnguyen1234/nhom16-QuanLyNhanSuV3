@@ -378,7 +378,7 @@ async function saveData(maBangChamCong, button) {
 // Fetch data from the API and render it on page load
 async function fetchBangChamCongData() {
     try {
-        const response = await fetch('http://localhost:8080/api/bangchamcong');
+        const response = await fetch('http://localhost:8080/api/bangchamcong/all');
         if (response.ok) {
             const data = await response.json();
             renderTable(data); // Populate table

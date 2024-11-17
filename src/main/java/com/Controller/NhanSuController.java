@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.time.format.DateTimeFormatter;
 
 @RestController
@@ -69,7 +68,7 @@ public class NhanSuController {
     dto.setMaNhanSu(nhanSu.getMaNhanSu());
     dto.setTenNhanSu(nhanSu.getTenNhanSu());
     dto.setGioiTinh(nhanSu.getGioiTinh());
-    DateTimeFormatter fm = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter fm = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     dto.setNgaySinh(nhanSu.getNgaySinh().format(fm));
     dto.setDiaChi(nhanSu.getDiaChi());
     dto.setSoDienThoai(nhanSu.getSoDienThoai());
