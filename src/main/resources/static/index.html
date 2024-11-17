@@ -39,6 +39,39 @@
 </head>
 
 <body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    fetch('http://localhost:8080/api/hoso/thongke')
+      .then(response => response.json())
+      .then(data => {
+        // Cập nhật tổng số nhân sự
+        document.getElementById('statTongNS').innerText = data.tongSoNhanSu;
+
+        // Lấy danh sách phòng ban và số nhân sự
+        const phongBanData = data.soNhanSuTheoPhongBan;
+
+        // Khởi tạo map cho các id tương ứng với phòng ban
+        const phongBanIdMap = {
+          "Công nghệ thông tin": "statIT",
+          "Quan hệ khách hàng": "statQHKH",
+          "Marketing": "statMKT",
+          "Nhân sự": "statNS",
+          "Tài chính - Kế toán": "statTCKT"
+        };
+
+        // Cập nhật số nhân sự theo từng phòng ban
+        phongBanData.forEach(item => {
+          const elementId = phongBanIdMap[item.tenPhongBan];
+          if (elementId) {
+            document.getElementById(elementId).innerText = item.soNhanSu;
+          }
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  });
+  </script>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -203,16 +236,14 @@
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12">
               <div class="card info-card customers-card">
-
                 <div class="card-body">
                   <h5 class="card-title">Tổng số nhân sự</h5>
-
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id = "statTongNS">0</h6>
                     </div>
                   </div>
 
@@ -220,39 +251,39 @@
               </div>
             </div><!-- End Customers Card -->
 
-           <!-- Customers Card -->
-           <div class="col-xxl-4 col-xl-12">
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-12">
             <div class="card info-card customers-card">
 
               <div class="card-body">
-                <h5 class="card-title">Số nhân sự phòng A</h5>
+                <h5 class="card-title">Số nhân sự phòng Nhân sự</h5>
 
                 <div class="d-flex align-items-center">
                   <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                     <i class="bi bi-people"></i>
                   </div>
                   <div class="ps-3">
-                    <h6>1244</h6>
+                    <h6 id = "statNS">0</h6>
                   </div>
                 </div>
 
               </div>
             </div>
-          </div><!-- End Customers Card -->
+            </div><!-- End Customers Card -->
 
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12">
               <div class="card info-card customers-card">
 
                 <div class="card-body">
-                  <h5 class="card-title">Số nhân sự phòng A</h5>
+                  <h5 class="card-title">Số nhân sự phòng Tài chính - Kế toán</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id = "statTCKT">0</h6>
                     </div>
                   </div>
 
@@ -265,14 +296,14 @@
               <div class="card info-card customers-card">
 
                 <div class="card-body">
-                  <h5 class="card-title">Số nhân sự phòng A</h5>
+                  <h5 class="card-title">Số nhân sự phòng Marketing</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id = "statMKT">0</h6>
                     </div>
                   </div>
 
@@ -284,14 +315,14 @@
               <div class="card info-card customers-card">
 
                 <div class="card-body">
-                  <h5 class="card-title">Số nhân sự phòng A</h5>
+                  <h5 class="card-title">Số nhân sự phòng Công nghệ thông tin</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id = "statIT">0</h6>
                     </div>
                   </div>
 
@@ -303,15 +334,14 @@
               <div class="card info-card customers-card">
 
                 <div class="card-body">
-                  <h5 class="card-title">Số nhân sự phòng A</h5>
+                  <h5 class="card-title">Số nhân sự phòng Quan hệ khách hàng</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
-
+                      <h6 id = "statQHKH">0</h6>
                     </div>
                   </div>
 
@@ -529,7 +559,39 @@
 
       </div>
     </section>
-
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+      fetch('/api/hoso/thongke')
+        .then(response => response.json())
+        .then(data => {
+          // Cập nhật tổng số nhân sự
+          document.getElementById('statTongNS').innerText = data.tongSoNhanSu;
+  
+          // Lấy danh sách phòng ban và số nhân sự
+          const phongBanData = data.soNhanSuTheoPhongBan;
+  
+          // Khởi tạo map cho các id tương ứng với phòng ban
+          const phongBanIdMap = {
+            "Công nghệ thông tin": "statIT",
+            "Quan hệ khách hàng": "statQHKH",
+            "Marketing": "statMKT",
+            "Nhân sự": "statNS",
+            "Tài chính - Kế toán": "statTCKT"
+          };
+  
+          // Cập nhật số nhân sự theo từng phòng ban
+          phongBanData.forEach(item => {
+            const elementId = phongBanIdMap[item.tenPhongBan];
+            if (elementId) {
+              document.getElementById(elementId).innerText = item.soNhanSu;
+            }
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
+    });
+    </script>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
