@@ -3,6 +3,9 @@ package com.Model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class ChucVuId implements Serializable {
     private String maChucVu;
     private String maPhongBan;

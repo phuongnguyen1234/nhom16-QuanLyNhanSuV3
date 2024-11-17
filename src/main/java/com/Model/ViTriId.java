@@ -3,6 +3,9 @@ package com.Model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class ViTriId implements Serializable {
     private String maViTri; // Mã vị trí
     private String maPhongBan; // Mã phòng ban
