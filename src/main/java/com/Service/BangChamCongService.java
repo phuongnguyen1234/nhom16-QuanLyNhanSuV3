@@ -92,4 +92,8 @@ public class BangChamCongService {
     public List<BangChamCong> getBangChamCongByThoiGian(LocalDate thoiGian) {
         return bangChamCongRepo.findByThoiGian(thoiGian);
     }
+
+    public boolean existsByMaNhanSu(String maNhanSu){
+        return bangChamCongRepo.existsByMaNhanSu(maNhanSu);
+    }
 }

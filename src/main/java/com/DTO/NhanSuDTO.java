@@ -1,10 +1,6 @@
 package com.DTO;
 
-import com.fasterxml.jackson.annotation.*;
-
-@JsonPropertyOrder({ "MaNhanSu", "TenNhanSu", "GioiTinh", "NgaySinh", "DiaChi", "SoDienThoai", 
-                     "Email", "TenPhongBan", "TenChucVu", "TenViTri", "MucLuong", "MatKhau" })
-public class NhanSuFullDTO {
+public class NhanSuDTO {
     private String MaNhanSu;
     private String TenNhanSu;
     private String GioiTinh;
@@ -12,18 +8,21 @@ public class NhanSuFullDTO {
     private String DiaChi;
     private String SoDienThoai;
     private String Email;
+    private String MaPhongBan;
     private String TenPhongBan;
+    private String MaChucVu;
     private String TenChucVu;
+    private String MaViTri;
     private String TenViTri;
     private int MucLuong;
     private String MatKhau;
 
-    public NhanSuFullDTO() {}
+    public NhanSuDTO() {}
 
     // Constructor với tất cả tham số
-    public NhanSuFullDTO(String MaNhanSu, String TenNhanSu, String GioiTinh, String NgaySinh, String DiaChi,
-                         String SoDienThoai, String Email, String TenPhongBan, String TenChucVu, String TenViTri,
-                         int MucLuong, String MatKhau) {
+    public NhanSuDTO(String MaNhanSu, String TenNhanSu, String GioiTinh, String NgaySinh, String DiaChi,
+                         String SoDienThoai, String Email, String MaPhongBan, String TenPhongBan, String MaChucVu, 
+                         String TenChucVu, String MaViTri, String TenViTri, int MucLuong, String MatKhau) {
         this.MaNhanSu = MaNhanSu;
         this.TenNhanSu = TenNhanSu;
         this.GioiTinh = GioiTinh;
@@ -31,8 +30,11 @@ public class NhanSuFullDTO {
         this.DiaChi = DiaChi;
         this.SoDienThoai = SoDienThoai;
         this.Email = Email;
+        this.MaPhongBan = MaPhongBan;
         this.TenPhongBan = TenPhongBan;
+        this.MaChucVu = MaChucVu;
         this.TenChucVu = TenChucVu;
+        this.MaViTri = MaViTri;
         this.TenViTri = TenViTri;
         this.MucLuong = MucLuong;
         this.MatKhau = MatKhau;
@@ -134,5 +136,29 @@ public class NhanSuFullDTO {
 
     public void setMatKhau(String MatKhau) {
         this.MatKhau = MatKhau;
+    }
+
+    public String getMaPhongBan() {
+        return MaPhongBan;
+    }
+    
+    public void setMaPhongBan(String MaPhongBan) {
+        this.MaPhongBan = MaPhongBan;
+    }
+    
+    public String getMaChucVu() {
+        return MaChucVu;
+    }
+    
+    public void setMaChucVu(String MaChucVu) {
+        this.MaChucVu = MaChucVu;
+    }
+    
+    public String getMaViTri() {
+        return MaViTri;
+    }
+    
+    public void setMaViTri(String MaViTri) {
+        this.MaViTri = MaViTri;
     }
 }

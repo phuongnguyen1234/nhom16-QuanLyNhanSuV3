@@ -4,45 +4,106 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Model.*;
 import com.Repository.*;
+import com.DTO.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class NhanSuService {
     @Autowired
     private NhanSuRepo nhanSuRepo;
 
-    public List<NhanSu> layTatCaHoSo() {
-        return nhanSuRepo.findAll();
-    }
+    @Autowired
+    private BangChamCongRepo bangChamCongRepo;
 
-    public List<NhanSu> layHoSoTheoPhongBan(String maPhongBan) {
-        return nhanSuRepo.findByMaPhongBan(maPhongBan);
-    }
+    public List<NhanSuDTO> layTatCaHoSo() { //lay danh sach ho so
+        List<NhanSu> danhSachNhanSu = nhanSuRepo.findAll();
+        List<NhanSuDTO> danhSachDTO = new ArrayList<>();
+        DateTimeFormatter fm = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public List<NhanSu> layHoSoTheoChucVu(String maChucVu) {
-        return nhanSuRepo.findByMaChucVu(maChucVu);
+        for (NhanSu ns : danhSachNhanSu) {
+            NhanSuDTO dto = new NhanSuDTO(
+                ns.getMaNhanSu(),
+                ns.getTenNhanSu(),
+                ns.getGioiTinh(),
+                ns.getNgaySinh().format(fm),
+                ns.getDiaChi(),
+                ns.getSoDienThoai(),
+                ns.getEmail(),
+                ns.getMaPhongBan(),
+                ns.getPhongBan().getTenPhongBan(),
+                ns.getMaChucVu(),
+                ns.getChucVu().getTenChucVu(),
+                ns.getMaViTri(),
+                ns.getViTri().getTenViTri(),
+                ns.getMucLuong(),
+                ns.getMatKhau());
+            danhSachDTO.add(dto);
+        }
+
+        return danhSachDTO;
     }
     
-    public List<NhanSu> layHoSoTheoViTri(String maViTri) {
-        return nhanSuRepo.findByMaViTri(maViTri);
-    }
-    
-    public NhanSu timKiemNhanSu(String maNhanSu) {
-        return nhanSuRepo.findByMaNhanSu(maNhanSu); 
+    public NhanSuDTO layHoSoChiTiet(String maNhanSu){
+        NhanSu ns = nhanSuRepo.findByMaNhanSu(maNhanSu);
+        DateTimeFormatter fm = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        NhanSuDTO dto = new NhanSuDTO(
+            maNhanSu,
+            ns.getTenNhanSu(),
+            ns.getGioiTinh(),
+            ns.getNgaySinh().format(fm),
+            ns.getDiaChi(),
+            ns.getSoDienThoai(),
+            ns.getEmail(),
+            ns.getMaPhongBan(),
+            ns.getPhongBan().getTenPhongBan(),
+            ns.getMaChucVu(),
+            ns.getChucVu().getTenChucVu(),
+            ns.getMaViTri(),
+            ns.getViTri().getTenViTri(),
+            ns.getMucLuong(),
+            ns.getMatKhau()
+            );
+        return dto;
     }
 
     public String generateNewMaNhanSu() {
+        // Lấy mã nhân sự cuối cùng từ cơ sở dữ liệu (sắp xếp giảm dần theo mã)
         Optional<NhanSu> lastNhanSu = nhanSuRepo.findTopByOrderByMaNhanSuDesc();
-        String newMaNhanSu = "NS0001";  // Giá trị mặc định nếu không có hồ sơ nào.
+        String newMaNhanSu = "NS0001"; // Giá trị mặc định nếu không có hồ sơ nào
+    
         if (lastNhanSu.isPresent()) {
-            String lastMaNhanSu = lastNhanSu.get().getMaNhanSu();  // Lấy mã nhân sự cuối cùng.
-            int lastNumber = Integer.parseInt(lastMaNhanSu.substring(2));  // Lấy phần số sau 'NS'.
-            newMaNhanSu = String.format("NS%04d", lastNumber + 1);  // Sinh mã mới theo định dạng NSxxxx.
+            String lastMaNhanSu = lastNhanSu.get().getMaNhanSu(); // Lấy mã nhân sự cuối cùng
+            try {
+                int lastNumber = Integer.parseInt(lastMaNhanSu.substring(2)); // Lấy phần số sau 'NS'
+                newMaNhanSu = String.format("NS%04d", lastNumber + 1); // Sinh mã mới theo định dạng NSxxxx
+            } catch (NumberFormatException e) {
+                // Xử lý trường hợp mã không đúng định dạng
+                throw new IllegalStateException("Mã nhân sự không đúng định dạng: " + lastMaNhanSu, e);
+            }
         }
+    
+        // Kiểm tra mã mới có tồn tại trong bảng công hoặc bảng khác liên quan
+        while (isMaNhanSuUsedInBangChamCong(newMaNhanSu)) {
+            // Nếu mã đã tồn tại, tăng số thứ tự và thử lại
+            int currentNumber = Integer.parseInt(newMaNhanSu.substring(2));
+            newMaNhanSu = String.format("NS%04d", currentNumber + 1);
+        }
+    
         return newMaNhanSu;
     }
 
+    public NhanSu taoHoSoMoi(NhanSu nhanSu){
+        NhanSu nhanSuMoi = nhanSuRepo.save(nhanSu);
+        return nhanSuMoi;
+    }
+    
+    // Kiểm tra mã nhân sự có tồn tại trong bảng công hay không
+    private boolean isMaNhanSuUsedInBangChamCong(String maNhanSu) {
+        return bangChamCongRepo.existsByMaNhanSu(maNhanSu); // Sử dụng phương thức từ repository
+    }
+    
     public Long getTotalNhanSu() {
         return nhanSuRepo.count();
     }
@@ -63,6 +124,15 @@ public class NhanSuService {
     
     public NhanSu save(NhanSu nhanSu) {
         return nhanSuRepo.save(nhanSu);
+    }
+
+    public NhanSu capNhatHoSo(String maNhanSu, NhanSu nhanSu){
+        NhanSu nhanSuUpdate = nhanSuRepo.save(nhanSu);
+        return nhanSuUpdate;
+    }
+
+    public void xoaHoSo(String maNhanSu){
+        nhanSuRepo.deleteById(maNhanSu); // Xóa nhân sự theo mã nhân sự
     }
 
 }

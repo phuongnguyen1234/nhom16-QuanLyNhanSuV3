@@ -1,7 +1,17 @@
+
 package com.Model;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "CHUCVU")
@@ -23,7 +33,7 @@ public class ChucVu {
     private PhongBan phongBan;
 
     @OneToMany(mappedBy = "chucVu")
-    private List<ViTri> listViTri;
+    private List<ViTri> listViTri = new ArrayList<>();
 
     public String getTenChucVu() {
         return tenChucVu;
@@ -48,4 +58,13 @@ public class ChucVu {
     public void setMaPhongBan(String maPhongBan) {
         this.maPhongBan = maPhongBan;
     }
+
+    public PhongBan getPhongBan() {
+        return phongBan;
+    }
+
+    public void setPhongBan(PhongBan phongBan) {
+        this.phongBan = phongBan;
+    }
+
 }

@@ -12,7 +12,6 @@ public class PhongBanService {
     private PhongBanRepo phongBanRepo;
 
     public List<PhongBan> layTatCaPhongBan() {
-        System.out.println("Gọi thành công API: /api/hoso/phongban");
         return phongBanRepo.findAll();
     }
 }

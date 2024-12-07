@@ -187,6 +187,8 @@
                     <td>${record.tenViTri}</td>
                     <td>
                         <button onclick="getDetail('${record.maNhanSu}')">Xem</button>
+                        <button onclick="editRecord('${record.maNhanSu}')">Sửa</button>
+                        <button onclick="deleteRecord('${record.maNhanSu}')">Xóa</button>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -195,73 +197,41 @@
         .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
 
-// Mở form thêm hồ sơ
+// Mở add form
   function openAddForm() {
-    document.getElementById('detailModal').style.display = 'block';// Mở modal
-    setFormMode('add');  // Đặt chế độ 'thêm mới'
+    document.getElementById('addModal').style.display = 'block';// Mở modal
   }
 
-  // Đóng form
-  function closeForm() {
-    setFormMode('view');
-    document.getElementById('detailModal').style.display = 'none';  // Đóng modal
+  // Đóng add form
+  function closeAddForm() {
+    document.getElementById('addModal').style.display = 'none';  // Đóng modal
   }
 
-  // Thay đổi chế độ của form
-  function setFormMode(mode) {
-    const form = document.getElementById('detailRecordForm');
-    const inputs = form.querySelectorAll('input, select');
-    
-    // Ẩn tất cả các nút trước khi hiển thị các nút phù hợp cho từng chế độ
-    document.getElementById('saveBtn').style.display = 'none';
-    document.getElementById('editBtn').style.display = 'none';
-    document.getElementById('deleteBtn').style.display = 'none';
-    document.getElementById('updateBtn').style.display = 'none';
-    document.getElementById('modal-title').innerHTML = "Thông tin hồ sơ";
-  
-    switch(mode) {
-      case 'view': // Chế độ xem chi tiết hồ sơ
-        inputs.forEach(input => input.disabled = true);  // Các trường ở chế độ chỉ đọc
-        document.getElementById('editBtn').style.display = 'inline-block';  // Hiển thị nút "Chỉnh sửa"
-        document.getElementById('deleteBtn').style.display = 'inline-block'; // Hiển thị nút "Xóa"
-        break;
-        
-      case 'edit': // Chế độ chỉnh sửa hồ sơ
-        document.getElementById('modal-title').innerHTML = "Chỉnh sửa hồ sơ";
-        inputs.forEach(input => input.disabled = false);  // Cho phép chỉnh sửa
-        document.getElementById('updateBtn').style.display = 'inline-block';
-        document.getElementById('maNhanSu').disabled = true;
-        break;
-        
-      case 'add': // Chế độ thêm hồ sơ mới
-      document.getElementById('modal-title').innerHTML = "Thêm hồ sơ mới";
-        inputs.forEach(input => input.disabled = false);  // Cho phép nhập liệu
-        document.getElementById('saveBtn').style.display = 'inline-block';
-        
-        document.getElementById('maNhanSu').disabled = true;
-        document.getElementById('detailRecordForm').reset();
-        break;
-    }
-}
+  // dong edit form
+  function closeEditForm(){
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  //dong detail form
+  function closeDetailForm(){
+    document.getElementById('detailModal').style.display = 'none';
+  }
 
   // Hàm gọi khi lưu hồ sơ
   function saveRecord() {
-    const mode = document.getElementById('saveBtn').style.display === 'inline-block' ? 'add' : 'edit';
-    if (mode === 'add') {
       const data = {
-      tenNhanSu: document.getElementById('tenNhanSu').value,
-      gioiTinh: document.querySelector('input[name="gioiTinh"]:checked').value,
-      ngaySinh: document.getElementById('ngaySinh').value,
-      diaChi: document.getElementById('diaChi').value,
-      soDienThoai: document.getElementById('soDT').value,
-      email: document.getElementById('email').value,
-      maPhongBan: document.getElementById('phongBan').value,
-      maChucVu: document.getElementById('chucVu').value,
-      maViTri: document.getElementById('viTri').value,
-      mucLuong: document.getElementById('mucLuong').value,
-      matKhau: document.getElementById('matKhau').value,
+      tenNhanSu: document.getElementById('tenNhanSuAdd').value,
+      gioiTinh: document.querySelector('input[name="gioiTinhAdd"]:checked').value,
+      ngaySinh: document.getElementById('ngaySinhAdd').value,
+      diaChi: document.getElementById('diaChiAdd').value,
+      soDienThoai: document.getElementById('soDTAdd').value,
+      email: document.getElementById('emailAdd').value,
+      maPhongBan: document.getElementById('phongBanAddModal').value,
+      maChucVu: document.getElementById('chucVuAddModal').value,
+      maViTri: document.getElementById('viTriAddModal').value,
+      mucLuong: document.getElementById('mucLuongAdd').value,
+      matKhau: document.getElementById('matKhauAdd').value,
       };
-      console.log(JSON.stringify(data));
 
     fetch('http://localhost:8080/api/hoso/new', {
       method: 'POST',
@@ -272,81 +242,91 @@
     })
     .then(response => response.json())
     .then(data => {
-      closeForm();
+      closeAddForm();
       loadDanhSachHoSo();
     })
     .catch(error => console.error('Lỗi:', error));
-      }
-  }
+}
 
   function getDetail(maNhanSu) {
-    setFormMode('view');
   // Gọi API để lấy dữ liệu chi tiết của nhân sự
   fetch(`http://localhost:8080/api/hoso/${maNhanSu}`)
       .then(response => response.json())
       .then(data => {
           // Điền dữ liệu vào các trường của form
-          document.getElementById("maNhanSu").value = maNhanSu;
-          document.getElementById("tenNhanSu").value = data.tenNhanSu;
+          document.getElementById("maNhanSuDetail").value = maNhanSu;
+          document.getElementById("tenNhanSuDetail").value = data.tenNhanSu;
           if (data.gioiTinh === "Nam") {
-              document.getElementById("gioiTinhNam").checked = true;
+              document.getElementById("gioiTinhNamDetail").checked = true;
           } else if (data.gioiTinh === "Nữ") {
-              document.getElementById("gioiTinhNu").checked = true;
+              document.getElementById("gioiTinhNuDetail").checked = true;
           }
-          document.getElementById("ngaySinh").value = data.ngaySinh;
-          document.getElementById("diaChi").value = data.diaChi;
-          document.getElementById("soDT").value = data.soDienThoai;
-          document.getElementById("email").value = data.email;
-          document.getElementById("phongBan").value = data.tenPhongBan;
-          document.getElementById("chucVu").value = data.tenChucVu;
-          document.getElementById("viTri").value = data.tenViTri;
-          document.getElementById("mucLuong").value = data.mucLuong;
-          document.getElementById("matKhau").value = data.matKhau;
-
+          document.getElementById("ngaySinhDetail").value = data.ngaySinh;
+          document.getElementById("diaChiDetail").value = data.diaChi;
+          document.getElementById("soDTDetail").value = data.soDienThoai;
+          document.getElementById("emailDetail").value = data.email;
+          document.getElementById("phongBanDetail").value = data.tenPhongBan;
+          document.getElementById("chucVuDetail").value = data.tenChucVu;
+          document.getElementById("viTriDetail").value = data.tenViTri;
+          document.getElementById("mucLuongDetail").value = data.mucLuong;
+          document.getElementById("matKhauDetail").value = data.matKhau;
+          
           document.getElementById("detailModal").style.display = "block";
       })
       .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
 
-
 // mở Chỉnh sửa bản ghi
-function editRecord() {
-  setFormMode('edit');
+function editRecord(maNhanSu) {
   document.querySelector("#modal-title").innerHTML = "Chỉnh sửa hồ sơ";
-
-  // Bật tất cả các trường có thể chỉnh sửa
-  document.querySelector("#tenNhanSu").disabled = false;
-  document.querySelector("#gioiTinhNam").disabled = false;
-  document.querySelector("#gioiTinhNu").disabled = false;
-  document.querySelector("#ngaySinh").disabled = false;
-  document.querySelector("#diaChi").disabled = false;
-  document.querySelector("#soDT").disabled = false;
-  document.querySelector("#email").disabled = false;
-  document.querySelector("#phongBan").disabled = false;
-  document.querySelector("#chucVu").disabled = false;
-  document.querySelector("#viTri").disabled = false;
-  document.querySelector("#mucLuong").disabled = false;
-  document.querySelector("#matKhau").disabled = false;
+  fetch(`http://localhost:8080/api/hoso/${maNhanSu}`)
+      .then(response => response.json())
+      .then(data => {
+          // Điền dữ liệu vào các trường của form
+          document.getElementById("maNhanSuEdit").value = maNhanSu;
+          document.getElementById("tenNhanSuEdit").value = data.tenNhanSu;
+          if (data.gioiTinh === "Nam") {
+              document.getElementById("gioiTinhNamEdit").checked = true;
+          } else if (data.gioiTinh === "Nữ") {
+              document.getElementById("gioiTinhNuEdit").checked = true;
+          }
+          document.getElementById("ngaySinhEdit").value = data.ngaySinh;
+          document.getElementById("diaChiEdit").value = data.diaChi;
+          document.getElementById("soDTEdit").value = data.soDienThoai;
+          document.getElementById("emailEdit").value = data.email;
+          document.getElementById("phongBanEditModal").value = data.tenPhongBan;
+          document.getElementById("chucVuEditModal").value = data.tenChucVu;
+          document.getElementById("viTriEditModal").value = data.tenViTri;
+          document.getElementById("mucLuongEdit").value = data.mucLuong;
+          document.getElementById("matKhauEdit").value = data.matKhau;
+          
+          document.getElementById("editModal").style.display = "block";
+      })
+      .catch(error => console.error("Lỗi khi tải dữ liệu:", error));
 }
 
 // Cập nhật bản ghi vào cơ sở dữ liệu
 function updateRecord() {
-  const maNhanSu = document.querySelector("#maNhanSu").value;
+  // Lấy giá trị từ các trường
+  const maNhanSu = document.querySelector("#maNhanSuEdit").value;
+
+  // Đảm bảo các thuộc tính có thứ tự mong muốn trong JSON
   const updatedRecord = {
-    tenNhanSu: document.querySelector("#tenNhanSu").value,
-    gioiTinh: document.querySelector('input[name="gioiTinh"]:checked').value,
-    ngaySinh: document.querySelector("#ngaySinh").value,
-    diaChi: document.querySelector("#diaChi").value,
-    soDienThoai: document.querySelector("#soDT").value,
-    email: document.querySelector("#email").value,
-    maPhongBan: document.querySelector("#phongBan").value,
-    maChucVu: document.querySelector("#chucVu").value,
-    maViTri: document.querySelector("#viTri").value,
-    mucLuong: document.querySelector("#mucLuong").value,
-    matKhau: document.querySelector("#matKhau").value
+    maPhongBan: document.querySelector("#phongBanEditModal").value,
+    maChucVu: document.querySelector("#chucVuEditModal").value,
+    maViTri: document.querySelector("#viTriEditModal").value,
+    maNhanSu: maNhanSu,
+    tenNhanSu: document.querySelector("#tenNhanSuEdit").value,
+    gioiTinh: document.querySelector('input[name="gioiTinhEdit"]:checked').value,
+    ngaySinh: document.querySelector("#ngaySinhEdit").value,
+    diaChi: document.querySelector("#diaChiEdit").value,
+    soDienThoai: document.querySelector("#soDTEdit").value,
+    email: document.querySelector("#emailEdit").value,
+    mucLuong: document.querySelector("#mucLuongEdit").value,
+    matKhau: document.querySelector("#matKhauEdit").value
   };
 
-  console.log("Dữ liệu gửi đi:", updatedRecord); // Log dữ liệu để kiểm tra
+  console.log("Dữ liệu chuẩn bị gửi:", JSON.stringify(updatedRecord, null, 2));
 
   // Gửi yêu cầu PUT đến API để cập nhật bản ghi
   fetch(`http://localhost:8080/api/hoso/edit/${maNhanSu}`, {
@@ -356,34 +336,31 @@ function updateRecord() {
     },
     body: JSON.stringify(updatedRecord)
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log("Dữ liệu trả về:", data);
-    loadDanhSachHoSo();  // Reload danh sách nhân sự sau khi cập nhật
-    closeForm();  // Đóng form thông tin chi tiết
-  })
-  .catch(error => {
-    console.error('Lỗi khi cập nhật:', error);
-  });
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(err => {
+          throw new Error(`HTTP error! status: ${response.status}, message: ${err.message || "Unknown error"}`);
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Dữ liệu trả về:", data);
+      // Reload danh sách hồ sơ và đóng form
+      loadDanhSachHoSo();
+      closeEditForm();
+    })
+    .catch(error => {
+      console.error('Lỗi khi cập nhật:', error);
+      // Hiển thị thông báo lỗi (nếu có UI để thông báo)
+      alert(`Lỗi khi cập nhật: ${error.message}`);
+    });
 }
 
 
+
 // Xóa bản ghi
-function deleteRecord() {
-  // Lấy mã nhân sự từ input
-  const maNhanSu = document.querySelector("#maNhanSu").value;
-
-  // Kiểm tra xem mã nhân sự có hợp lệ không
-  if (!maNhanSu) {
-    alert("Không tìm thấy mã nhân sự để xóa!");
-    return;
-  }
-
+function deleteRecord(maNhanSu) {
   // Hiển thị modal xác nhận xóa
   document.querySelector(".confirm-box").style.display = "block";
 
@@ -404,7 +381,6 @@ function deleteConfirmed() {
       if (response.ok) {
         loadDanhSachHoSo();  // Reload danh sách nhân sự sau khi xóa
         closeDeleteConfirmModal();  // Đóng modal xác nhận
-        closeForm();  // Đóng form thông tin chi tiết
       } else {
         alert("Không thể xóa hồ sơ. Vui lòng thử lại!");
       }
@@ -427,10 +403,10 @@ function closeDeleteConfirmModal() {
   });
   
 // Kiểm tra và kích hoạt Chức vụ và Vị trí khi có lựa chọn Phòng ban và Chức vụ
-function toggleFields() {
-  const phongBanSelect = document.getElementById("phongBan");
-  const chucVuSelect = document.getElementById("chucVu");
-  const viTriSelect = document.getElementById("viTri");
+function toggleFieldsAdd() {
+  const phongBanSelect = document.getElementById("phongBanAddModal");
+  const chucVuSelect = document.getElementById("chucVuAddModal");
+  const viTriSelect = document.getElementById("viTriAddModal");
 
   // Nếu Phòng ban không được chọn, khóa Chức vụ và Vị trí
   if (!phongBanSelect.value) {
@@ -443,15 +419,15 @@ function toggleFields() {
   
   // Nếu Phòng ban được chọn, kích hoạt Chức vụ và load lại Chức vụ
   chucVuSelect.disabled = false;
-  loadChucVu(phongBanSelect.value); // Lọc và tải Chức vụ theo Phòng ban
+  loadChucVuAdd(phongBanSelect.value); // Lọc và tải Chức vụ theo Phòng ban
 }
 
 // Lọc các chức vụ theo Phòng ban
-function loadChucVu(phongBanId) {
-  fetch(`http://localhost:8080/api/hoso/${phongBanId}/chucvu`)
+function loadChucVuAdd(phongBanId) {
+  fetch(`http://localhost:8080/api/vitricongviec/${phongBanId}/chucvu`)
       .then(response => response.json())
       .then(data => {
-          const chucVuSelect = document.getElementById("chucVu");
+          const chucVuSelect = document.getElementById("chucVuAddModal");
           chucVuSelect.innerHTML = '<option value="">- Chọn Chức vụ -</option>'; // Reset Chức vụ
 
           // Thêm các option Chức vụ vào select
@@ -463,7 +439,7 @@ function loadChucVu(phongBanId) {
           });
 
           // Sau khi load chức vụ, reset và khóa vị trí để đảm bảo vị trí sẽ cập nhật khi chọn chức vụ mới
-          const viTriSelect = document.getElementById("viTri");
+          const viTriSelect = document.getElementById("viTriAddModal");
           viTriSelect.disabled = true;
           viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
       })
@@ -471,10 +447,10 @@ function loadChucVu(phongBanId) {
 }
 
 // Lọc các vị trí theo Phòng ban và Chức vụ
-function loadViTri() {
-  const phongBanId = document.getElementById("phongBan").value;
-  const chucVuId = document.getElementById("chucVu").value;
-  const viTriSelect = document.getElementById("viTri");
+function loadViTriAdd() {
+  const phongBanId = document.getElementById("phongBanAddModal").value;
+  const chucVuId = document.getElementById("chucVuAddModal").value;
+  const viTriSelect = document.getElementById("viTriAddModal");
 
   // Nếu không có Phòng ban hoặc Chức vụ thì khóa Vị trí
   if (!phongBanId || !chucVuId) {
@@ -485,7 +461,7 @@ function loadViTri() {
 
   // Nếu có đủ Phòng ban và Chức vụ, kích hoạt Vị trí và load lại danh sách Vị trí
   viTriSelect.disabled = false;
-  fetch(`http://localhost:8080/api/hoso/${phongBanId}/${chucVuId}/vitri`)
+  fetch(`http://localhost:8080/api/vitricongviec/${phongBanId}/${chucVuId}/vitri`)
       .then(response => response.json())
       .then(data => {
           viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
@@ -501,8 +477,80 @@ function loadViTri() {
       .catch(error => console.error("Lỗi khi tải vị trí:", error));
 }
 
-// Event listener cho khi chọn Phòng ban và Chức vụ
 
+function toggleFieldsEdit() {
+  const phongBanSelect = document.getElementById("phongBanEditModal");
+  const chucVuSelect = document.getElementById("chucVuEditModal");
+  const viTriSelect = document.getElementById("viTriEditModal");
+
+  // Reset trạng thái nếu phòng ban không được chọn
+  if (!phongBanSelect.value) {
+    chucVuSelect.disabled = true;
+    viTriSelect.disabled = true;
+    chucVuSelect.innerHTML = '<option value="">- Chọn Chức vụ -</option>';
+    viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>';
+    return;
+  }
+
+  // Kích hoạt chức vụ và load lại
+  chucVuSelect.disabled = false;
+  loadChucVuEdit(phongBanSelect.value);
+}
+
+// Lọc các chức vụ theo Phòng ban
+function loadChucVuEdit(phongBanId) {
+  fetch(`http://localhost:8080/api/vitricongviec/${phongBanId}/chucvu`)
+    .then(response => response.json())
+    .then(data => {
+      const chucVuSelect = document.getElementById("chucVuEditModal");
+      chucVuSelect.innerHTML = '<option value="">- Chọn Chức vụ -</option>';
+
+      // Load chức vụ
+      data.forEach(chucVu => {
+        const option = document.createElement("option");
+        option.value = chucVu.maChucVu;
+        option.textContent = chucVu.tenChucVu;
+        chucVuSelect.appendChild(option);
+      });
+
+      // Reset vị trí
+      const viTriSelect = document.getElementById("viTriEditModal");
+      viTriSelect.disabled = true;
+      viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>';
+    })
+    .catch(error => console.error("Lỗi khi tải chức vụ:", error));
+}
+
+// Lọc các vị trí theo Phòng ban và Chức vụ
+function loadViTriEdit() {
+  const phongBanId = document.getElementById("phongBanEditModal").value;
+  const chucVuId = document.getElementById("chucVuEditModal").value;
+  const viTriSelect = document.getElementById("viTriEditModal");
+
+  // Nếu không có Phòng ban hoặc Chức vụ thì khóa Vị trí
+  if (!phongBanId || !chucVuId) {
+      viTriSelect.disabled = true;
+      viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+      return;
+  }
+
+  // Nếu có đủ Phòng ban và Chức vụ, kích hoạt Vị trí và load lại danh sách Vị trí
+  viTriSelect.disabled = false;
+  fetch(`http://localhost:8080/api/vitricongviec/${phongBanId}/${chucVuId}/vitri`)
+      .then(response => response.json())
+      .then(data => {
+          viTriSelect.innerHTML = '<option value="">- Chọn Vị trí -</option>'; // Reset Vị trí
+
+          // Thêm các option Vị trí vào select
+          data.forEach(viTri => {
+              const option = document.createElement("option");
+              option.value = viTri.maViTri;
+              option.textContent = viTri.tenViTri;
+              viTriSelect.appendChild(option);
+          });
+      })
+      .catch(error => console.error("Lỗi khi tải vị trí:", error));
+}
 
 
 </script>
@@ -680,58 +728,143 @@ function loadViTri() {
       </div>
     </section>
 
-    <!-- Modal form cho tất cả các thao tác -->
+    <!-- Modal form thong tin chi tiet -->
 <div id="detailModal" class="modal" aria-hidden="true">
   <div class="modal-content">
-    <span class="close" onclick="closeForm()">&times;</span>
+    <span class="close" onclick="closeDetailForm()">&times;</span>
     <h3 id="modal-title">Thông tin nhân sự</h3>
     <form id="detailRecordForm">
       <!-- Tên Nhân Sự -->
       <div class="form-group">
-        <label for="maNhanSu">Mã nhân sự:</label>
-        <input type="text" id="maNhanSu" class="form-control" disabled>
+        <label for="maNhanSuDetail">Mã nhân sự:</label>
+        <input type="text" id="maNhanSuDetail" class="form-control" disabled>
       </div>
 
       <div class="form-group">
-        <label for="tenNhanSu">Tên nhân sự:</label>
-        <input type="text" id="tenNhanSu" class="form-control" disabled>
+        <label for="tenNhanSuDetail">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSuDetail" class="form-control" disabled>
       </div>
 
       <!-- Giới Tính -->
       <div class="form-group radio-group">
         <label>Giới tính:</label>
-        <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam" disabled> Nam
-        <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nữ" disabled> Nữ
+        <input type="radio" id="gioiTinhNamDetail" name="gioiTinh" value="Nam" disabled> Nam
+        <input type="radio" id="gioiTinhNuDetail" name="gioiTinh" value="Nữ" disabled> Nữ
       </div>
 
       <!-- Ngày Sinh -->
       <div class="form-group">
-        <label for="ngaySinh">Ngày sinh:</label>
-        <input type="date" id="ngaySinh" class="form-control" disabled>
+        <label for="ngaySinhDetail">Ngày sinh:</label>
+        <input type="text" id="ngaySinhDetail" class="form-control" disabled>
       </div>
 
       <!-- Địa Chỉ -->
       <div class="form-group">
-        <label for="diaChi">Địa chỉ:</label>
-        <input type="text" id="diaChi" class="form-control" disabled>
+        <label for="diaChiDetail">Địa chỉ:</label>
+        <input type="text" id="diaChiDetail" class="form-control" disabled>
       </div>
       
       <!-- Số Điện Thoại -->
       <div class="form-group">
-        <label for="soDT">Số điện thoại:</label>
-        <input type="tel" id="soDT" class="form-control" disabled>
+        <label for="soDTDetail">Số điện thoại:</label>
+        <input type="tel" id="soDTDetail" class="form-control" disabled>
       </div>
 
       <!-- Email -->
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" class="form-control" disabled>
+        <label for="emailDetail">Email:</label>
+        <input type="email" id="emailDetail" class="form-control" disabled>
       </div>
 
       <!-- Phòng Ban -->
       <div class="form-group">
-        <label for="phongBan">Phòng ban:</label>
-        <select id="phongBan" class="form-control" required disabled onchange="toggleFields()">
+        <label for="phongBanDetail">Phòng ban:</label>
+        <input type="text" id="phongBanDetail" class="form-control" disabled>
+      </div>
+
+      <!-- Chức Vụ -->
+      <div class="form-group">
+        <label for="chucVuDetail">Chức vụ:</label>
+        <input type="text" id="chucVuDetail" class="form-control" disabled>
+      </div>
+
+      <!-- Vị Trí -->
+      <div class="form-group">
+        <label for="viTriDetail">Vị trí:</label>
+        <input type="text" id="viTriDetail" class="form-control" disabled>
+      </div>
+
+      <!-- Mức Lương -->
+      <div class="form-group">
+        <label for="mucLuongDetail">Mức lương:</label>
+        <input type="number" id="mucLuongDetail" class="form-control" oninput="this.value = Math.floor(Math.abs(this.value))" disabled>
+      </div>
+
+      <!-- Mật Khẩu -->
+      <div class="form-group">
+        <label for="matKhauDetail">Mật khẩu:</label>
+        <input type="password" id="matKhauDetail" class="form-control" disabled>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="showPassword">
+          <label class="form-check-label" for="showPassword">Hiển thị mật khẩu</label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal form chinh sua ho so -->
+<div id="editModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditForm()">&times;</span>
+    <h3 id="modal-title">Chỉnh sửa thông tin nhân sự</h3>
+    <form id="editRecordForm">
+      <!-- Tên Nhân Sự -->
+      <div class="form-group">
+        <label for="maNhanSuEdit">Mã nhân sự:</label>
+        <input type="text" id="maNhanSuEdit" class="form-control" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="tenNhanSuEdit">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSuEdit" class="form-control">
+      </div>
+
+      <!-- Giới Tính -->
+      <div class="form-group radio-group">
+        <label>Giới tính:</label>
+        <input type="radio" id="gioiTinhNamEdit" name="gioiTinhEdit" value="Nam"> Nam
+        <input type="radio" id="gioiTinhNuEdit" name="gioiTinhEdit" value="Nữ"> Nữ
+      </div>
+
+      <!-- Ngày Sinh -->
+      <div class="form-group">
+        <label for="ngaySinhEdit">Ngày sinh:</label>
+        <input type="date" id="ngaySinhEdit" class="form-control">
+      </div>
+
+      <!-- Địa Chỉ -->
+      <div class="form-group">
+        <label for="diaChiEdit">Địa chỉ:</label>
+        <input type="text" id="diaChiEdit" class="form-control">
+      </div>
+      
+      <!-- Số Điện Thoại -->
+      <div class="form-group">
+        <label for="soDTEdit">Số điện thoại:</label>
+        <input type="tel" id="soDTEdit" class="form-control">
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="emailEdit">Email:</label>
+        <input type="email" id="emailEdit" class="form-control">
+      </div>
+
+      <!-- Phòng Ban -->
+      <div class="form-group">
+        <label for="phongBanEditModal">Phòng ban:</label>
+        <select id="phongBanEditModal" class="form-control" required onchange="toggleFieldsEdit(); loadChucVuEdit();">
           <option value="">- Chọn phòng ban -</option>
           <option value="NS">Nhân sự</option>
           <option value="TC-KT">Tài chính - Kế toán</option>
@@ -743,42 +876,135 @@ function loadViTri() {
 
       <!-- Chức Vụ -->
       <div class="form-group">
-        <label for="chucVu">Chức vụ:</label>
-        <select id="chucVu" class="form-control" required disabled onchange="loadViTri()">
+        <label for="chucVuEditModal">Chức vụ:</label>
+        <select id="chucVuEditModal" class="form-control" required onchange="loadViTriEdit();" disabled>
           <option value="">- Chọn chức vụ -</option>
         </select>
       </div>
 
       <!-- Vị Trí -->
       <div class="form-group">
-        <label for="viTri">Vị trí:</label>
-        <select id="viTri" class="form-control" required disabled>
+        <label for="viTriEditModal">Vị trí:</label>
+        <select id="viTriEditModal" class="form-control" required disabled>
           <option value="">- Chọn vị trí -</option>
         </select>
       </div>
 
       <!-- Mức Lương -->
       <div class="form-group">
-        <label for="mucLuong">Mức lương:</label>
-        <input type="number" id="mucLuong" class="form-control" oninput="this.value = Math.floor(Math.abs(this.value))" disabled>
+        <label for="mucLuongEdit">Mức lương:</label>
+        <input type="number" id="mucLuongEdit" class="form-control" oninput="this.value = Math.floor(Math.abs(this.value))" required>
       </div>
 
       <!-- Mật Khẩu -->
       <div class="form-group">
-        <label for="matKhau">Mật khẩu:</label>
-        <input type="password" id="matKhau" class="form-control" disabled>
+        <label for="matKhauEdit">Mật khẩu:</label>
+        <input type="password" id="matKhauEdit" class="form-control">
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="showPassword">
-          <label class="form-check-label" for="showPassword">Hiển thị mật khẩu</label>
+          <input type="checkbox" class="form-check-input" id="showPasswordEdit">
+          <label class="form-check-label" for="showPasswordEdit">Hiển thị mật khẩu</label>
         </div>
       </div>
       
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn" id="editBtn" onclick="editRecord()" style="display: none;">Chỉnh sửa</button>
-        <button type="button" class="btn" id="deleteBtn" onclick="deleteRecord()" style="display: none;">Xóa</button>
+        <button type="button" class="btn" id="updateBtn" onclick="updateRecord()">Lưu hồ sơ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal form them ho so -->
+<div id="addModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddForm()">&times;</span>
+    <h3 id="modal-title">Thêm hồ sơ mới</h3>
+    <form id="addRecordForm">
+      <!-- Tên Nhân Sự -->
+      <div class="form-group">
+        <label for="tenNhanSuAdd">Tên nhân sự:</label>
+        <input type="text" id="tenNhanSuAdd" class="form-control" required>
+      </div>
+
+      <!-- Giới Tính -->
+      <div class="form-group radio-group">
+        <label>Giới tính:</label>
+        <input type="radio" id="gioiTinhNamAdd" name="gioiTinhAdd" value="Nam" required> Nam
+        <input type="radio" id="gioiTinhNuAdd" name="gioiTinhAdd" value="Nữ" required> Nữ
+      </div>
+
+      <!-- Ngày Sinh -->
+      <div class="form-group">
+        <label for="ngaySinhAdd">Ngày sinh:</label>
+        <input type="date" id="ngaySinhAdd" class="form-control" required>
+      </div>
+
+      <!-- Địa Chỉ -->
+      <div class="form-group">
+        <label for="diaChiAdd">Địa chỉ:</label>
+        <input type="text" id="diaChiAdd" class="form-control" required>
+      </div>
+      
+      <!-- Số Điện Thoại -->
+      <div class="form-group">
+        <label for="soDTAdd">Số điện thoại:</label>
+        <input type="tel" id="soDTAdd" class="form-control" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="emailAdd">Email:</label>
+        <input type="email" id="emailAdd" class="form-control" required>
+      </div>
+
+      <!-- Phòng Ban -->
+      <div class="form-group">
+        <label for="phongBanAddModal">Phòng ban:</label>
+        <select id="phongBanAddModal" class="form-control" required onchange="toggleFieldsAdd(); loadChucVuAdd();">
+          <option value="">- Chọn phòng ban -</option>
+          <option value="NS">Nhân sự</option>
+          <option value="TC-KT">Tài chính - Kế toán</option>
+          <option value="MKT">Marketing</option>
+          <option value="IT">Công nghệ thông tin</option>
+          <option value="QHKH">Quan hệ khách hàng</option>
+        </select>
+      </div>
+
+      <!-- Chức Vụ -->
+      <div class="form-group">
+        <label for="chucVuAddModal">Chức vụ:</label>
+        <select id="chucVuAddModal" class="form-control" required onchange="loadViTriAdd();" disabled>
+          <option value="">- Chọn chức vụ -</option>
+        </select>
+      </div>
+
+      <!-- Vị Trí -->
+      <div class="form-group">
+        <label for="viTriAddModal">Vị trí:</label>
+        <select id="viTriAddModal" class="form-control" required disabled>
+          <option value="">- Chọn vị trí -</option>
+        </select>
+      </div>
+
+      <!-- Mức Lương -->
+      <div class="form-group">
+        <label for="mucLuongAdd">Mức lương:</label>
+        <input type="number" id="mucLuongAdd" class="form-control" oninput="this.value = Math.floor(Math.abs(this.value))" required>
+      </div>
+
+      <!-- Mật Khẩu -->
+      <div class="form-group">
+        <label for="matKhauAdd">Mật khẩu:</label>
+        <input type="password" id="matKhauAdd" class="form-control">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="showPasswordAdd">
+          <label class="form-check-label" for="showPasswordAdd">Hiển thị mật khẩu</label>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer">
         <button type="button" class="btn" id="saveBtn" onclick="saveRecord()">Lưu hồ sơ</button>
-        <button type="button" class="btn" id="updateBtn" onclick="updateRecord()" style="display: none;">Cập nhật</button>
       </div>
     </form>
   </div>
@@ -806,13 +1032,18 @@ function loadViTri() {
   <script src="assets/js/main.js"></script>
 
   <script>
-    document.getElementById("showPassword").addEventListener("change", function () {
-      const passwordField = document.getElementById("matKhau");
+    document.getElementById("showPasswordDetail").addEventListener("change", function () {
+      const passwordField = document.getElementById("matKhauDetail");
       passwordField.type = this.checked ? "text" : "password";
     });
 
-    document.getElementById("phongBan").addEventListener("change", toggleFields);
-    document.getElementById("chucVu").addEventListener("change", loadViTri);
+    document.getElementById("phongBanAddModal").addEventListener("change", toggleFieldsAdd);
+    document.getElementById("phongBanAddModal").addEventListener("change", loadChucVuAdd);
+    document.getElementById("chucVuAddModal").addEventListener("change", loadViTriAdd);
+
+    document.getElementById("phongBanEditModal").addEventListener("change", toggleFieldsEdit);
+    document.getElementById("phongBanEditModal").addEventListener("change", loadChucVuEdit);
+    document.getElementById("chucVuEditModal").addEventListener("change", loadViTriEdit);
   </script>
 </body>
 </html>

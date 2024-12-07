@@ -1,9 +1,13 @@
 package com.Repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.Model.*;
 import java.util.List;
-import org.springframework.stereotype.*;;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.Model.ViTri;
+import com.Model.ViTriId;
+;
 
 @Repository
 public interface ViTriRepo extends JpaRepository<ViTri, ViTriId> {

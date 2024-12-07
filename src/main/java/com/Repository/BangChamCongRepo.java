@@ -7,4 +7,5 @@ import java.util.*;
 
 public interface BangChamCongRepo extends JpaRepository<BangChamCong, String> {
     List<BangChamCong> findByThoiGian(LocalDate thoiGian);
+    boolean existsByMaNhanSu(String maNhanSu);
 }

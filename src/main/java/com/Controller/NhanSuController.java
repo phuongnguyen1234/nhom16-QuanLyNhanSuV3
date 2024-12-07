@@ -1,15 +1,27 @@
 package com.Controller;
 
-import com.Service.*;
-import com.Repository.*;
-import com.Model.*;
-import com.DTO.*;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
-import java.time.format.DateTimeFormatter;
-import jakarta.servlet.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.DTO.NhanSuDTO;
+import com.Model.NhanSu;
+import com.Repository.NhanSuRepo;
+import com.Service.NhanSuService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @RestController
@@ -22,98 +34,49 @@ public class NhanSuController {
     @Autowired
     private NhanSuRepo nhanSuRepo;
 
-    @Autowired
-    private ChucVuService chucVuService;
-
-    @Autowired
-    private ViTriService viTriService;
-
-    // Lấy danh sách chức vụ theo mã phòng ban
-    @GetMapping("/{maPhongBan}/chucvu")
-    public List<ChucVu> layChucVuTheoPhongBan(@PathVariable String maPhongBan) {
-        return chucVuService.layChucVuTheoPhongBan(maPhongBan);
-    }
-
-    // Lấy danh sách vị trí theo mã chức vụ và mã phòng ban
-    @GetMapping("/{maPhongBan}/{maChucVu}/vitri")
-    public List<ViTri> layViTriTheoPhongBanVaChucVu(@PathVariable String maPhongBan, @PathVariable String maChucVu) {
-        return viTriService.layViTriTheoPhongBanVaChucVu(maPhongBan, maChucVu);
-    }
-
     @GetMapping("/all")
-    public List<NhanSuShortDTO> layTatCaHoSo() {
-        List<NhanSu> danhSachNhanSu = nhanSuService.layTatCaHoSo();
-        List<NhanSuShortDTO> danhSachDTO = new ArrayList<>();
-
-        for (NhanSu nhanSu : danhSachNhanSu) {
-            NhanSuShortDTO dto = new NhanSuShortDTO(
-                nhanSu.getMaNhanSu(),
-                nhanSu.getTenNhanSu(),
-                nhanSu.getPhongBan().getTenPhongBan(),
-                nhanSu.getChucVu().getTenChucVu(),
-                nhanSu.getViTri().getTenViTri()
-            );
-            danhSachDTO.add(dto);
-        }
-
-        return danhSachDTO;
+    public List<NhanSuDTO> layTatCaHoSo() {
+        return nhanSuService.layTatCaHoSo();
     }
 
     @GetMapping("/{maNhanSu}")
-    public ResponseEntity<NhanSuFullDTO> layHoSoChiTiet(@PathVariable String maNhanSu) {
-    NhanSu nhanSu = nhanSuRepo.findById(maNhanSu).orElse(null);
-    if (nhanSu == null) {
-        return ResponseEntity.notFound().build();
-    }
-    // Chuyển đổi sang NhanSuFullDTO
-    NhanSuFullDTO dto = new NhanSuFullDTO();
-    dto.setMaNhanSu(nhanSu.getMaNhanSu());
-    dto.setTenNhanSu(nhanSu.getTenNhanSu());
-    dto.setGioiTinh(nhanSu.getGioiTinh());
-    DateTimeFormatter fm = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    dto.setNgaySinh(nhanSu.getNgaySinh().format(fm));
-    dto.setDiaChi(nhanSu.getDiaChi());
-    dto.setSoDienThoai(nhanSu.getSoDienThoai());
-    dto.setEmail(nhanSu.getEmail());
-    dto.setTenPhongBan(nhanSu.getPhongBan().getTenPhongBan());
-    dto.setTenChucVu(nhanSu.getChucVu().getTenChucVu());
-    dto.setTenViTri(nhanSu.getViTri().getTenViTri());
-    dto.setMucLuong(nhanSu.getMucLuong());
-    dto.setMatKhau(nhanSu.getMatKhau());
-    return ResponseEntity.ok(dto);
+    public ResponseEntity<NhanSuDTO> layHoSoChiTiet(@PathVariable String maNhanSu) {
+        NhanSuDTO nhanSu = nhanSuService.layHoSoChiTiet(maNhanSu);
+        return ResponseEntity.ok(nhanSu);
     }
 
     //tao ho so moi
     @PostMapping("/new")
     public ResponseEntity<NhanSu> taoHoSoMoi(@RequestBody NhanSu nhanSu) {
+        System.out.println("Dữ liệu nhận được: " + nhanSu.getTenNhanSu());
         try {
-            String newMaNhanSu = nhanSuService.generateNewMaNhanSu();
-            nhanSu.setMaNhanSu(newMaNhanSu);
-            NhanSu nhanSuMoi = nhanSuRepo.save(nhanSu);
+            nhanSu.setMaNhanSu(nhanSuService.generateNewMaNhanSu());
+            NhanSu nhanSuMoi = nhanSuService.taoHoSoMoi(nhanSu);
             return ResponseEntity.ok(nhanSuMoi);
         } catch (Exception e) {
+            e.printStackTrace(); // Log chi tiết lỗi
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
+
     //cap nhat ho so
     @PutMapping("/edit/{maNhanSu}")
     public ResponseEntity<NhanSu> capNhatHoSo(@PathVariable String maNhanSu, @RequestBody NhanSu nhanSu) {
-        if (!nhanSuRepo.existsById(maNhanSu)) {
-            return ResponseEntity.notFound().build();
+        if (nhanSu.getMaNhanSu() == null || nhanSu.getMaNhanSu().isEmpty()) {
+            nhanSu.setMaNhanSu(maNhanSu); // Gán ID từ URL nếu thiếu
         }
-        nhanSu.setMaNhanSu(maNhanSu); // Thiết lập lại mã nhân sự
-        NhanSu nhanSuCapNhat = nhanSuRepo.save(nhanSu); // Lưu lại thông tin cập nhật
-        return ResponseEntity.ok(nhanSuCapNhat);
+        if (!maNhanSu.equals(nhanSu.getMaNhanSu())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Kiểm tra ID trong URL và body
+        }
+        return ResponseEntity.ok(nhanSuService.capNhatHoSo(maNhanSu, nhanSu));
     }
+
 
     //xoa ho so
     @DeleteMapping("/delete/{maNhanSu}")
     public ResponseEntity<Void> xoaHoSo(@PathVariable String maNhanSu) {
-        if (!nhanSuRepo.existsById(maNhanSu)) {
-            return ResponseEntity.notFound().build();
-        }
-        nhanSuRepo.deleteById(maNhanSu);
+        nhanSuService.xoaHoSo(maNhanSu);
         return ResponseEntity.noContent().build();
     }
 

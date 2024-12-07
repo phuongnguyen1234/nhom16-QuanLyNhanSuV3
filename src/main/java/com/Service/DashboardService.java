@@ -1,12 +1,13 @@
 package com.Service;
 
-import com.Model.NhanSu;
-import com.Repository.NhanSuRepo;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.Model.NhanSu;
+import com.Repository.NhanSuRepo;
 
 @Service
 public class DashboardService {
@@ -35,7 +36,7 @@ public class DashboardService {
         int totalEmployees = (int) nhanSuRepo.count();
         statistics.put("totalEmployees", totalEmployees);
 
-        // Số nhân sự theo từng phòng ban (giả sử bạn có mã phòng ban như "A", "B", "C" trong cơ sở dữ liệu)
+        // Số nhân sự theo từng phòng ban
         statistics.put("statIT", getUsersByDepartment("IT").size());
         statistics.put("statMKT", getUsersByDepartment("MKT").size());
         statistics.put("statNS", getUsersByDepartment("NS").size());

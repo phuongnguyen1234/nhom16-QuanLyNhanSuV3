@@ -1,3 +1,4 @@
+
 package com.Model;
 
 import java.io.Serializable;
@@ -13,9 +14,9 @@ public class ChucVuId implements Serializable {
     public ChucVuId() {
     }
 
-    public ChucVuId(String MaChucVu, String MaPhongBan) {
-        this.maChucVu = MaChucVu;
-        this.maPhongBan = MaPhongBan;
+    public ChucVuId(String maChucVu, String maPhongBan) {
+        this.maChucVu = maChucVu;
+        this.maPhongBan = maPhongBan;
     }
 
     // Getters và Setters
@@ -23,16 +24,16 @@ public class ChucVuId implements Serializable {
         return maChucVu;
     }
 
-    public void setMaChucVu(String MaChucVu) {
-        this.maChucVu = MaChucVu;
+    public void setMaChucVu(String maChucVu) {
+        this.maChucVu = maChucVu;
     }
 
     public String getMaPhongBan() {
         return maPhongBan;
     }
 
-    public void setMaPhongBan(String MaPhongBan) {
-        this.maPhongBan = MaPhongBan;
+    public void setMaPhongBan(String maPhongBan) {
+        this.maPhongBan = maPhongBan;
     }
 
     // equals() và hashCode()

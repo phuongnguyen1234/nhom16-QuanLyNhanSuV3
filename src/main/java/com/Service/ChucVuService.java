@@ -1,10 +1,12 @@
 package com.Service;
 
-import com.Model.*;
-import com.Repository.*;
-import java.util.*;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.Model.ChucVu;
+import com.Repository.ChucVuRepo;
 
 @Service
 public class ChucVuService {
