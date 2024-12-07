@@ -66,7 +66,7 @@
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
             <h6>Admin</h6>
-            <span>Web Designer</span>
+            <span>Trưởng phòng quản lý nhân sự</span>
           </li>
           <li>
             <hr class="dropdown-divider">
@@ -93,7 +93,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="#">
+            <a class="dropdown-item d-flex align-items-center" href="/dangxuat">
               <i class="bi bi-box-arrow-right"></i>
               <span>Đăng xuất</span>
             </a>
@@ -151,11 +151,11 @@
     </li><!-- End Profile Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-login.html">
-        <i class="bi bi-box-arrow-in-right"></i>
-        <span>Đăng nhập</span>
+      <a class="nav-link collapsed" href="/dangxuat">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Đăng xuất</span>
       </a>
-    </li><!-- End Login Page Nav -->
+  </li><!-- End Logout Nav -->
 
   </ul>
 </aside><!-- End Sidebar-->
@@ -301,6 +301,16 @@
             </div>
           </div>
         </div>
+
+        <!-- Biểu đồ mức lương nhân sự -->
+<div class="col-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Thống kê theo mức lương</h5>
+      <canvas id="salaryPieChart" style="max-height: 400px;"></canvas>
+    </div>
+  </div>
+</div>
 
         <!-- Biểu đồ cột 1 -->
         <div class="col-12">
@@ -467,8 +477,91 @@
       }
     }
 
-    // Hàm gọi API và tạo các biểu đồ khác (barChart1, barChart2)
+
+    // Hàm gọi API và tạo biểu đồ tròn theo mức lương
+    async function loadSalaryStatistics() {
+      try {
+          const response = await fetch('http://localhost:8080/api/dashboard/salaryStatistics');
+          const data = await response.json();
+
+          // Kiểm tra dữ liệu trả về
+          console.log('Salary Statistics Data:', data);
+
+          const labels = Object.keys(data); // Các nhóm lương: "Dưới 6 triệu", "6-9 triệu", ...
+          const values = Object.values(data); // Số lượng nhân sự từng nhóm
+          const colors = ["#ff6384", "#36a2eb", "#ffce56"]; // Màu sắc cho các lát
+
+          // Tạo biểu đồ tròn mức lương
+          new Chart(document.getElementById('salaryPieChart'), {
+              type: 'pie',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      data: values,
+                      backgroundColor: colors,
+                      hoverOffset: 4
+                  }]
+              },
+              options: {
+                  plugins: {
+                      legend: {
+                          display: true,
+                          position: 'top',
+                      },
+                      tooltip: {
+                          enabled: true,
+                          callbacks: {
+                              label: function(context) {
+                                  const label = context.label || '';
+                                  const value = context.parsed || 0;
+                                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                  const percentage = ((value / total) * 100).toFixed(2) + '%';
+                                  return `${label}: ${value} (${percentage})`;
+                              }
+                          }
+                      },
+                  }
+              }
+          });
+      } catch (error) {
+          console.error('Error fetching salary statistics:', error);
+      }
+  }
+
+
+
+    // Hàm gọi API và tạo các biểu đồ khác (pieChart2, barChart1, barChart2)
     function loadOtherCharts() {
+      // Biểu đồ tròn 2
+      fetch('http://localhost:8080/api/dashboard/pieData')
+        .then(response => response.json())
+        .then(data => {
+          new Chart(document.getElementById('pieChart2'), {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Pie Chart 2',
+                data: data.data,
+                backgroundColor: data.backgroundColor,
+                hoverOffset: 4
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top',
+                },
+                tooltip: {
+                  enabled: true,
+                },
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching pieChart2 data:', error));
+
       // Biểu đồ cột 1
       fetch('http://localhost:8080/api/dashboard/barData')
         .then(response => response.json())
@@ -527,6 +620,7 @@
     // Gọi hàm để tạo biểu đồ khi DOM đã tải
     loadAgeStatistics();
     loadOtherCharts();
+    loadSalaryStatistics();
   });
 </script>
 </body>
