@@ -48,7 +48,6 @@ public class NhanSuController {
     //tao ho so moi
     @PostMapping("/new")
     public ResponseEntity<NhanSu> taoHoSoMoi(@RequestBody NhanSu nhanSu) {
-        System.out.println("Dữ liệu nhận được: " + nhanSu.getTenNhanSu());
         try {
             nhanSu.setMaNhanSu(nhanSuService.generateNewMaNhanSu());
             NhanSu nhanSuMoi = nhanSuService.taoHoSoMoi(nhanSu);
@@ -62,14 +61,10 @@ public class NhanSuController {
 
     //cap nhat ho so
     @PutMapping("/edit/{maNhanSu}")
-    public ResponseEntity<NhanSu> capNhatHoSo(@PathVariable String maNhanSu, @RequestBody NhanSu nhanSu) {
-        if (nhanSu.getMaNhanSu() == null || nhanSu.getMaNhanSu().isEmpty()) {
-            nhanSu.setMaNhanSu(maNhanSu); // Gán ID từ URL nếu thiếu
-        }
-
-        NhanSu existingNhanSu = nhanSuService.findByMaNhanSu(maNhanSu);
-        if(existingNhanSu == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        return ResponseEntity.ok(nhanSuService.capNhatHoSo(maNhanSu, nhanSu));
+    public ResponseEntity<NhanSu> capNhatHoSo(@RequestBody NhanSu nhanSu) {
+        if(nhanSu == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        NhanSu nhanSuUpdate = nhanSuService.capNhatHoSo(nhanSu);
+        return ResponseEntity.ok(nhanSuUpdate);
     }
 
 

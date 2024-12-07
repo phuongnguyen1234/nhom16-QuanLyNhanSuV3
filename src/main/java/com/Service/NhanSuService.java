@@ -133,9 +133,22 @@ public class NhanSuService {
         return nhanSuRepo.save(nhanSu);
     }
 
-    public NhanSu capNhatHoSo(String maNhanSu, NhanSu nhanSu){
-        NhanSu nhanSuUpdate = nhanSuRepo.save(nhanSu);
-        return nhanSuUpdate;
+    public NhanSu capNhatHoSo(NhanSu nhanSu){
+        NhanSu nhanSuUpdate = new NhanSu();
+        nhanSuUpdate.setMaNhanSu(nhanSu.getMaNhanSu());
+        nhanSuUpdate.setTenNhanSu(nhanSu.getTenNhanSu());
+        nhanSuUpdate.setGioiTinh(nhanSu.getGioiTinh());
+        nhanSuUpdate.setNgaySinh(nhanSu.getNgaySinh());
+        nhanSuUpdate.setDiaChi(nhanSu.getDiaChi());
+        nhanSuUpdate.setSoDienThoai(nhanSu.getSoDienThoai());
+        nhanSuUpdate.setEmail(nhanSu.getEmail());
+        nhanSuUpdate.setMaPhongBan(nhanSu.getMaPhongBan());
+        nhanSuUpdate.setMaChucVu(nhanSu.getMaChucVu());
+        nhanSuUpdate.setMaViTri(nhanSu.getMaViTri());
+        nhanSuUpdate.setMucLuong(nhanSu.getMucLuong());
+        nhanSuUpdate.setMatKhau(nhanSu.getMatKhau());
+
+        return nhanSuRepo.save(nhanSuUpdate);
     }
 
     public void xoaHoSo(String maNhanSu){
