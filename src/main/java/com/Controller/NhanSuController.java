@@ -66,9 +66,9 @@ public class NhanSuController {
         if (nhanSu.getMaNhanSu() == null || nhanSu.getMaNhanSu().isEmpty()) {
             nhanSu.setMaNhanSu(maNhanSu); // Gán ID từ URL nếu thiếu
         }
-        if (!maNhanSu.equals(nhanSu.getMaNhanSu())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Kiểm tra ID trong URL và body
-        }
+
+        NhanSu existingNhanSu = nhanSuService.findByMaNhanSu(maNhanSu);
+        if(existingNhanSu == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         return ResponseEntity.ok(nhanSuService.capNhatHoSo(maNhanSu, nhanSu));
     }
 

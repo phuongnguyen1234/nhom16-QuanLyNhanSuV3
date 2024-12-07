@@ -1,13 +1,20 @@
 package com.Service;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.Model.*;
-import com.Repository.*;
-import com.DTO.*;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.time.format.DateTimeFormatter;
+
+import com.DTO.NhanSuDTO;
+import com.Model.NhanSu;
+import com.Repository.BangChamCongRepo;
+import com.Repository.NhanSuRepo;
 
 @Service
 public class NhanSuService {
@@ -133,6 +140,10 @@ public class NhanSuService {
 
     public void xoaHoSo(String maNhanSu){
         nhanSuRepo.deleteById(maNhanSu); // Xóa nhân sự theo mã nhân sự
+    }
+
+    public NhanSu findByMaNhanSu(String maNhanSu){
+        return nhanSuRepo.findByMaNhanSu(maNhanSu);
     }
 
 }
