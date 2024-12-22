@@ -123,7 +123,7 @@
       width: 100%;
     }
 
-    .btn:hover {
+    .btn:hover, .btn2:hover {
       background-color: #0056b3;
     }
 
@@ -164,6 +164,18 @@
       height: 100%;
       background-color: rgba(0, 0, 0, 0.4);
     }
+
+    .btn2 {
+      background-color: #007bff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 30%;
+    }
   </style>
 
 </head>
@@ -186,9 +198,9 @@
                     <td>${record.tenChucVu}</td>
                     <td>${record.tenViTri}</td>
                     <td>
-                        <button onclick="getDetail('${record.maNhanSu}')">Xem</button>
-                        <button onclick="editRecord('${record.maNhanSu}')">Sửa</button>
-                        <button onclick="deleteRecord('${record.maNhanSu}')">Xóa</button>
+                        <button class="btn2" onclick="getDetail('${record.maNhanSu}')">Xem</button>
+                        <button class="btn2" onclick="editRecord('${record.maNhanSu}')">Sửa</button>
+                        <button class="btn2" onclick="deleteRecord('${record.maNhanSu}')">Xóa</button>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -1015,8 +1027,8 @@ function loadViTriEdit() {
     <h3>Xác nhận xóa</h3>
     <p>Bạn có chắc chắn muốn xóa hồ sơ này không?</p>
     <div class="buttons">
-        <button id="confirmDelete" onclick="deleteConfirmed()">Xóa</button>
-        <button id="cancelDelete" onclick="closeDeleteConfirmModal()">Hủy</button>
+        <button class="btn2" id="confirmDelete" onclick="deleteConfirmed()">Xóa</button>
+        <button class="btn2" id="cancelDelete" onclick="closeDeleteConfirmModal()">Hủy</button>
     </div>
   </div>
 </div>
