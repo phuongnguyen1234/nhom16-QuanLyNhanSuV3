@@ -237,14 +237,7 @@
                 <tbody>
                 <!-- Table rows go here -->
                   <tr>
-<!--                    <td>BC001</td>-->
-<!--                    <td>ABC</td>-->
-<!--                    <td>11/2024</td>-->
-<!--                    <td>30</td>-->
-<!--                    <td>5</td>-->
-<!--                    <td>2</td>-->
-<!--                    <td>0</td>-->
-<!--                    <td>On time</td>-->
+
                   </tr>
                 </tbody>
               </table>
@@ -273,195 +266,260 @@
 <script>
   let selectedRow = null; // Variable to store the selected row
 
+// Khi giá trị của tháng hoặc năm thay đổi, gọi hàm lọc
+$('#selectMonth, #selectYear').on('change', function () {
+    filterTableByDate(); // Gọi hàm lọc khi giá trị thay đổi
+});
 
- // Khi giá trị của tháng hoặc năm thay đổi, gọi hàm lọc
-    $('#selectMonth, #selectYear').on('change', function() {
-        filterTableByDate(); // Gọi hàm lọc khi giá trị thay đổi
-    });
+// Hàm lọc bảng theo tháng và năm
+function filterTableByDate() {
+    const selectedMonth = $('#selectMonth').val(); // Lấy giá trị tháng
+    const selectedYear = $('#selectYear').val(); // Lấy giá trị năm
 
-    // Hàm lọc bảng theo tháng và năm
-    function filterTableByDate() {
-        const selectedMonth = parseInt($('#selectMonth').val()); // Lấy tháng đã chọn dưới dạng số
-        const selectedYear = parseInt($('#selectYear').val()); // Lấy năm đã chọn dưới dạng số
-
-        // Lặp qua từng dòng trong bảng (bỏ qua tiêu đề)
-        $('#attendanceTable tbody tr').each(function() {
-            const row = $(this);
-            const monthYear = row.find('td').eq(2).text().trim(); // Lấy tháng/năm từ cột thứ 3 của dòng
-
-            // Tách chuỗi "MM/YYYY" thành số tháng và số năm
-            const [rowMonth, rowYear] = monthYear.split('/').map(Number); // Chuyển thành số nguyên
-
-            // Kiểm tra xem dòng có khớp với tháng và năm đã chọn hay không
-            const isMonthMatch = isNaN(selectedMonth) || rowMonth === selectedMonth;
-            const isYearMatch = isNaN(selectedYear) || rowYear === selectedYear;
-
-            // Hiển thị hoặc ẩn dòng dựa trên điều kiện khớp
-            if (isMonthMatch && isYearMatch) {
-                row.show();
-            } else {
-                row.hide();
+    // Nếu không có tháng và năm được chọn (tức là chọn "tất cả" hoặc không chọn gì)
+    if (!selectedMonth || !selectedYear) {
+        // Gửi yêu cầu tới API để lấy tất cả dữ liệu bảng chấm công
+        $.ajax({
+            url: '/api/bangchamcong/all', // Đường dẫn đến API để lấy tất cả dữ liệu
+            type: 'GET',
+            success: function (data) {
+                if (data.length > 0) {
+                    renderTable(data); // Hiển thị bảng với dữ liệu trả về
+                } else {
+                    const tableBody = document.querySelector('#attendanceTable tbody');
+                    tableBody.innerHTML = '<tr><td colspan="10">Không có dữ liệu chấm công.</td></tr>';
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching attendance data:', error);
+                alert('Có lỗi xảy ra khi lấy dữ liệu.');
+            }
+        });
+    } else {
+        // Gửi yêu cầu tới API để lọc dữ liệu theo tháng và năm
+        $.ajax({
+            url: `/api/bangchamcong/search`, // Đường dẫn đến API để lọc theo tháng và năm
+            type: 'GET',
+            data: { month: selectedMonth, year: selectedYear }, // Truyền dữ liệu tháng và năm
+            success: function (data) {
+                if (data.length > 0) {
+                    renderTable(data); // Hiển thị bảng với dữ liệu trả về
+                } else {
+                    const tableBody = document.querySelector('#attendanceTable tbody');
+                    tableBody.innerHTML = '<tr><td colspan="10">Không có dữ liệu chấm công cho tháng và năm này.</td></tr>';
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching attendance data:', error);
+                alert('Có lỗi xảy ra khi lấy dữ liệu.');
             }
         });
     }
-
-// Function to render table data
-function renderTable(data) {
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    tableBody.innerHTML = ''; // Clear existing rows
-
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><input type="text" value="${item.maBangChamCong}" disabled></td>
-            <td><input type="text" value="${item.maNhanSu}" disabled></td>
-            <td><input type="text" value="${item.thoiGian}" disabled></td>
-            <td><input type="number" value="${item.soNgayLamTrongThang}" disabled></td>
-            <td><input type="number" value="${item.soGioLamThem}" disabled></td>
-            <td><input type="number" value="${item.soNgayNghiCoPhep}" disabled></td>
-            <td><input type="number" value="${item.soNgayNghiKhongPhep}" disabled></td>
-            <td><input type="text" value="${item.ghiChu}" disabled></td>
-            <td><input type="checkbox" ${item.duocPhepChinhSua ? 'checked' : ''} disabled></td>
-            <td>
-                <button class="btn btn-secondary" onclick="enableEditing(this)">Chỉnh sửa</button>
-                <button class="btn btn-primary" onclick="saveData('${item.maBangChamCong}', this)" disabled>Lưu</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
 }
 
-// Function to enable editing mode
-function enableEditing(button) {
-    const row = button.closest('tr');
-    const inputs = row.querySelectorAll('input');
-    inputs.forEach(input => input.disabled = false);  // Enable all inputs
-    row.querySelector('button:nth-child(2)').disabled = false; // Enable the save button    . Disabled = true; // Disable the "Edit" button to prevent further edits
-}
+// Lắng nghe sự kiện thay đổi
+$('#selectMonth, #selectYear').on('change', function () {
+    filterTableByDate();
+});
 
-// Function to save data after editing
-async function saveData(maBangChamCong, button) {
-    const row = button.closest('tr');
-    const inputs = row.querySelectorAll('input');
-    const data = {
-        maBangChamCong: inputs[0].value,
-        maNhanSu: inputs[1].value,
-        thoiGian: inputs[2].value,
-        soNgayLamTrongThang: parseInt(inputs[3].value),
-        soGioLamThem: parseInt(inputs[4].value),
-        soNgayNghiCoPhep: parseInt(inputs[5].value),
-        soNgayNghiKhongPhep: parseInt(inputs[6].value),
-        ghiChu: inputs[7].value,
-        duocPhepChinhSua: inputs[8].checked
-    };
 
-    try {
-        const response = await fetch(`http://localhost:8080/api/bangchamcong/${maBangChamCong}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+  function renderTable(data) {
+      const tableBody = document.querySelector('#attendanceTable tbody');
+      tableBody.innerHTML = ''; // Clear existing rows
 
-        if (response.ok) {
-            alert('Cập nhật thành công');
-            fetchBangChamCongData();  // Refresh the table after saving
-        } else {
-            alert('Cập nhật thất bại');
-        }
-    } catch (error) {
-        console.error('Error saving data:', error);
-    }
-}
+      data.forEach(item => {
+          const row = document.createElement('tr');
+          const date = new Date(item.thoiGian); // Convert the LocalDate string to a Date object
+          const formattedDate = `${date.getMonth() + 1}/${date.getFullYear()}`; // Format as MM/YYYY
 
-// Fetch data from the API and render it on page load
-async function fetchBangChamCongData() {
-    try {
-        const response = await fetch('http://localhost:8080/api/bangchamcong/all');
-        if (response.ok) {
-            const data = await response.json();
-            renderTable(data); // Populate table
-            document.querySelector('#exportButton').disabled = false; // Enable Export Button
-        } else {
-            alert('Không thể tải dữ liệu');
-        }
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
-function downloadExcel() {
-            // Gọi API tải xuống file Excel
-            fetch('/api/bangchamcong/export/excel', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Có lỗi xảy ra khi tải file.');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                // Tạo một URL tạm thời cho file tải về
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'bangchamcong.xlsx'); // Tên file tải về
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                alert('Không thể tải xuống file Excel.');
-            });
-        }
+          // Create row content
+          row.innerHTML = `
+              <td><input type="text" value="${item.maBangChamCong}" disabled></td>
+              <td><input type="text" value="${item.maNhanSu}" disabled></td>
+              <td><input type="text" value="${formattedDate}" disabled></td>
+              <td><input type="number" value="${item.soNgayLamTrongThang}" disabled></td>
+              <td><input type="number" value="${item.soGioLamThem}" disabled></td>
+              <td><input type="number" value="${item.soNgayNghiCoPhep}" disabled></td>
+              <td><input type="number" value="${item.soNgayNghiKhongPhep}" disabled></td>
+              <td><input type="text" value="${item.ghiChu}" disabled></td>
+              <td><input type="checkbox" ${item.duocPhepChinhSua ? 'checked' : ''} disabled></td>
+              <td>
+                  <button class="btn btn-secondary" onclick="enableEditing(this)">Chỉnh sửa</button>
+                  <button class="btn btn-primary" onclick="saveData('${item.maBangChamCong}', this)" disabled>Lưu</button>
+              </td>
+          `;
+          tableBody.appendChild(row);
+      });
+  }
 
-// Call fetchBangChamCongData when the page loads
-window.onload = fetchBangChamCongData;
+  // Function to enable editing mode
+  function enableEditing(button) {
+      const row = button.closest('tr');
+      const inputs = row.querySelectorAll('input:not([type="checkbox"])'); // Lấy tất cả input (trừ checkbox)
+      const saveButton = row.querySelector('button:nth-child(2)'); // Nút Lưu trong dòng
+      const checkbox = row.querySelector('input[type="checkbox"]'); // Checkbox chỉnh sửa
 
-async function createAttendanceSheet() {
-    try {
-        // Fetch employee data from NhanSu API
-        const response = await fetch('http://localhost:8080/api/hoso/all');
-        if (response.ok) {
-            const employees = await response.json();
+      // Bật tất cả các input và checkbox
+      inputs.forEach(input => input.disabled = false);
+      if (checkbox) checkbox.disabled = false;
 
-            // Prepare attendance data based on current month and year
-            const today = new Date();
-            const month = today.getMonth() + 1;
-            const year = today.getFullYear();
-            const attendanceData = employees.map(employee => ({
-                maBangChamCong: `BCC-${employee.maNhanSu}-${month}${year}`, // Example ID
-                maNhanSu: employee.maNhanSu,
-                thoiGian: `${month}/${year}`,
-                soNgayLamTrongThang: 0, // Default or calculated value
-                //soGioLamThem: 0, // Default value
-                soNgayNghiCoPhep: 0, // Default value
-                soNgayNghiKhongPhep: 0, // Default value
-                ghiChu: ""
+      // Bật nút Lưu
+      if (saveButton) saveButton.disabled = false;
+
+      // Tắt nút "Chỉnh sửa"
+      button.disabled = true;
+  }
+
+  // Function to save data after editing
+  async function saveData(maBangChamCong, button) {
+      const row = button.closest('tr');
+      const inputs = row.querySelectorAll('input:not([type="checkbox"])');
+      const checkbox = row.querySelector('input[type="checkbox"]');
+
+      const data = {
+          maBangChamCong: inputs[0].value,
+          maNhanSu: inputs[1].value,
+          thoiGian: inputs[2].value,
+          soNgayLamTrongThang: parseInt(inputs[3].value) || 0,
+          soGioLamThem: parseInt(inputs[4].value) || 0,
+          soNgayNghiCoPhep: parseInt(inputs[5].value) || 0,
+          soNgayNghiKhongPhep: parseInt(inputs[6].value) || 0,
+          ghiChu: inputs[7].value || '',
+          duocPhepChinhSua: checkbox ? checkbox.checked : false
+      };
+
+      try {
+          const response = await fetch(`http://localhost:8080/api/bangchamcong/${maBangChamCong}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          });
+
+          if (response.ok) {
+              alert('Cập nhật thành công');
+
+              // Vô hiệu hóa các input sau khi lưu
+              inputs.forEach(input => input.disabled = true);
+              if (checkbox) checkbox.disabled = true;
+
+              // Bật lại nút "Chỉnh sửa" và tắt nút "Lưu"
+              const editButton = row.querySelector('button:nth-child(1)');
+              const saveButton = row.querySelector('button:nth-child(2)');
+              editButton.disabled = false;
+              saveButton.disabled = true;
+
+              fetchBangChamCongData(); // Refresh bảng dữ liệu
+          } else {
+              alert('Cập nhật thất bại');
+          }
+      } catch (error) {
+          console.error('Error saving data:', error);
+      }
+  }
+
+  async function fetchBangChamCongData() {
+      try {
+          const response = await fetch('http://localhost:8080/api/bangchamcong/all');
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          if (data.length > 0) {
+              renderTable(data);
+          } else {
+              const tableBody = document.querySelector('#attendanceTable tbody');
+              tableBody.innerHTML = '<tr><td colspan="8">Không có dữ liệu chấm công.</td></tr>';
+          }
+      } catch (error) {
+          console.error('Error fetching data:', error);
+          alert(`Có lỗi xảy ra khi tải dữ liệu: ${error.message}`);
+      }
+  }
+
+  function downloadExcel() {
+      // Gọi API tải xuống file Excel
+      fetch('/api/bangchamcong/export/excel', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          }
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Có lỗi xảy ra khi tải file.');
+          }
+          return response.blob();
+      })
+      .then(blob => {
+          const url = window.URL.createObjectURL(new Blob([blob]));
+
+          if (window.showSaveFilePicker) {
+              window.showSaveFilePicker({
+                  suggestedName: 'bangchamcong.xlsx',
+                  types: [{
+                      description: 'Excel Files',
+                      accept: {'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']}
+                  }]
+              }).then(fileHandle => {
+                  fileHandle.createWritable().then(writable => {
+                      writable.write(blob).then(() => writable.close());
+                  });
+              }).catch(error => {
+                  console.error('Error while saving the file:', error);
+                  alert('Không thể lưu file Excel.');
+              });
+          } else {
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', 'bangchamcong.xlsx');
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+          }
+      })
+      .catch(error => {
+          console.error('Lỗi:', error);
+          alert('Không thể tải xuống file Excel.');
+      });
+  }
+
+  // Call fetchBangChamCongData when the page loads
+  window.onload = fetchBangChamCongData;
+
+  async function createAttendanceSheet() {
+      try {
+          const response = await fetch('http://localhost:8080/api/hoso/all');
+          if (response.ok) {
+              const employees = await response.json();
+              const today = new Date();
+              const month = today.getMonth() + 1;
+              const year = today.getFullYear();
+              const attendanceData = employees.map(employee => ({
+                  maBangChamCong: `BCC_${month}${year}_${employee.maNhanSu}`,
+                  maNhanSu: employee.maNhanSu,
+                  thoiGian: `${year}-${month < 10 ? '0' + month : month}-01`,
+                  soNgayLamTrongThang: 0,
+                  soGioLamThem: 0,
+                  soNgayNghiCoPhep: 0,
+                  soNgayNghiKhongPhep: 0,
+                  ghiChu: ""
             }));
 
             // Render the attendance table with fetched data
             renderTable(attendanceData);
 
             // Save each attendance record to the database
-            for (const entry of attendanceData) {
-              const saveResponse = await fetch('http://localhost:8080/api/bangchamcong', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(entry)
-            });
+            const savePromises = attendanceData.map(entry =>
+                fetch('http://localhost:8080/api/bangchamcong/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(entry)
+                })
+            );
 
-    if (!saveResponse.ok) {
-        console.error(`Failed to save record for ${entry.maNhanSu}: ${saveResponse.statusText}`);
-    }
-}
+            await Promise.all(savePromises);
             alert('Bảng chấm công đã được tạo và lưu thành công');
             fetchBangChamCongData(); // Refresh the table after saving
         } else {
@@ -471,28 +529,6 @@ async function createAttendanceSheet() {
         console.error('Error creating attendance table:', error);
     }
 }
-const savePromises = attendanceData.map(entry =>
-    fetch('http://localhost:8080/api/bangchamcong', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entry)
-    })
-);
-
-Promise.all(savePromises)
-    .then(results => {
-        if (results.every(response => response.ok)) {
-            alert('Bảng chấm công đã được tạo và lưu thành công');
-            fetchBangChamCongData(); // Refresh the table after all saves
-        } else {
-            alert('Có lỗi khi lưu bảng chấm công cho một số nhân sự');
-        }
-    })
-    .catch(error => {
-        console.error('Error creating attendance table:', error);
-    });
-
-
 
 </script>
 
