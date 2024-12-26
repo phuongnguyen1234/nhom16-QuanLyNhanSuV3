@@ -5,12 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.Model.*;
 import java.util.*;
-import java.util.List;
-
 
 @Repository
 public interface NhanSuRepo extends JpaRepository<NhanSu, String> {
     NhanSu findByMaNhanSu(String maNhanSu);
+    List<NhanSu> findByMaViTri(String maViTri);
+    List<NhanSu> findByMaChucVu(String maChucVu);
     List<NhanSu> findByMaPhongBan(String maPhongBan);
     Optional<NhanSu> findTopByOrderByMaNhanSuDesc();
     @Query("SELECT pb.tenPhongBan, COUNT(ns) " +
