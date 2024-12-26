@@ -24,14 +24,16 @@ public class BangChamCongController {
     @Autowired
     private BangChamCongService bangChamCongService;
 
-    // Lấy danh sách bảng chấm công
+    // 1. Get all attendance records
     @GetMapping("/all")
     public List<BangChamCongDTO> getAllBangChamCong() {
         List<BangChamCong> bangChamCongList = bangChamCongService.getAllBangChamCong();
-        return bangChamCongList.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return bangChamCongList.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    // Lấy bảng chấm công theo mã
+    // 2. Get an attendance record by ID
     @GetMapping("/{id}")
     public ResponseEntity<BangChamCongDTO> getBangChamCongById(@PathVariable String id) {
         Optional<BangChamCong> bangChamCong = bangChamCongService.getBangChamCongById(id);
@@ -39,6 +41,7 @@ public class BangChamCongController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // 3. Export all attendance records to Excel
     @GetMapping("/export/excel")
     public ResponseEntity<InputStreamResource> exportBangChamCongToExcel() {
         ByteArrayInputStream in = bangChamCongService.exportBangChamCongToExcel();
@@ -51,44 +54,69 @@ public class BangChamCongController {
                 .body(new InputStreamResource(in));
     }
 
-    // Thêm bảng chấm công mới
+    // 4. Create a new attendance record
     @PostMapping("/create")
     public ResponseEntity<?> createBangChamCong(@RequestBody BangChamCongDTO bangChamCongDTO) {
         try {
+            // Log the received data
+            System.out.println("Received BangChamCong DTO: " + bangChamCongDTO);
+
+            // Convert DTO to Entity
             BangChamCong bangChamCong = convertToEntity(bangChamCongDTO);
+
+            // Save the entity
             BangChamCong savedBangChamCong = bangChamCongService.createBangChamCong(bangChamCong);
+
+            // Return the saved record as DTO
             return ResponseEntity.ok(convertToDTO(savedBangChamCong));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Cập nhật bảng chấm công
+    // 5. Update an attendance record by ID
     @PutMapping("/{id}")
     public ResponseEntity<BangChamCongDTO> updateBangChamCong(@PathVariable String id, @RequestBody BangChamCongDTO bangChamCongDTO) {
         Optional<BangChamCong> optionalBangChamCong = bangChamCongService.getBangChamCongById(id);
         if (optionalBangChamCong.isPresent()) {
             BangChamCong bangChamCong = optionalBangChamCong.get();
+
+            // Update fields with new values from DTO
             bangChamCong.setSoNgayLamTrongThang(bangChamCongDTO.getSoNgayLamTrongThang());
             bangChamCong.setSoNgayNghiCoPhep(bangChamCongDTO.getSoNgayNghiCoPhep());
             bangChamCong.setSoNgayNghiKhongPhep(bangChamCongDTO.getSoNgayNghiKhongPhep());
+            bangChamCong.setSoGioLamThem(bangChamCongDTO.getSoGioLamThem());  // Update overtime hours
             bangChamCong.setGhiChu(bangChamCongDTO.getGhiChu());
-            bangChamCong.setDuocPhepChinhSua(bangChamCongDTO.isDuocPhepChinhSua());
-            BangChamCong updated = bangChamCongService.saveBangChamCong(bangChamCong);
-            return ResponseEntity.ok(convertToDTO(updated));
-        } else {
-            return ResponseEntity.notFound().build();
+
+            // Save updated attendance record
+            BangChamCong updatedBangChamCong = bangChamCongService.saveBangChamCong(bangChamCong);
+
+            // Return the updated record as DTO
+            return ResponseEntity.ok(convertToDTO(updatedBangChamCong));
         }
+        return ResponseEntity.notFound().build();  // Record not found
     }
-    // Endpoint tìm kiếm bảng chấm công theo tháng và năm
+
+    // 6. Search for attendance records by time (e.g., month and year)
+//    @GetMapping("/search")
+//    public List<BangChamCongDTO> searchBangChamCongByThoiGian(@RequestParam LocalDate thoiGian) {
+//        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByThoiGian(thoiGian);
+//        return bangChamCongList.stream()
+//                .map(this::convertToDTO)
+//                .collect(Collectors.toList());
+//    }
     @GetMapping("/search")
     public List<BangChamCongDTO> searchBangChamCongByThoiGian(
-            @RequestParam LocalDate thoiGian) {
-
-        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByThoiGian(thoiGian);
-        return bangChamCongList.stream().map(this::convertToDTO).collect(Collectors.toList());
+            @RequestParam int month,
+            @RequestParam int year) {
+        List<BangChamCong> bangChamCongList = bangChamCongService.getBangChamCongByMonthAndYear(month, year);
+        return bangChamCongList.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
-    // Chuyển đổi từ BangChamCong thành BangChamCongDTO
+
+
+    // Convert from BangChamCong entity to BangChamCongDTO
     private BangChamCongDTO convertToDTO(BangChamCong bangChamCong) {
         return new BangChamCongDTO(
                 bangChamCong.getMaBangChamCong(),
@@ -98,11 +126,12 @@ public class BangChamCongController {
                 bangChamCong.getSoNgayNghiCoPhep(),
                 bangChamCong.getSoNgayNghiKhongPhep(),
                 bangChamCong.getGhiChu(),
-                bangChamCong.isDuocPhepChinhSua()
+                bangChamCong.isDuocPhepChinhSua(),
+                bangChamCong.getSoGioLamThem()  // Include overtime hours
         );
     }
 
-    // Chuyển đổi từ BangChamCongDTO thành BangChamCong
+    // Convert from BangChamCongDTO to BangChamCong entity
     private BangChamCong convertToEntity(BangChamCongDTO bangChamCongDTO) {
         return new BangChamCong(
                 bangChamCongDTO.getMaBangChamCong(),
@@ -112,7 +141,8 @@ public class BangChamCongController {
                 bangChamCongDTO.getSoNgayNghiCoPhep(),
                 bangChamCongDTO.getSoNgayNghiKhongPhep(),
                 bangChamCongDTO.getGhiChu(),
-                bangChamCongDTO.isDuocPhepChinhSua()
+                bangChamCongDTO.isDuocPhepChinhSua(),
+                bangChamCongDTO.getSoGioLamThem()  // Set overtime hours from DTO
         );
     }
 }
