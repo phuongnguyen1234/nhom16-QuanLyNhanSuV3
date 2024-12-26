@@ -36,6 +36,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
 </head>
 
 <body>
@@ -70,13 +71,13 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+            <span class="tenNguoiDung" class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Admin</h6>
-              <span>Trưởng phòng quản lý nhân sự</span>
+              <h6 class="tenNguoiDung">Loading...</h6>
+              <span>Trưởng phòng nhân sự</span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -197,8 +198,8 @@
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
               <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2>Admin</h2>
-              <h3>Trưởng phòng quản lý nhân sự</h3>
+              <h2 class="tenNguoiDung">Loading...</h2>
+              <h3>Trưởng phòng nhân sự</h3>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -226,10 +227,6 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Cài đặt</button>
-                </li>
-
-                <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Thay đổi mật khẩu</button>
                 </li>
 
@@ -245,7 +242,7 @@
 
   <div class="row">
     <div class="col-lg-3 col-md-4 label">Họ tên</div>
-    <div class="col-lg-9 col-md-8" id="tenNhanSuOverview">Loading...</div>
+    <div class="col-lg-9 col-md-8" id="tenNguoiDungOverview">Loading...</div>
   </div>
 
   <div class="row">
@@ -286,8 +283,14 @@
           thongTinNguoiDung = data;  // Lưu dữ liệu vào biến toàn cục
           console.log(thongTinNguoiDung); // Kiểm tra dữ liệu người dùng nhận được
 
+           // Chọn tất cả các phần tử có class "tenNguoiDung"
+          const elements = document.querySelectorAll('.tenNguoiDung');
+          elements.forEach(element => {
+            element.textContent = data.tenNhanSu; // Cập nhật giá trị
+          });
+
           // Cập nhật các trường với thông tin người dùng
-          document.getElementById('tenNhanSuOverview').textContent = data.tenNhanSu;
+          document.getElementById('tenNguoiDungOverview').textContent = data.tenNhanSu;
           document.getElementById('gioiTinhOverview').textContent = data.gioiTinh;
           document.getElementById('ngaySinhOverview').textContent = data.ngaySinh;
           document.getElementById('diaChiOverview').textContent = data.diaChi;
@@ -407,49 +410,6 @@
 
 
 
-
-
-                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                  <!-- Settings Form -->
-                  <form>
-
-                    <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Thông báo Email</label>
-                      <div class="col-md-8 col-lg-9">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                          <label class="form-check-label" for="changesMade">
-                            Những thay đổi được thực hiện cho tài khoản của bạn
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                          <label class="form-check-label" for="newProducts">
-                            Thông tin về sản phẩm và dịch vụ mới
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="proOffers">
-                          <label class="form-check-label" for="proOffers">
-                            Tiếp thị và khuyến mại
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                          <label class="form-check-label" for="securityNotify">
-                            Cảnh báo bảo mật
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-                    </div>
-                  </form><!-- End settings Form -->
-
-                </div>
 
                <!-- Thay đổi mật khẩu -->
 <div class="tab-pane fade pt-3 profile-change-password" id="profile-change-password">
