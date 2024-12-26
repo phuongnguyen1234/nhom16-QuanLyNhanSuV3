@@ -1,10 +1,15 @@
 package com.Controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 import jakarta.servlet.http.Cookie;
@@ -21,32 +26,37 @@ public class DangNhapController {
 
     // Hiển thị trang đăng nhập
     @GetMapping("/dangnhap")
-    public String showLoginPage(HttpSession session) {
-        // Kiểm tra nếu người dùng đã đăng nhập, chuyển hướng đến trang chính
-        if (session.getAttribute("email") != null) {
-            return "redirect:/index.html";
-        }
-        return "pages-login"; // Trả về trang đăng nhập
+public String showLoginPage(HttpSession session) {
+    // Nếu người dùng đã đăng nhập, chuyển hướng tới trang chủ
+    if (session.getAttribute("email") != null) {
+        return "redirect:/index.html";  // Hoặc trả về tên view index.html
     }
+    // Nếu chưa đăng nhập, hiển thị trang đăng nhập
+    return "pages-login";  // Trả về trang login (HTML tĩnh hoặc template)
+}
+
+
 
     // API đăng nhập
-    @PostMapping("/dangnhap")
-    public String dangNhap(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) {
-        // Kiểm tra thông tin đăng nhập
-        boolean isValid = xacThucService.kiemTraThongTinDangNhap(username, password);
+    @PostMapping("/api/dangnhap")
+public ResponseEntity<?> dangNhap(@RequestBody Map<String, String> requestData, HttpSession session) {
+    String username = requestData.get("username");
+    String password = requestData.get("password");
 
-        if (isValid) {
-            // Lưu thông tin người dùng vào session
-            session.setAttribute("email", username);
-            // Chuyển hướng người dùng tới trang index.html sau khi đăng nhập thành công
-            return "redirect:/index.html";
-        } else {
-            // Thêm thông báo lỗi vào model và reload lại trang
-            model.addAttribute("errorMessage", "Nhập sai thông tin, vui lòng nhập lại.");
-            // Trả về trang đăng nhập với thông báo lỗi
-            return "pages-login";
-        }
+    if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+        return ResponseEntity.badRequest().body(Map.of("message", "Dữ liệu không hợp lệ"));
     }
+
+    boolean isValid = xacThucService.kiemTraThongTinDangNhap(username, password);
+    if (isValid) {
+        session.setAttribute("email", username);
+        return ResponseEntity.ok().body(Map.of("message", "Đăng nhập thành công"));
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Tên đăng nhập hoặc mật khẩu không đúng"));
+    }
+}
+    
 
     // API đăng xuất
     @GetMapping("/dangxuat")
@@ -61,6 +71,6 @@ public class DangNhapController {
         response.addCookie(cookie);
 
         // Chuyển hướng về trang đăng nhập
-        return new RedirectView("/dangnhap");
+        return new RedirectView("/pages-login.html");
     }
 }
