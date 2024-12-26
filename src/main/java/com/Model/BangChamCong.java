@@ -1,6 +1,6 @@
 package com.Model;
-
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -31,6 +31,10 @@ public class BangChamCong {
     @Column(name = "DuocPhepChinhSua")
     private boolean duocPhepChinhSua;
 
+    @Column(name = "SoGioLamThem")  // Thêm cột SoGioLamThem
+    private int soGioLamThem;  // Thêm thuộc tính soGioLamThem
+
+    // Các mối quan hệ
     @ManyToOne
     @JoinColumn(name = "MaNhanSu", referencedColumnName = "MaNhanSu", insertable = false, updatable = false)
     private NhanSu nhanSu;
@@ -38,12 +42,12 @@ public class BangChamCong {
     @OneToOne(mappedBy = "bangChamCong")
     private BangLuong bangLuong;
 
-    public BangChamCong() {
-    }
+    // Constructors, Getters, Setters
+    public BangChamCong() {}
 
     public BangChamCong(String maBangChamCong, String maNhanSu, LocalDate thoiGian,
-                        int soNgayLamTrongThang, int soNgayNghiCoPhep,
-                        int soNgayNghiKhongPhep, String ghiChu, boolean duocPhepChinhSua) {
+                        int soNgayLamTrongThang, int soNgayNghiCoPhep, int soNgayNghiKhongPhep,
+                        String ghiChu, boolean duocPhepChinhSua, int soGioLamThem) {
         this.maBangChamCong = maBangChamCong;
         this.maNhanSu = maNhanSu;
         this.thoiGian = thoiGian;
@@ -52,9 +56,16 @@ public class BangChamCong {
         this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
         this.ghiChu = ghiChu;
         this.duocPhepChinhSua = duocPhepChinhSua;
+        this.soGioLamThem = soGioLamThem; // Set giá trị soGioLamThem
     }
 
-    // Getters và Setters
+    public int getSoGioLamThem() {
+        return soGioLamThem;
+    }
+
+    public void setSoGioLamThem(int soGioLamThem) {
+        this.soGioLamThem = soGioLamThem;
+    }
 
     public String getMaBangChamCong() {
         return maBangChamCong;
@@ -135,7 +146,6 @@ public class BangChamCong {
     public void setBangLuong(BangLuong bangLuong) {
         this.bangLuong = bangLuong;
     }
-
-    public void setSoGioLamThem(int i) {
-    }
 }
+
+
