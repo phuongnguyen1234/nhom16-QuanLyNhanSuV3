@@ -298,11 +298,11 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${item.maBangLuong}</td>
-                <td>${item.bangChamCong.maBangChamCong}</td>
-                <td>${item.bangChamCong.nhanSu.tenNhanSu}</td>
-                <td>${item.month}/${item.year}</td>
-                <td>${item.bangChamCong.soNgayLam}</td>
-                <td>${item.bangChamCong.soNgayNghi}</td>
+                <td>${item.maBangChamCong}</td>
+                <td>${item.tenNhanSu}</td>
+                <td>${item.thoiGian}</td>
+                <td>${item.soNgayLamTrongThang}</td>
+                <td>${item.soNgayNghiKhongPhep}</td>
                 <td>${item.luongThucNhan}</td>
                 <td>${item.ghiChu || ''}</td>
               `;
