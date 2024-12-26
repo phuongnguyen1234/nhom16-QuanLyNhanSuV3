@@ -1,7 +1,6 @@
 package com.DTO;
 
 import java.time.LocalDate;
-
 public class BangChamCongDTO {
     private String maBangChamCong;
     private String maNhanSu;
@@ -11,13 +10,15 @@ public class BangChamCongDTO {
     private int soNgayNghiKhongPhep;
     private String ghiChu;
     private boolean duocPhepChinhSua;
+    private int soGioLamThem;  // Thêm thuộc tính soGioLamThem
 
-    public BangChamCongDTO() {
-    }
+    // Constructors, Getters, Setters
+
+    public BangChamCongDTO() {}
 
     public BangChamCongDTO(String maBangChamCong, String maNhanSu, LocalDate thoiGian,
                            int soNgayLamTrongThang, int soNgayNghiCoPhep,
-                           int soNgayNghiKhongPhep, String ghiChu, boolean duocPhepChinhSua) {
+                           int soNgayNghiKhongPhep, String ghiChu, boolean duocPhepChinhSua, int soGioLamThem) {
         this.maBangChamCong = maBangChamCong;
         this.maNhanSu = maNhanSu;
         this.thoiGian = thoiGian;
@@ -26,9 +27,16 @@ public class BangChamCongDTO {
         this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
         this.ghiChu = ghiChu;
         this.duocPhepChinhSua = duocPhepChinhSua;
+        this.soGioLamThem = soGioLamThem; // Set giá trị soGioLamThem
     }
 
-    // Getters và Setters
+    public int getSoGioLamThem() {
+        return soGioLamThem;
+    }
+
+    public void setSoGioLamThem(int soGioLamThem) {
+        this.soGioLamThem = soGioLamThem;
+    }
 
     public String getMaBangChamCong() {
         return maBangChamCong;
@@ -93,5 +101,4 @@ public class BangChamCongDTO {
     public void setDuocPhepChinhSua(boolean duocPhepChinhSua) {
         this.duocPhepChinhSua = duocPhepChinhSua;
     }
-
 }
