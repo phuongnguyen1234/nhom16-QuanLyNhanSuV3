@@ -1,7 +1,9 @@
 package com.Service;
 
+import com.Exception.BangChamCongAlreadyExistsException;
+import com.Model.NhanSu;
 import com.Repository.BangChamCongRepo;
-import com.Model.*;
+import com.Model.BangChamCong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,17 +32,18 @@ public class BangChamCongService {
     public Optional<BangChamCong> getBangChamCongById(String maBangChamCong) {
         return bangChamCongRepo.findById(maBangChamCong);
     }
-    // Thêm bảng chấm công nếu mã chưa tồn tại
+   // Thêm bảng chấm công nếu mã chưa tồn tại
+
     public BangChamCong createBangChamCong(BangChamCong bangChamCong) {
         if (bangChamCongRepo.existsById(bangChamCong.getMaBangChamCong())) {
-            throw new IllegalArgumentException("Mã bảng chấm công đã tồn tại.");
+            throw new BangChamCongAlreadyExistsException("Mã bảng chấm công đã tồn tại.");
         }
         BangChamCong savedBangChamCong = bangChamCongRepo.save(bangChamCong);
-        System.out.println("Bảng chấm công đã được lưu: " + savedBangChamCong);
+        System.out.println("Bảng chấm công đã được lưu: " + savedBangChamCong); // Log thông tin bảng chấm công đã lưu
         return savedBangChamCong;
     }
 
-    // Thêm hoặc cập nhật bảng chấm công
+    // cập nhật bảng chấm công
     public BangChamCong saveBangChamCong(BangChamCong bangChamCong) {
         return bangChamCongRepo.save(bangChamCong);
     }
@@ -88,12 +91,12 @@ public class BangChamCongService {
             throw new RuntimeException("Failed to export data to Excel file", e);
         }
     }
-    // Hàm tìm kiếm bảng chấm công theo tháng và năm
-    public List<BangChamCong> getBangChamCongByThoiGian(LocalDate thoiGian) {
-        return bangChamCongRepo.findByThoiGian(thoiGian);
-    }
+     //Hàm tìm kiếm bảng chấm công theo tháng và năm
+//    public List<BangChamCong> getBangChamCongByThoiGian(LocalDate thoiGian) {
+//        return bangChamCongRepo.findByThoiGian(thoiGian);
+//    }
+     public List<BangChamCong> getBangChamCongByMonthAndYear(int month, int year) {
+         return bangChamCongRepo.findByMonthAndYear(month, year);
+     }
 
-    public boolean existsByMaNhanSu(String maNhanSu){
-        return bangChamCongRepo.existsByMaNhanSu(maNhanSu);
-    }
 }
