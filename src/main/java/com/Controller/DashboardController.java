@@ -31,4 +31,12 @@ public class DashboardController {
         return dashboardService.getSalaryStatistics();
     }
 
+    //API trả về thống kê mức lương theo phòng
+    @GetMapping("/departmentSalaryDistribution")
+public Map<String, Map<String, Integer>> getDepartmentSalaryDistribution() {
+    return dashboardService.getDepartmentSalaryDistribution();
+}
+
+
+
 }
