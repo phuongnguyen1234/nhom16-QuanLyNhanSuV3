@@ -1,13 +1,13 @@
 package com.Service;
 
+import com.Model.NhanSu;
+import com.Repository.NhanSuRepo;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
-import com.Model.NhanSu;
-import com.Repository.NhanSuRepo;
 
 @Service
 public class DashboardService {
@@ -36,7 +36,7 @@ public class DashboardService {
         int totalEmployees = (int) nhanSuRepo.count();
         statistics.put("totalEmployees", totalEmployees);
 
-        // Số nhân sự theo từng phòng ban
+        // Số nhân sự theo từng phòng ban (giả sử bạn có mã phòng ban như "A", "B", "C" trong cơ sở dữ liệu)
         statistics.put("statIT", getUsersByDepartment("IT").size());
         statistics.put("statMKT", getUsersByDepartment("MKT").size());
         statistics.put("statNS", getUsersByDepartment("NS").size());
@@ -108,6 +108,39 @@ public class DashboardService {
 
         return salaryStatistics;
     }
+    
 
 
+    //Thống kê mức lương và phân chia theo các phòng ban
+    public Map<String, Map<String, Integer>> getDepartmentSalaryDistribution() {
+        Map<String, Map<String, Integer>> distribution = new HashMap<>();
+        List<NhanSu> allNhanSu = nhanSuRepo.findAll();
+    
+        // Duyệt qua từng phòng ban và nhóm mức lương
+        for (NhanSu nhanSu : allNhanSu) {
+            String department = nhanSu.getMaPhongBan();
+            int salary = nhanSu.getMucLuong();
+            String salaryGroup;
+    
+            if (salary < 6000000) {
+                salaryGroup = "Dưới 6 triệu";
+            } else if (salary <= 9000000) {
+                salaryGroup = "6-9 triệu";
+            } else {
+                salaryGroup = "Trên 9 triệu";
+            }
+    
+            // Khởi tạo map nếu chưa tồn tại
+            distribution.putIfAbsent(department, new HashMap<>());
+            Map<String, Integer> salaryMap = distribution.get(department);
+    
+            // Cập nhật số liệu
+            salaryMap.put(salaryGroup, salaryMap.getOrDefault(salaryGroup, 0) + 1);
+        }
+    
+        return distribution;
+    }
+    
+
+    
 }
