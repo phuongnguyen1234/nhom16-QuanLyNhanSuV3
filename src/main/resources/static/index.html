@@ -27,12 +27,15 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  
+
 </head>
 
 <body>
 
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
+
   <div class="d-flex align-items-center justify-content-between">
     <a href="index.html" class="logo d-flex align-items-center">
       <img src="assets/img/logo.png" alt="">
@@ -56,17 +59,17 @@
           <i class="bi bi-search"></i>
         </a>
       </li><!-- End Search Icon-->
-
       <li class="nav-item dropdown pe-3">
+
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
           <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
-        </a><!-- End Profile Image Icon -->
+          <span class="tenNguoiDung" class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+        </a><!-- End Profile Iamge Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>Admin</h6>
-            <span>Trưởng phòng quản lý nhân sự</span>
+            <h6 class="tenNguoiDung">Loading...</h6>
+            <span>Trưởng phòng nhân sự</span>
           </li>
           <li>
             <hr class="dropdown-divider">
@@ -91,6 +94,9 @@
           <li>
             <hr class="dropdown-divider">
           </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
           <li>
             <a class="dropdown-item d-flex align-items-center" href="/dangxuat">
@@ -101,6 +107,34 @@
 
         </ul><!-- End Profile Dropdown Items -->
       </li><!-- End Profile Nav -->
+
+      <script>
+         let thongTinNguoiDung = {};  // Biến lưu trữ thông tin người dùng
+
+        // Khi trang được tải, gọi API để lấy thông tin người dùng
+        document.addEventListener("DOMContentLoaded", function() {
+          fetch("/api/hoso/thongtinnguoidung")
+            .then(response => response.json())
+            .then(data => {
+              if (data) {
+                thongTinNguoiDung = data;  // Lưu dữ liệu vào biến toàn cục
+                console.log(thongTinNguoiDung); // Kiểm tra dữ liệu người dùng nhận được
+
+                // Chọn tất cả các phần tử có class "tenNguoiDung"
+                const elements = document.querySelectorAll('.tenNguoiDung');
+                elements.forEach(element => {
+                  element.textContent = data.tenNhanSu; // Cập nhật giá trị
+                });
+              } else {
+                alert('Không tìm thấy thông tin người dùng.');
+              }
+            })
+            .catch(error => {
+              console.error('Có lỗi xảy ra khi lấy thông tin người dùng:', error);
+              alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            });
+        });
+      </script>
 
     </ul>
   </nav><!-- End Icons Navigation -->
@@ -282,15 +316,6 @@
   <section class="section charts">
     <div class="container mt-5">
       <div class="row">
-      <!-- Biểu đồ tròn phân bổ nhân sự theo phòng ban -->
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Phân bổ nhân sự theo phòng ban</h5>
-              <canvas id="employeePerRoomPieChart" style="max-height: 400px;"></canvas>
-            </div>
-          </div>
-        </div>
 
         <!-- Biểu đồ độ tuổi nhân sự -->
         <div class="col-12">
@@ -316,7 +341,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Biểu đồ cột 1</h5>
+              <h5 class="card-title">Thống kê mức lương theo phòng ban</h5>
               <canvas id="barChart1" style="max-height: 400px;"></canvas>
             </div>
           </div>
@@ -380,52 +405,8 @@
         document.getElementById('statNS').textContent = data.statNS || '0';
         document.getElementById('statQHKH').textContent = data.statQHKH || '0';
         document.getElementById('statTCKT').textContent = data.statTCKT || '0';
-
-        const labels = ['Công nghệ thông tin', 'Marketing', 'Nhân sự', 'Quan hệ khách hàng', 'Tài chính - Kế toán'];
-        const values = [
-          data.statIT || 0,
-          data.statMKT || 0,
-          data.statNS || 0,
-          data.statQHKH || 0,
-          data.statTCKT || 0
-        ];
-        const colors = ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56", "#4bc0c0"]; // Màu sắc cho các lát
-
-        new Chart(document.getElementById('employeePerRoomPieChart'), {
-          type: 'pie',
-          data: {
-            labels: labels,
-            datasets: [{
-              data: values,
-              backgroundColor: colors,
-              hoverOffset: 4
-            }]
-          },
-          options: {
-            plugins: {
-              legend: {
-                display: true,
-                position: 'top',
-              },
-              tooltip: {
-                enabled: true,
-                callbacks: {
-                  label: function(context) {
-                    const label = context.label || '';
-                    const value = context.parsed || 0;
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = ((value / total) * 100).toFixed(2) + '%';
-                    return `${label}: ${value} (${percentage})`;
-                  }
-                }
-              },
-            }
-          }
-        });
       })
       .catch(error => console.error('Error fetching statistics:', error));
-
-
 
     // Hàm gọi API và tạo biểu đồ tròn độ tuổi
     async function loadAgeStatistics() {
@@ -562,32 +543,37 @@
         })
         .catch(error => console.error('Error fetching pieChart2 data:', error));
 
-      // Biểu đồ cột 1
-      fetch('http://localhost:8080/api/dashboard/barData')
-        .then(response => response.json())
-        .then(data => {
-          new Chart(document.getElementById('barChart1'), {
-            type: 'bar',
-            data: {
-              labels: data.labels,
-              datasets: [{
-                label: 'Bar Chart 1',
-                data: data.data,
-                backgroundColor: data.backgroundColor,
-                borderColor: data.borderColor,
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              }
-            }
-          });
-        })
-        .catch(error => console.error('Error fetching barChart1 data:', error));
+      // Thống kê mức lương theo phòng ban
+      fetch('http://localhost:8080/api/dashboard/departmentSalaryDistribution')
+  .then(response => response.json())
+  .then(data => {
+    const labels = Object.keys(data); // Danh sách phòng ban
+    const salaryGroups = ["Dưới 6 triệu", "6-9 triệu", "Trên 9 triệu"];
+    const datasets = salaryGroups.map((group, index) => ({
+      label: group,
+      data: labels.map(department => data[department][group] || 0),
+      backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"][index],
+      borderColor: "#fff",
+      borderWidth: 1
+    }));
+
+    new Chart(document.getElementById('barChart1'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  })
+  .catch(error => console.error('Error fetching department salary distribution data:', error));
+
+
+
 
       // Biểu đồ cột 2
       fetch('http://localhost:8080/api/dashboard/barData2') // Giả sử bạn có API cho barChart2
